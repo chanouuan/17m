@@ -1,0 +1,455 @@
+<?php include('header.html'); ?>
+<link href="<?=$tpl_dir?>/css/pagination.css" rel="stylesheet" type="text/css">
+<link href="<?=$tpl_dir?>/css/webuploader.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="<?=$tpl_dir?>/css/viewer.min.css" type="text/css">
+<script src="<?=APPLICATION_URL?>/public/assets/js/jquery.min.js"></script>
+<script src="<?=APPLICATION_URL?>/public/layer/layer.js"></script>
+<script type="text/javascript" src="<?=APPLICATION_URL?>/public/webuploader-0.1.5/webuploader.min.js"></script>
+<script src="<?=APPLICATION_URL?>/public/js/viewer.min.js"></script>
+
+  <?if($action=="from"){?>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    .progress {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100px;
+        height: 15px;
+        font-size: 12px;
+        color: #fff;
+        text-align: center;
+        line-height: 15px;
+    }
+
+    .uploader-list .file-item {
+        position: relative;
+    }
+
+    .progress span {
+        display: inline-block;
+        height: 100%;
+        background: #1C9F09;
+    }
+</style>
+
+<div class="admin-content">
+    <div class="admin-content-body">
+        <div class="am-cf am-padding am-padding-bottom-0">
+            <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg"><a href="javascript:history.go(-1);">返回</a></strong> / 底片管理</div>
+        </div>
+        <hr>
+        <div class="am-g">
+            <div class="am-panel am-panel-secondary">
+                <div class="am-panel-hd am-cf">订单信息</div>
+                <div id="collapse-panel-4" class="am-panel-bd am-collapse am-in">
+                    <table class="am-table am-table-bordered">
+                        <tr>
+                            <td>门店</td>
+                            <td><?=$storeinfo['name']?></td>
+                        </tr>
+                        <tr>
+                            <td>订单编号</td>
+                            <td><?=$storeinfo['ordercode']?></td>
+                        </tr>
+                        <tr>
+                            <td>创建时间</td>
+                            <td><?=$storeinfo['createtime']?></td>
+                        </tr>
+                        <tr>
+                            <td>姓名</td>
+                            <td><?=$storeinfo['buyer']?></td>
+                        </tr>
+                        <tr>
+                            <td>联系方式</td>
+                            <td><a href="tel:<?=$storeinfo['buyerphone']?>"><?=$storeinfo['buyerphone']?></a></td>
+                        </tr>
+                        <tr>
+                            <td>拍摄日期</td>
+                            <td> <?=date('Y年m月d日',strtotime($storeinfo['ordertime'])) ?> (<?=$storeinfo['week']?>) <?=$storeinfo['time']?></td>
+                        </tr>
+                        <tr>
+                            <td>套餐信息</td>
+                            <td><?=$storeinfo['item']?></td>
+                        </tr>
+                        <tr>
+                            <td>订单金额</td>
+                            <td><?=$storeinfo['pay']/100?></td>
+                        </tr>
+                        <tr>
+                            <td>优惠金额</td>
+                            <td><?=$storeinfo['coupon']/100?></td>
+                        </tr>
+                        <tr>
+                            <td>已付金额</td>
+                            <td><?=$storeinfo['downpay']/100?></td>
+                        </tr>
+                    </table>
+                    <div id="uploader-demo">
+                        <!--用来存放item-->
+                        <div id="fileList" class="uploader-list">
+                            <ul class="images  am-avg-sm-4 am-thumbnails" style="margin-left:0px">
+                                <?foreach($Photolist as $v){?>
+                                <li id="<?=$v['id']?>" class="  file-item thumbnail upload-state-done">
+                                    <div>
+                                        <div class="am-modal-hd">
+                                            <a href="#" onclick="deletesetPhoto(<?=$v['id']?>)" style="color:red" class="am-close am-close-alt am-close-spin am-icon-times"></a>
+                                        </div>
+                                        <img class="am-img-thumbnail am-radius" src="<?=$v['url']?>">
+                                        <div class="info"><?=$v['name']?></div>
+                                    </div>
+                                </li>
+                                <?}?>
+                            </ul>
+
+                        </div>
+                        <div id="filePicker">上传底片</div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <script type="text/javascript">
+
+    //文件上传
+    // 图片上传demo
+    jQuery(function () {
+        var $ = jQuery,
+            $list = $('#fileList'),
+            // 优化retina, 在retina下这个值是2
+            ratio = window.devicePixelRatio || 1,
+
+            // 缩略图大小
+            thumbnailWidth = 100 * ratio,
+            thumbnailHeight = 100 * ratio,
+
+            // Web Uploader实例
+            uploader;
+
+
+    // 初始化Web Uploader
+    //    uploader = WebUploader.create({
+
+    //        // 自动上传。
+    //        auto: true,
+
+    //        // swf文件路径
+    //        swf: '/js/webuploader/js/Uploader.swf',
+
+    //        // 文件接收服务端。
+    //        server: '/?c=admin&a=order&action=savefile&orderid=<?=$storeinfo['id']?>',
+    //            auto: true,
+    //        // [默认值：'file']  设置文件上传域的name。
+    //        fileVal: 'upload',
+
+    //        // 选择文件的按钮。可选。
+    //        // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+    //        pick: '#filePicker',
+
+    //        // 只允许选择文件，可选。
+    //        accept: {
+    //            title: 'Images',
+    //            extensions: 'gif,jpg,jpeg,bmp,png',
+    //            mimeTypes: 'image/*'
+    //        }
+    //});
+    uploader=  WebUploader.create({
+        pick: '#filePicker',
+        auto: true,
+        server: '/?c=admin&a=order&action=savefile&orderid=<?=$storeinfo['id']?>',
+        fileVal: 'upload',
+    })
+        // 当有文件添加进来的时候
+        uploader.on('fileQueued', function (file) {
+            var $li = $(
+                    '<div id="' + file.id + '" class="file-item thumbnail">' +
+                        '<img>' +
+                        '<div class="info">' + file.name + '</div>' +
+                    '</div>'
+                    ),
+                $img = $li.find('img');
+
+            $list.append($li);
+
+            // 创建缩略图
+            uploader.makeThumb(file, function (error, src) {
+                if (error) {
+                    $img.replaceWith('<span>不能预览</span>');
+                    return;
+                }
+
+                $img.attr('src', src);
+            }, thumbnailWidth, thumbnailHeight);
+        });
+
+        // 文件上传过程中创建进度条实时显示。
+        uploader.on('uploadProgress', function (file, percentage) {
+            var $li = $('#' + file.id),
+                $percent = $li.find('.progress span');
+
+            // 避免重复创建
+            if (!$percent.length) {
+                $percent = $('<p class="progress"><span></span></p>')
+                        .appendTo($li)
+                        .find('span');
+            }
+
+            $percent.css('width', percentage * 100 + '%');
+        });
+
+        // 文件上传成功，给item添加成功class, 用样式标记上传成功。
+        uploader.on('uploadSuccess', function (file, data) {
+
+            if(data.success=="0"){
+                layer.alert(data.msg);
+            }
+            $('#' + file.id).addClass('upload-state-done');
+        });
+
+        // 文件上传失败，现实上传出错。
+        uploader.on('uploadError', function (file) {
+            var $li = $('#' + file.id),
+                $error = $li.find('div.error');
+            // 避免重复创建
+            if (!$error.length) {
+                $error = $('<div class="error"></div>').appendTo($li);
+            }
+            $error.text('上传失败!!!');
+        });
+
+        // 完成上传完了，成功或者失败，先删除进度条。
+        uploader.on('uploadComplete', function (file) {
+
+            var $li = $('#' + file.id),
+            $progress = $li.find('div.progress');
+            $('#' + file.id).find('.progress').remove();
+            if (!$progress.length) {
+                $progress = $('<div class="success">上传成功!</div>').appendTo($li);
+            }
+        });
+    }
+    );
+        function deletesetPhoto(id){
+            layer.confirm('是否确认删除该图片？', {
+                btn: ['确认', '取消']
+            }, function () {
+                $.ajax({
+                    type: "POST",
+                    async: true,
+                    data: { action: "delete", id: id },
+                    url: "?c=admin&a=order",
+                    success: function (ret) {
+                        window.location.reload();
+                    },
+                    error: function (data) {
+
+                        alert("请求失败");
+                    }
+                });
+            });
+        }
+        </script>
+    </div>
+</div>
+<?}else if($action=="editinfo"){?>
+<div class="admin-content">
+    <div class="admin-content-body">
+        <div class="am-cf am-padding am-padding-bottom-0">
+            <div class="am-fl am-cf">修改客户姓名</div>
+        </div>
+        <hr>
+        <div class="am-g">
+            <form method="post" action="?<?=burl('action=editbuyer')?>">
+                <div class="admin-content-body">
+                    <input type="hidden" name="id" value="<?=$storeinfo['id']?>" />
+                    <div class="am-form">
+                        <fieldset>
+                            <div class="am-form-group">
+                                <label for="doc-ipt-email-1">修改客户姓名</label>
+                                <input type="text" id="buyer" maxlength="11" size="11" name="buyer" value="<?=$storeinfo['buyer']?>">
+                            </div>
+                            <p><button type="submit" class="am-btn am-btn-success">提交</button></p>
+                        </fieldset>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+        <?}else{?>
+        <div class="admin-content">
+            <div class="admin-content-body">
+                <div class="am-cf am-padding am-padding-bottom-0">
+                    <div class="am-fl am-cf">订单管理</div>
+                </div>
+                <hr>
+                <div class="am-g">
+                    <form class="am-form-inline" role="form" action="?c=admin&a=order" method="post">
+                        <div class="am-form-group am-input-group-sm am-u-sm-6">
+                            <input type="text" class="am-form-field date-control" name="search_starttime" id="search_starttime" value="<?=$search_starttime?>" placeholder="开始时间" readonly="">
+                        </div>
+                        <div class="am-form-group am-input-group-sm am-u-sm-6">
+                            <input type="text" class="am-form-field date-control" name="search_endtime" id="search_endtime" value="<?=$search_endtime?>" placeholder="结束时间" readonly="">
+                        </div>
+                        <div class="am-form-group am-input-group-sm am-u-sm-6">
+                            <input type="text" class="am-form-field " name="buyerphone" value="<?=$buyerphone?>" placeholder="联系电话">
+                        </div>
+                        <div class="am-form-group am-input-group-sm am-u-sm-6">
+                            <select name="status" class="am-form-field" id="status">
+                                <option value="全部" <?if($status=="全部"){?>   selected <?}?>>全部</option>
+                                <option value="1"  <?if($status==1){?>   selected <?}?>>已支付</option>
+                                <option value="2"  <?if($status==2){?>   selected <?}?>>已完成</option>
+                                <option value="-1"  <?if($status==-1){?>   selected <?}?>>已退款</option>
+                            </select>
+                        </div>
+                        <?if($userinfo['area']<1){?>
+			                <div class="am-form-group am-input-group-sm am-u-sm-6">
+			                    <select name="storeid" id="storeid" class="am-form-field">
+			                        <option value=" 0">全部门店</option>
+			                        <?foreach($storelist as $k=>$v){?>
+			                        <option value="<?=$v['id']?>"<?if($storeid==$v['id']){?>selected <?}?>><?=$v['name']?></option>
+			                        <?}?>
+			                    </select>
+			                </div>
+			                <?}?>
+                        <div class="am-form-group am-input-group-sm am-u-sm-3">
+                            <button class="am-btn am-btn-default am-btn-sm" type="submit">搜索</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="am-g">
+                    <div style="margin:10px">
+                        <ul class="mui-pagination  mui-pagination-sm">
+                            <li class="<? if($search_starttime=='2008-06-01 00:00:00'&&$search_endtime=='2020-06-01 00:00:00'){ ?>mui-active<? } ?>"><a href="?c=admin&a=order&search_starttime=2008-06-01 00:00:00&search_endtime=2020-06-01 00:00:00&phone=<?=$phone?>&status=<?=$status?>&storeid=<?=$storeid?>">全部</a></li>
+                            <li class="<? if($search_starttime==$tomorrow_start&&$search_endtime==$tomorrow_end){ ?>mui-active<? } ?>"><a href="?c=admin&a=order&search_starttime=<?=$tomorrow_start?>&search_endtime=<?=$tomorrow_end?>&phone=<?=$phone?>&status=<?=$status?>&storeid=<?=$storeid?>">明日</a></li>
+                            <li class="<? if($search_starttime==$today_start&&$search_endtime==$today_end){ ?>mui-active<? } ?>"><a href="?c=admin&a=order&search_starttime=<?=$today_start?>&search_endtime=<?=$today_end?>&phone=<?=$phone?>&status=<?=$status?>&storeid=<?=$storeid?>">本日</a></li>
+                            <li class="<? if($search_starttime==$yesterday_start&&$search_endtime==$yesterday_end){ ?>mui-active<? } ?>"><a href="?c=admin&a=order&search_starttime=<?=$yesterday_start?>&search_endtime=<?=$yesterday_end?>&phone=<?=$phone?>&status=<?=$status?>&storeid=<?=$storeid?>">昨日</a></li>
+                            <li class="<? if($search_starttime==$week_starttime&&$search_endtime==$week_endtime){ ?>mui-active<? } ?>"><a href="?c=admin&a=order&search_starttime=<?=$week_starttime?>&search_endtime=<?=$week_endtime?>&phone=<?=$phone?>&status=<?=$status?>&storeid=<?=$storeid?>">本周</a></li>
+                            <li class="<? if($search_starttime==$lweek_starttime&&$search_endtime==$lweek_endtime){ ?>mui-active<? } ?>"><a href="?c=admin&a=order&search_starttime=<?=$lweek_starttime?>&search_endtime=<?=$lweek_endtime?>&phone=<?=$phone?>&status=<?=$status?>&storeid=<?=$storeid?>">上周</a></li>
+                            <li class="<? if($search_starttime==$month_starttime&&$search_endtime==$month_endtime){ ?>mui-active<? } ?>"><a href="?c=admin&a=order&search_starttime=<?=$month_starttime?>&search_endtime=<?=$month_endtime?>&phone=<?=$phone?>&status=<?=$status?>&storeid=<?=$storeid?>">本月</a></li>
+                            <li class=" <? if($search_starttime==$lmonth_starttime&&$search_endtime==$lmonth_endtime){ ?>mui-active<? } ?>"><a href="?c=admin&a=order&search_starttime=<?=$lmonth_starttime?>&search_endtime=<?=$lmonth_endtime?>&phone=<?=$phone?>&status=<?=$status?>&storeid=<?=$storeid?>">上月</a></li>
+                            <li class=" <? if($search_starttime==$year_begin&&$search_endtime==$year_end){ ?>mui-active<? } ?>"><a href="?c=admin&a=order&search_starttime=<?=$year_begin?>&search_endtime=<?=$year_end?>&phone=<?=$phone?>&status=<?=$status?>">本年</a></li>
+                            <li class=" <? if($search_starttime==$yesteryear_begin&&$search_endtime==$yesteryear_end){ ?>mui-active<? } ?>"><a href="?c=admin&a=order&search_starttime=<?=$yesteryear_begin?>&search_endtime=<?=$yesteryear_end?>&phone=<?=$phone?>&status=<?=$status?>&storeid=<?=$storeid?>">去年</a></li>
+                        </ul>
+                    </div>
+                    <div class="am-g" style="margin:10px">
+                        <div class="am-form  am-scrollable-horizontal">
+                            <table class="am-table am-table-bordered am-table-striped am-text-nowrap">
+                                <thead>
+                                    <tr>
+                                        <th>拍摄门店</th>
+
+                                        <th>项目</th>
+                                        <th>姓名</th>
+                                        <th>电话</th>
+                                        <th>总价</th>
+                                        <th>已付款</th>
+                                        <th>优惠金额</th>
+                                        <th>预约时间</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?foreach ($Orderlist as $v){?>
+                                    <tr>
+                                        <td><?=$v['name']?></td>
+
+                                        <td><?=$v['item']?></td>
+                                        <td><?=$v['buyer']?></td>
+                                        <td><?=$v['buyerphone']?></td>
+                                        <td><?=$v['pay']/100?></td>
+                                        <td><?=$v['downpay']/100?></td>
+                                        <td><?=$v['coupon']/100?></td>
+                                        <td><?=$v['ordertime']?></td>
+
+                                        <td>
+                                            <?if($v['status']=="0"){?>
+                                            <span style="color:#808080">未支付</span>
+                                            <?}else if($v['status']=="1"){?>
+                                            <span style="color:green">已支付</span>
+                                            <?}else if($v['status']=="2"){?>
+                                            <span style="color:blue">已完成</span>
+                                            <?}else if($v['status']=="-1"){?>
+                                            <span style="color:red">已退款</span>
+                                            <?}?>
+                                        </td>
+                                        <td>
+                                            <?if($v['status']=="1" ||$v['status']=="2"){?>
+                                            <a class="am-btn am-btn-default am-btn-xs am-text-secondary" href="?c=admin&a=order&action=from&id=<?=$v['id']?>"><span class="am-icon-pencil-square-o"></span> 上传底片</a>
+                                            <a style="color:#fff" class="am-btn am-btn-primary am-btn-xs am-text-secondary" href="?c=admin&a=exportword&id=<?=$v['id']?>"><span class="am-icon-pencil-square-o"></span> 打印word</a>
+                                            <?}?>
+                                            <a style="color:#fff" class="am-btn am-btn-danger am-btn-xs am-text-success" href="?<?=burl('&action=editinfo&id='.$v['id'])?>"><span class="am-icon-pencil-square-o"></span> 修改客户姓名</a>
+
+                                        </td>
+                                    </tr>
+                                    <?}?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="am-cf" style="text-align: center; margin:1rem; font-size:1rem">
+                            每页<?=$page_count?> 共<?=$totalcount?> 条记录
+                            <div class="am-fr">
+                                <? if(count($pagestr)>1){ ?>
+                                <ul class="mui-pagination  mui-pagination-sm">
+                                    <li class="mui-previous"><a href="?c=admin&a=order&page=1&phone=<?=$phone?>&search_starttime=<?=$search_starttime?>&search_endtime=<?=$search_endtime?>&status=<?=$status?>&storeid=<?=$storeid?>">首页</a></li>
+                                    <? foreach($pagestr as $k=>$v){ ?>
+                                    <? if($v==$page){ ?>
+                                    <li class="mui-active"><a href="#"><?=$v?></a></li>
+                                    <? }else{ ?>
+                                    <li><a href="?c=admin&a=order&page=<?=$v?>&phone=<?=$phone?>&search_starttime=<?=$search_starttime?>&search_endtime=<?=$search_endtime?>&status=<?=$status?>&storeid=<?=$storeid?>"><?=$v?></a></li>
+                                    <? } ?>
+                                    <? } ?>
+                                    <li class="mui-next"> <a href="?c=admin&a=order&page=<?=$totalpage?>&phone=<?=$phone?>&search_starttime=<?=$search_starttime?>&search_endtime=<?=$search_endtime?>&status=<?=$status?>&storeid=<?=$storeid?>">尾页</a></li>
+                                </ul>
+                                <? } ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <?}?>
+        <script type="text/javascript">
+      function onFormSubmit(from) {
+          var code = $("#code").val();
+          var name = $("#name").val();
+
+          if (!code) {
+              layer.msg("请输入城市编码");
+              return false;
+          }
+          if (!name) {
+              layer.msg("请输入名称");
+              return false;
+          }
+      }
+      function deletesetCity(id) {
+          layer.confirm('是否确认删除？', {
+              btn: ['确认', '取消']
+          }, function () {
+              $.ajax({
+                  type: "POST",
+                  async: true,
+                  data: { action: "delete", id: id },
+                  url: "?c=admin&a=city",
+                  success: function (ret) {
+                      window.location.href = window.location.href;
+                  },
+                  error: function (data) {
+                      alert("请求失败");
+                  }
+              });
+          });
+      }
+      $(".images").viewer();
+        </script>
+        <?php include('footer.html'); ?>

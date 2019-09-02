@@ -1,0 +1,2047 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <meta name="format-detection" content="telephone=no">
+    <title>十七平创意摄影工作室</title>
+    <link href="<?=$tpl_dir?>/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="<?=$tpl_dir?>/css/notice.css" rel="stylesheet" type="text/css">
+    <link href="<?=$tpl_dir?>/css/common2.css?v=1" rel="stylesheet" type="text/css">
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script src="<?=APPLICATION_URL?>/public/js/jquery.min.js"></script>
+</head>
+<body ontouchstart>
+    <?if($step=="city"){?>
+    <style>
+        .toolbar-back {
+            display: block;
+        }
+    </style>
+    <link href="<?=$tpl_dir?>/css/city.css?v=1" rel="stylesheet" type="text/css">
+    <div class="app">
+        <div class="toolbar">
+            <div class="toolbar-logo"><img src="<?=$tpl_dir?>/imgs/logo.png" /></div>
+            <div class="toolbar-menu" id="toolbar-menu"><a href="javascript:void(0)" data-role="icon-ment" class="icon-menu"></a></div>
+            <div class="toolbar-back" id="toolbar-back"><a href="javascript:void(0);"><i class="icon-arrow-left"></i>上一步</a></div>
+        </div>
+        <div class="app-body">
+            <div class="captain wrap">
+                <span class="no-store-tips">抱歉，定位失败。</span>
+            </div>
+            <div class="wrap" style="overflow: hidden;">
+                <form id="search-city" style="display: none;">
+                    <dl class="search-city">
+                        <dt>选择其他城市</dt>
+                        <dd>
+                            <i class="icon"></i> <input id="inputSearch" type="text" placeholder="输入城市名称或拼音查询">
+                        </dd>
+                    </dl>
+                </form>
+                <p style="font-size:12px;color:#888888;line-height:12px;text-align:justify;margin-bottom: 11px;">请选择下列有十七平创意摄影工作室门店的城市</p>
+                <div class="city-list">
+                    <ul class="clearfix" id="city-all">
+                        <?foreach($citylist as $v){?>
+                        <li><a href="?c=order&a=createorder&step=products&citycode=<?=urlencode($v['code'])?>"><?=$v['name']?></a></li>
+                        <?}?>
+                    </ul>
+                    <ul class="clearfix" id="city-search"></ul>
+                </div>
+                <p style="font-size:12px;color:#888888;line-height:12px;text-align:justify;margin-bottom: 11px;">更多城市敬请期待</p>
+                <div class="city-list">
+                    <ul class="clearfix">
+                        <?foreach($citylist1 as $v){?>
+                        <li><span><?=$v['name']?></span></li>
+                        <?}?>
+                        <li class="dot"><i class="icon-dot"></i><i class="icon-dot"></i><i class="icon-dot"></i></li>
+                    </ul>
+                </div>
+                <div class="tips">
+                    我们正在努力开设更多门店以方便顾客。敬请期待！<br>如果你有店铺及其他资源，欢迎提供给我们，不胜感激！
+                </div>
+            </div>
+            <div id="page-mask" class="page-mask"></div>
+        </div>
+    </div>
+    <?}else if($step=="products"){?>
+    <link href="<?=$tpl_dir?>/css/common2.css?v=1" rel="stylesheet" type="text/css">
+    <link href="<?=$tpl_dir?>/css/products.css?v=1" rel="stylesheet" type="text/css">
+    <div class="app">
+        <div class="toolbar">
+            <div class="toolbar-logo"><img src="<?=$tpl_dir?>/imgs/logo.png"></div>
+            <div class="toolbar-menu" id="toolbar-menu"><a href="javascript:void(0)" data-role="icon-ment" class="icon-menu"></a></div>
+            <div class="toolbar-back" id="toolbar-back"><a href="javascript:void(0);"><i class="icon-arrow-left"></i>上一步</a></div>
+            <div class="toolbar-location" id="toolbar-location" style="display: block;"><a href="javascript:void(0);"><i class="icon-location-white"></i><strong data-role="location"><?=$cityname['name']?></strong><i data-role="arrow" class="icon-arrow-down"></i></a></div>
+        </div>
+        <div class="app-body">
+            <div class="flow">
+                <i class="icon-number1"></i><strong>选择拍摄类型</strong> <span>(如需选择门店，可在第3步选择)</span>
+            </div>
+            <div class="wrap">
+                <div class="product-list">
+                    <ul class="clearfix">
+                        <?foreach($productlist as $v){?>
+                        <li>
+                            <a href="?c=order&a=createorder&step=showproducts&type=1&categoryid=<?=$v['id']?>&citycode=<?=urlencode($citycode)?>">
+                                <span class="photo"><img src="<?=$v['icon']?>"></span>
+                                <span class="title"><?=$v['name']?></span>
+                            </a>
+                        </li>
+                        <?}?>
+                    </ul>
+                </div>
+                <div class="product-list">
+                    <div class="tel-tip">以下项目需电话预约</div>
+                    <ul class="clearfix">
+                        <?foreach($productlistA as $v){?>
+                        <li>
+                            <a href="?c=order&a=createorder&step=showproducts&type=0&categoryid=<?=$v['id']?>&citycode=<?=urlencode($citycode)?>">
+                                <span class="photo"><img src="<?=$v['icon']?>"></span>
+                                <span class="title"><?=$v['name']?></span>
+                            </a>
+                        </li>
+                        <?}?>
+                    </ul>
+                </div>
+            </div>
+            <div id="page-mask" class="page-mask"></div>
+        </div>
+    </div>
+    <div id="toolbar-citys" class="toolbar-citys">
+        <p style="font-size:12px;color:#888888;line-height:12px;text-align:justify;margin-bottom: 11px;">请选择下列有十七平创意摄影工作室门店的城市</p>
+
+        <div class="city-list">
+            <ul class="clearfix" id="city-all">
+                <?foreach($citylist as $v){?>
+                <li><a href="?c=order&a=createorder&step=products&citycode=<?=urlencode($v['code'])?>"><?=$v['name']?></a></li>
+                <?}?>
+            </ul>
+            <ul class="clearfix" id="city-search"></ul>
+        </div>
+        <p style="font-size:12px;color:#888888;line-height:12px;text-align:justify;margin-bottom: 11px;">更多城市敬请期待</p>
+        <div class="city-list">
+            <ul class="clearfix">
+                <?foreach($citylist1 as $v){?>
+                <li><span><?=$v['name']?></span></li>
+                <?}?>
+                <li class="dot"><i class="icon-dot"></i><i class="icon-dot"></i><i class="icon-dot"></i></li>
+            </ul>
+        </div>
+        <div class="tips">
+            我们正在努力开设更多门店以方便顾客。敬请期待！<br>如果你有店铺及其他资源，欢迎提供给我们，不胜感激！
+        </div>
+    </div>
+    <?}else if($step=="openproduct"){?>
+    <link href="<?=$tpl_dir?>/css/product-detail.css?v=1" rel="stylesheet" type="text/css">
+    <div class="app">
+        <div class="toolbar">
+            <div class="toolbar-logo"><img src="<?=$tpl_dir?>/imgs/logo.png" /></div>
+            <div class="toolbar-menu" id="toolbar-menu"><a href="javascript:void(0)" data-role="icon-ment" class="icon-menu"></a></div>
+        </div>
+        <div class="app-body">
+            <section class="product-section clearfix">
+                <div class="image-title">
+                    <div class="product-image"><img src="<?=$category['icon']?>"></div>
+                    <div class="product-title"> </div>
+                </div>
+                <div class="price-stores" style="min-height:auto;">
+                    <div class="price-box">
+                        <div class="product-cost" style="font-size:20px;"><?=$category['name']?></div>
+                    </div>
+                    <div class="provide-stores" style="position:relative;padding-top:10px;">
+                        <?foreach($store as $v){?>
+                        <span><i class="icon-success-fill"></i><?=$v['name']?>(<?=$v['price']/100?>元)</span>
+                        <?}?>
+                    </div>
+                </div>
+            </section>
+            <?=$category['description']?>
+            <div id="page-mask" class="page-mask"></div>
+        </div>
+    </div>
+    <?}else if($step=="showproducts"){?>
+    <link href="<?=$tpl_dir?>/css/product-detail.css?v=1" rel="stylesheet" type="text/css">
+    <div class="app">
+        <div class="toolbar">
+            <div class="toolbar-logo"><img src="<?=$tpl_dir?>/imgs/logo.png" /></div>
+            <div class="toolbar-menu" id="toolbar-menu"><a href="javascript:void(0)" data-role="icon-ment" class="icon-menu"></a></div>
+            <div class="toolbar-back" id="toolbar-back"><a href="javascript:void(0);"><i class="icon-arrow-left"></i>上一步</a></div>
+        </div>
+        <div class="app-body">
+            <section class="product-section clearfix">
+                <div class="image-title">
+                    <div class="product-image"><img src="<?=$category['icon']?>"></div>
+                    <div class="product-title"> </div>
+                </div>
+                <div class="price-stores" style="min-height:auto;">
+                    <div class="price-box">
+                        <div class="product-cost" style="font-size:20px;"><?=$category['name']?></div>
+                    </div>
+                    <div class="provide-stores" style="position:relative;padding-top:10px;">
+                        <?foreach($store as $v){?>
+                        <?if($v['ordercount']>0){?>
+                        <span><i class="icon-success-fill"></i><?=$v['name']?>(<?=$v['price']/100?>元)</span>
+                        <?}?>
+                        <?}?>
+                    </div>
+                </div>
+            </section>
+            <?=$category['description']?>
+            <div class="action">
+                <a href="javascript:history.back();" class="nb-btn nb-btn-default">重选拍摄类型</a>
+                <?if($type==1){?>
+                <?if($atLeastOneStoreOpen){?>
+                <a href="?c=order&a=createorder&step=schedules&type=1&categoryid=<?=$categoryid?>&citycode=<?=$citycode?>" class="nb-btn nb-btn-primary">下一步</a>
+                <?}?>
+                <?}else{?>
+                <a href="tel:<?=$cityinfo['phone']?>" class="nb-btn nb-btn-primary"><i class="icon-phone1"></i>电话预约</a>
+                <?}?>
+            </div>
+            <div id="page-mask" class="page-mask"></div>
+        </div>
+    </div>
+    <?}else if($step=="schedules"){?>
+    <link href="<?=$tpl_dir?>/css/swiper.3.2.0.min.css?v=1" rel="stylesheet" type="text/css">
+    <link href="<?=$tpl_dir?>/css/schedule-preview.css?v=1" rel="stylesheet" type="text/css">
+    <link href="<?=$tpl_dir?>/css/schedules.css?v=1" rel="stylesheet" type="text/css">
+    <link href="<?=$tpl_dir?>/css/stores.css?v=1" rel="stylesheet" type="text/css">
+    <script src="<?=APPLICATION_URL?>/public/js/swiper.3.2.0.jquery.min.js"></script>
+    <div class="app">
+        <div class="toolbar">
+            <div class="toolbar-logo"><img src="<?=$tpl_dir?>/imgs/logo.png"></div>
+            <div class="toolbar-menu" id="toolbar-menu"><a href="javascript:void(0)" data-role="icon-ment" class="icon-menu"></a></div>
+            <div class="toolbar-back" id="toolbar-back"><a href="javascript:void(0);"><i class="icon-arrow-left"></i>上一步</a></div>
+        </div>
+        <div class="app-body">
+
+            <div class="captain wrap clearfix">
+                <span class="store-name noclick"></span>
+                <span class="check-address"><i class="icon-store-info1"></i>门店信息</span>
+            </div>
+            <div class="flow">
+                <i class="icon-number2"></i><strong>选择档期</strong> <span>(开放14天内的档期) <span class="can-book">可预约</span> <span class="fully">已约满</span></span>
+            </div>
+            <div class="schedules-preview clearfix">
+                <div id="schedule-date-swiper" style="margin-bottom: 14px">
+                    <div class="swiper-container swiper-container-horizontal">
+                        <div class="swiper-wrapper" style="transition-duration: 0ms; transform: translate3d(-2660px, 0px, 0px);">
+
+                            <?foreach($scheduleslist as $v){?>
+                            <div data-date="<?=$v['today']?>" class="swiper-slide schedule-item <?if($v['ordercount']<=0){?>disable<?}?>" data-role="schedule-date" style="width: 257px; margin-right: 9px;">
+                                <div class="schedule-date">
+                                    <span class="month"><?=$v['month']?>月</span>
+                                    <strong class="day"><?=$v['date']?></strong>
+                                </div>
+                                <div class="schedule-weekly">
+                                    <?=$v['name']?>
+                                </div>
+                                <div class="schedule-status"></div>
+                            </div>
+                            <?}?>
+                        </div>
+                    </div>
+                    <a href="javascript:;" class="swiper-prev icon-arrow-left"></a>
+                    <a href="javascript:;" class="swiper-next icon-arrow-right swiper-disable"></a>
+                </div>
+            </div>
+            <div class="schedule-selected">
+                <dl>
+                    <dt>已选择档期</dt>
+                    <dd id="schedule-selected">2017年4月10日(周一)</dd>
+                </dl>
+                <a id="all-schedules" href="javascript:void(0);" class="all-schedules icon-calender">全部档期</a>
+            </div>
+            <div class="flow"><i class="icon-number3"></i><strong>选择门店</strong></div>
+            <div class="flow">
+                <i class="icon-number4"></i><strong>选择时间</strong>
+                <div style="float: right; padding-right: 14px;"><span class="can-book">可预约</span> <span class="fully">已约满</span></div>
+            </div>
+            <div id="schedules-box" class="schedules-box " style="display:none">
+                <div class="schedules-content clearfix">
+                    <div id="standard-schedules" class="standard-schedules clearfix">
+                    </div>
+                </div>
+            </div>
+            <div id="loadingBox" class="clearfix" style="text-align: center; background-color: rgb(246, 246, 246); display: none;">
+                <br><br><br><br>
+                <span id="loadingText">正在加载时间表</span>
+                <br><br><br>
+                <br><br>
+            </div>
+            <div class="schedule-confirm" id="schedule-confirm">
+                <div class="confirm-header">
+                    <p class="icon"><i class="icon-notice"></i></p>
+                    <p>你选择的档期是</p>
+                </div>
+                <div class="confirm-content">
+                    <p data-role="date-time" class="date-time"></p>
+                    <p data-role="store" class="store"></p>
+                    <p>是否确认？</p>
+                </div>
+                <div class="confirm-footer">
+                    <a href="javascript:void(0);" data-role="cancel" class="nb-btn nb-btn-default">取消</a>
+                    <a href="javascript:void(0);" data-role="ok" class="nb-btn nb-btn-primary">确认</a>
+                </div>
+            </div>
+            <div id="store-box" class="store-box" style="display:none">
+                <ul class="store-list"></ul>
+            </div>
+            <style>
+                #store-box-open {
+                    position: absolute;
+                    top: -100%;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    z-index: 3;
+                    transition: all 0.2s ease-in-out;
+                }
+
+                    #store-box-open .store-box {
+                        background-color: #FFFFFF;
+                        padding-top: 14px;
+                        padding-bottom: 4px;
+                    }
+
+                    #store-box-open .store-list .store-name {
+                        text-align: left;
+                    }
+
+                .store-box-open-show {
+                    top: 84px !important;
+                }
+            </style>
+
+            <div id="store-box-open">
+                <div class="store-box">
+                    <ul class="store-list">
+                        <li data-store="4" data-city="深圳" data-storeid="4" data-productid="" class="">
+                            <a href="javascript:;">
+                                <div class="status"><i class="can-book"></i><i class="icon-success-fill"></i><i class="icon-full"></i></div>
+                                <div class="store-name"><span><strong>深圳后海店</strong></span></div>
+                                <div class="store-address-tel">
+                                    <div class="store-address">深圳市南山区海德一道观海台C栋10号商铺</div>
+                                </div>
+                                <!-- <a href="/book/remind?city=深圳&productId=&storeId=4"  class="remind"><i class="icon-remind"></i>档期提醒</a>
+                                <div class="arrow"><i class="icon-arrow-right"></i></div> -->
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <style>
+                .store-address-dialog {
+                    color: #888888;
+                    position: fixed;
+                }
+
+                    .store-address-dialog .icon-store-info2 {
+                        font-size: 48px;
+                    }
+
+                    .store-address-dialog .dialog-box-header {
+                        border-bottom-color: #f3f3f3;
+                        margin: 0 15px 10px;
+                    }
+
+                    .store-address-dialog .dialog-box {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        margin-top: -120px;
+                        margin-left: -145px;
+                        padding: 0;
+                        overflow: hidden;
+                    }
+
+                    .store-address-dialog .dialog-box-content {
+                        border-bottom: none;
+                        padding: 0 15px;
+                    }
+
+                        .store-address-dialog .dialog-box-content p {
+                            position: relative;
+                            padding-left: 22px;
+                            margin-bottom: 19px;
+                        }
+
+                    .store-address-dialog p i {
+                        position: absolute;
+                        top: 3px;
+                        left: 0;
+                        width: 12px;
+                        height: 12px;
+                    }
+
+                    .store-address-dialog .desc p {
+                        padding: 0;
+                        margin: 0;
+                    }
+
+                    .store-address-dialog a.tela {
+                        padding: 7px 14px;
+                        border: 1px solid #e4e4e4;
+                        border-radius: 3px;
+                        color: #888888;
+                    }
+
+                        .store-address-dialog a.tela:hover {
+                            background: #e4e4e4;
+                        }
+
+                        .store-address-dialog a.tela:active {
+                            background-color: #cccccc;
+                            border-color: #cccccc;
+                            color: #FFFFFF;
+                        }
+            </style>
+            <div id="schedules-calender-open" class="schedules-calender-open schedules-calender-open-show">
+                <ul class="clearfix">
+                    <?foreach($scheduleslist as $v){?>
+                    <li data-role="schedule-date" data-date="<?=$v['today']?>" class="schedule-item <?if($v['ordercount']<=0){?>disable<?}?>" style="width: 66px;">
+                        <div class="schedule-date">
+                            <span class="month"><?=$v['month']?>月</span>
+                            <strong class="day"><?=$v['date']?></strong>
+                        </div>
+                        <div class="schedule-weekly">
+                            <?=$v['name']?>
+                        </div>
+                        <div class="schedule-status"></div>
+                    </li>
+                    <?}?>
+                </ul>
+
+                <div class="schedules-calender-open-action">
+                    <p>可预约14天内的档期，新一天的档期于每日10:00开放。</p>
+                    <!-- <a href="/book/remind?city=上海&productId=1">档期提醒</a> -->
+                </div>
+            </div>
+            <div id="page-mask" class="page-mask"></div>
+        </div>
+    </div>
+    <script src="<?=$tpl_dir?>/js/hm.js"></script>
+    <script src="<?=$tpl_dir?>/js/zepto.min.js"></script>
+    <script src="<?=$tpl_dir?>/js/fastclick.js"></script>
+    <script src="<?=$tpl_dir?>/js/mobile-detect.js"></script>
+    <script>
+
+
+        $('#toolbar-back').click(function(){
+
+            if($('#schedules-calender-open').length)
+            {
+                if(!$('#schedules-calender-open').hasClass('schedules-calender-open-show'))
+                {
+                    $('#schedules-calender-open').addClass('schedules-calender-open-show');
+                    return ;
+                }
+            }
+
+            history.back();
+        });
+
+
+        $('#toolbar-submenu').on('click', '.mask', function() {
+            $('#toolbar-submenu').hide();
+            var mentEl = $('#toolbar-menu').find('[data-role="icon-ment"]');
+            if (mentEl.hasClass('icon-menu')) {
+                mentEl.removeClass('icon-menu');
+                mentEl.addClass('icon-arrow-right');
+            } else {
+                mentEl.addClass('icon-menu');
+                mentEl.removeClass('icon-arrow-right');
+            }
+            $('#ts-menu').removeClass('ts-menu-active');
+        });
+        var toolbarLocationElm = $('#toolbar-location');
+        toolbarLocationElm.show();
+        toolbarLocationElm.on('click', function() {
+            $(this).find('[data-role="arrow"]').toggleClass('icon-arrow-down');
+            $(this).find('[data-role="arrow"]').toggleClass('icon-arrow-up');
+            $('#toolbar-citys').toggleClass('toolbar-citys-show');
+        });
+
+        function customAlert(status, message, actionText, callback) {
+            var statusClass = '';
+            if(status == 'error') {
+                statusClass = 'error';
+            }
+            $('#alert-dialog').addClass(statusClass);
+            $('#alert-dialog .alert-content').html(message);
+            $('#alert-dialog .action-btn').html(actionText);
+            $('#alert-dialog .action-btn').on('click', function() {
+                if (callback != null) {
+                    callback($('#alert-dialog'));
+                }
+                $('#alert-dialog').hide();
+            });
+            $('#alert-dialog').show();
+            var h = $('#alert-dialog .alert-box').height();
+            $('#alert-dialog .alert-box').height(h);
+            $('#alert-dialog .alert-box').css('margin-top', -h/2)
+        }
+
+        $('.mask').on('click', function() {
+            $(this).parent().hide();
+        });
+    </script>
+    <script type="text/javascript" src="<?=$tpl_dir?>/js/swiper.3.2.0.jquery.min.js"></script>
+    <script type="text/javascript">
+        ///book/combos?storeId=4&isVip=1&date=2017-04-10&time=&productId=2&city=深圳
+        var selectDate =  '<?=$scheduleslist[0]['today']?>';
+        var hasCombos = '';
+        var scheduleDates = {"latest":1491753600,"dateList":[{"date":1490889600,"canOrder":false,"hasSchedule":true,"week":"\u4e94"},{"date":1490976000,"canOrder":true,"hasSchedule":false,"week":"\u516d"},{"date":1491062400,"canOrder":true,"hasSchedule":false,"week":"\u65e5"},{"date":1491148800,"canOrder":true,"hasSchedule":false,"week":"\u4e00"},{"date":1491235200,"canOrder":true,"hasSchedule":false,"week":"\u4e8c"},{"date":1491321600,"canOrder":true,"hasSchedule":false,"week":"\u4e09"},{"date":1491408000,"canOrder":true,"hasSchedule":false,"week":"\u56db"},{"date":1491494400,"canOrder":true,"hasSchedule":false,"week":"\u4e94"},{"date":1491580800,"canOrder":true,"hasSchedule":false,"week":"\u516d"},{"date":1491667200,"canOrder":true,"hasSchedule":false,"week":"\u65e5"},{"date":1491753600,"canOrder":true,"hasSchedule":true,"week":"\u4e00"},{"date":1491840000,"canOrder":true,"hasSchedule":true,"week":"\u4e8c"},{"date":1491926400,"canOrder":true,"hasSchedule":true,"week":"\u4e09"},{"date":1492012800,"canOrder":true,"hasSchedule":true,"week":"\u56db"},{"date":1492099200,"canOrder":true,"hasSchedule":true,"week":"\u4e94"}]};
+        var weekAry = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+        var city = '深圳';
+        var tag = 'default';
+        var productId = '2';
+        var productScreenCount = '2';
+        var activied =false;
+        var storeId = '4';
+        var activied = "";
+        var number = '2';
+        var initSlideIndex=1;
+        (function(){
+            var opw = $('#schedules-calender-open').width();
+            var itemW = opw / 5 - 14;
+            $('#schedules-calender-open li').width(itemW);
+        })();
+        if (activied) {
+            $('#schedules-calender-open').toggleClass('schedules-calender-open-show');
+        }
+        $(".captain").hide()
+        $($(".flow")[1]).hide()
+        function startLoading()
+        {
+            // List of words to loop on
+            var words = ['正在加载时间表...','正在加载时间表','正在加载时间表.', '正在加载时间表..'];
+
+            // Index of the words array
+            var index = 0;
+
+            window.setInterval(function(){
+                $('#loadingText').html(words[index]);
+                // Increment the index modulo the length of words: 0, 1, 2, 0, 1, 2, etc
+                index = (index+1) % words.length;
+            }, 500);
+        }
+        if (initSlideIndex < 2) {
+            initSlideIndex = 2;
+        }
+        var mySwiper = new Swiper ('.swiper-container', {
+            slidesPerView : 5,
+            initialSlide: initSlideIndex,
+            slidesPerGroup: 1,
+            spaceBetween: 9,
+            prevButton:'.swiper-prev',
+            nextButton:'.swiper-next',
+            buttonDisabledClass: 'swiper-disable'
+        });
+
+        startLoading();
+        function ajaxGetStoreScheduleStatus(date) {
+            $("#schedules-box").hide();
+            $('#loadingBox').show();
+            $('#store-box').hide();
+            $.ajax({
+                'url': '?c=order&a=calscheduleforcityondate',
+                'data': {
+                    'citycode': <?=$cityinfo['code']?>,
+                    'categoryid': <?=$category['id']?>,
+                    'date': date
+                },
+                'dataType': 'json',
+                'success': function(o) {
+                    console.log(o);
+                    $('#loadingBox').hide();
+                    if(o.atLeastOneStoreOpen=='no')
+                    {
+                        clearInterval($loadingTimer);
+                        $('#store-box').hide();
+                        $('#loadingBox').show();
+                        $('#loadingText').html("本日已被约满<br />请返回后，重新选择日期");
+                        window.location.reload(true);
+                    }
+                    var li="";
+                    for(var i = 0; i < o.storelist.length; i++) {
+                        var storeId = o.storelist[i].id;
+                        var ordercount = o.storelist[i].ordercount;
+                        if(ordercount==0){
+                            disable="class=disable";
+                        }
+                        else{
+                            disable="";
+                        }
+                        li+='   <li data-store='+storeId+' data-city="<?=$cityinfo['name']?>" data-storeid='+storeId+'  '+disable+' data-categoryid="<?=$category['id']?>">';
+                        li+='     <a href="javascript:;">';
+                        li+='   <div class="status"><i class="can-book"></i><i class="icon-success-fill"></i><i class="icon-full"></i></div>';
+                        li+='     <div class="store-name" style="position:relative"><span><strong>'+o.storelist[i].name+'</strong></span><span class="badge" style="display:none;position:absolute;right:0;top:0;background-color:#dd514c;color:#fff;font-size:12px;">'+o.storelist[i].ordercount+'</span></div>';
+                        li+='       <div class="store-address-tel">';
+                        li+='       <div class="store-address">'+o.storelist[i].address+'</div>';
+                        li+='     </div>';
+                        li+='   </a>';
+                        li+='       </li>';
+                    }
+                    $(".store-list").html(li);
+                    $($(".flow")[1]).show()
+                    $($(".flow")[2]).hide()
+                    $('#store-box').show();
+
+                }
+            });
+
+            $('#loadingBox').hide();
+            setScheduleSelected(date);
+        }
+        function getCitySchedulesOnDate(date) {
+
+            $.ajax({
+                'url': '',
+                'data': {
+                    'tag': tag,
+                    'city': city,
+                    'productId': productId,
+                    'date': date
+                },
+                'dataType': 'json',
+                'success': function(o) {
+                    o ='{ "standard": [{ "time": "10:00", "count": 5, "bookedNum": 4, "canOrderCount": 1 }, { "time": "10:30", "count": 5, "bookedNum": 5, "canOrderCount": 0 }, { "time": "11:00", "count": 5, "bookedNum": 2, "canOrderCount": 3 }, { "time": "11:30", "count": 5, "bookedNum": 1, "canOrderCount": 4 }, { "time": "12:00", "count": 5, "bookedNum": 3, "canOrderCount": 2 }, { "time": "13:00", "count": 2, "bookedNum": 2, "canOrderCount": 0 }, { "time": "13:30", "count": 5, "bookedNum": 2, "canOrderCount": 3 }, { "time": "14:00", "count": 5, "bookedNum": 2, "canOrderCount": 3 }, { "time": "14:30", "count": 5, "bookedNum": 4, "canOrderCount": 1 }, { "time": "15:00", "count": 5, "bookedNum": 5, "canOrderCount": 0 }, { "time": "15:30", "count": 5, "bookedNum": 1, "canOrderCount": 4 }, { "time": "16:00", "count": 4, "bookedNum": 0, "canOrderCount": 4 }, { "time": "16:30", "count": 4, "bookedNum": 1, "canOrderCount": 3 }, { "time": "17:00", "count": 4, "bookedNum": 2, "canOrderCount": 2 }, { "time": "17:30", "count": 4, "bookedNum": 4, "canOrderCount": 0 }, { "time": "18:00", "count": 2, "bookedNum": 2, "canOrderCount": 0 }, { "time": "18:30", "count": 2, "bookedNum": 2, "canOrderCount": 0 }], "gifp": [] }';
+                    for(var i = 0; i < o.length; i++) {
+                        var storeId = o[i].id;
+                        var hasSchedules = o[i].hasSchedules;
+                        if (hasSchedules) {
+                            $('[data-store="' + storeId + '"]').removeClass('disable');
+                        } else {
+                            $('[data-store="' + storeId + '"]').addClass('disable');
+                        }
+                    }
+
+                }
+            });
+        }
+
+        function setScheduleSelected(date) {
+            selectDate = date;
+            var dd = new Date(date);
+            var y = dd.getFullYear();
+            var m = dd.getMonth() + 1;
+            var d = dd.getDate();
+            var w = weekAry[dd.getDay()];
+            $('#schedule-selected').html(y+"年"+m+"月"+d+"日("+w+")");
+        }
+
+        if(selectDate!='-')
+        {
+            setScheduleSelected(selectDate);
+        }
+
+
+
+        $('#all-schedules').on('click', function() {
+            window.location.href= window.location.href;
+        });
+        var date
+        //点击了某个日期：
+        $(document).on('click', '[data-role="schedule-date"]', function() {
+            if ($(this).hasClass('disable')) {
+                return;
+            }
+
+            date = $(this).data('date');
+            ajaxGetStoreScheduleStatus(date);
+            mySwiper.slideTo($(this).index());
+            $('[data-role="schedule-date"]').removeClass('activied');
+            $('[data-date="'+date+'"]').addClass('activied');
+            if($('#schedules-calender-open').hasClass('schedules-calender-open-show')) {
+                $('#schedules-calender-open').removeClass('schedules-calender-open-show');
+            }
+
+            //        window.location.href = '/book/schedules?city=' + city + '&storeId=' + storeId + '&productId='+productId+'&date=' + date;
+        });
+
+
+        $('.store-list').on('click', 'li', function() {
+            if($(this).hasClass('disable')) {
+                return;
+            }
+            storeid= $(this).attr("data-storeid")
+            $.ajax({
+                'url': '?c=order&a=getstoreinfo',
+                'data': {
+                    'date': date,
+                    'storeid': storeid,
+                },
+                'dataType': 'json',
+                'success': function(data) {
+                    if (data.success) {
+                        $(".noclick").html(data.msg.name);
+                        divhtml= '<div class="nb-dialog store-address-dialog" style="display: none;">';
+                        divhtml+= ' <div class="dialog-box">';
+                        divhtml+= '   <div class="dialog-box-header">';
+                        divhtml+= '   <p><span class="icon-store-info2"></span></p>';
+                        divhtml+= '    <p style="height: 31px;" id="storename">'+data.msg.name+'</p>';
+                        divhtml+= '      <a href="javascript:$(&#39;.store-address-dialog&#39;).hide();" class="icon-close close"></a>';
+                        divhtml+= '  </div>';
+                        divhtml+= '  <div class="dialog-box-content list" style="font-size: 12px;">';
+                        divhtml+= '    <p><i class="icon-location-gray" id="storeaddress"></i>'+data.msg.address+'</p>';
+                        divhtml+= ' <p><i class="icon-phone2"></i><a href="tel:'+data.msg.tel+'" class="tela" style="">'+data.msg.tel+'</a></p>';
+                        divhtml+= '       <p><i class="icon-email"></i>'+data.msg.email+'</p>';
+                        divhtml+= '  <p><i class="icon-bus"></i>'+data.msg.transit+'</p>';
+                        divhtml+= ' </div>';
+                        divhtml+= '    <div class="desc"></div>';
+                        divhtml+= ' </div>';
+                        divhtml+= '  <div class="mask"></div>';
+                        divhtml+= '</div>';
+                        store=data.msg.name;
+                        var ahtml="";
+                        var span;
+                        for(var i=0;i<data.poollist.length;i++){
+                            if(data.poollist[i].count<=0){
+                                disable="disable";
+                                span='';
+                            }
+                            else{
+                                disable="";
+                                span='<span class="badge" style="display:none;position:absolute;right:0;top:0;background-color:#dd514c;color:#fff;font-size:12px;">'+data.poollist[i].count+'</span>';
+                            }
+                            ahtml+='<a data-role="schedule-item" data-id='+data.poollist[i].id+' data-time="'+data.poollist[i].time+'" class="schedule-item '+disable+'" href="javascript:;" style="position: relative;">'+data.poollist[i].time+''+span+'</a>'
+                        }
+                        padNum = 4 - (data.poollist.length % 4);
+                        if(padNum!=4){
+                            for(var i=0;i<padNum;i++){
+                                ahtml+='<a class="schedule-item padding">&nbsp;</a>';
+                            }
+                        }
+                        $("#standard-schedules").html(ahtml);
+                        $("#schedules-calender-open").before(divhtml);
+                        $("#schedule-date-swiper").hide();
+                        $("#store-box").hide();
+                        $($(".flow")[0]).hide()
+                        $($(".flow")[1]).hide()
+                        $($(".flow")[2]).show()
+                        $(".captain").show();
+                        $('#schedules-box').show();
+                    }
+                }
+            });
+
+        });
+
+        function showConfirm( time) {
+
+            var dateTime = $('#schedule-selected').html() + " " + time;
+            $('#schedule-confirm').find('[data-role="date-time"]').html(dateTime);
+            $('#schedule-confirm').find('[data-role="store"]').html(store);
+            $('#page-mask').show().css('top', 0);
+            $('#schedule-confirm').addClass('schedule-confirm-show');
+            //if (hasCombos) {
+            //    $('#schedule-confirm').find('[data-role="ok"]').attr('href', '/book/combos?storeId='+storeId+'&date='+selectDate+'&time='+time+'&productId='+productId+'&city='+city);
+            //} else {
+            var dd = new Date(selectDate);
+            var week = weekAry[dd.getDay()];
+            storeId = 10;
+            productScreenCount = 1;
+            //$('#schedule-confirm').find('[data-role="ok"]').attr('href', '/book/order?storeId='+storeId+'&date='+selectDate+'&time='+time+'&productId='+productId+'&tag='+tag+'&city='+city+'&week='+week+'&number='+productScreenCount+'&combos=');
+            $('#schedule-confirm').find('[data-role="ok"]').attr('href', '?c=order&a=createorder&poolid='+poolid+'&step=package&type=1&categoryid=<?=$category["id"]?>&citycode=<?=$cityinfo["code"]?>&storeId='+storeid+'&date=' + selectDate + '&time=' + time + '&week=' + week + '&number=' + productScreenCount + '&combos=');
+            //}
+
+        }
+
+        $('#schedule-confirm').on('click', '[data-role="cancel"]', function() {
+            $('#page-mask').hide().css('top', 0);
+            $('#schedule-confirm').removeClass('schedule-confirm-show');
+            $('[data-role="schedule-item"]').removeClass('active');
+        });
+        var poolid;
+
+        $('.schedules-box').on('click', '[data-role="schedule-item"]', function() {
+            if($(this).hasClass('disable') || $(this).hasClass('padding')) {
+                return;
+            }
+
+            var time = $(this).attr('data-time');
+            poolid = $(this).attr('data-id');
+            $('[data-role="schedule-item"]').removeClass('active');
+            $(this).addClass('active');
+
+            showConfirm( time);
+        });
+
+        function storeMultiNameClicked() {
+            var arrowElm = $('#store-multi-name').find('i');
+            arrowElm.toggleClass('icon-arrow-down');
+            arrowElm.toggleClass('icon-arrow-up');
+            $('#store-box-open').toggleClass('store-box-open-show');
+            if ($('#page-mask').css('display') == 'none') {
+                $('#page-mask').show().css('top', '84px');
+            } else {
+                $('#page-mask').hide().css('top', 0);
+            }
+        }
+
+        $('#store-multi-name').on('click', function() {
+            storeMultiNameClicked();
+        });
+
+        $('.check-address').on('click', function() {
+            $('.store-address-dialog').toggle();
+            var h = $('.store-address-dialog .dialog-box').height();
+            $('.store-address-dialog .dialog-box').css({
+                'height': h + 'px',
+                'margin-top': -h/2+'px'
+            });
+
+        });
+
+        $('#store-box-open').on('click', function() {
+            if ($(this).hasClass('store-box-open-show')) {
+                var arrowElm = $('#store-multi-name').find('i');
+                arrowElm.addClass('icon-arrow-down');
+                arrowElm.removeClass('icon-arrow-up');
+                $(this).removeClass('store-box-open-show');
+                $('#page-mask').hide().css('top', 0);
+            }
+        });
+
+    </script>
+    <?}else if($step=="package"){?>
+    <link href="<?=$tpl_dir?>/css/combos.css?v=1" rel="stylesheet" type="text/css">
+    <div class="app">
+        <div class="toolbar">
+            <div class="toolbar-logo"><img src="<?=$tpl_dir?>/imgs/logo.png"></div>
+            <div class="toolbar-menu" id="toolbar-menu"><a href="javascript:void(0)" data-role="icon-ment" class="icon-menu"></a></div>
+            <div class="toolbar-back" id="toolbar-back"><a href="javascript:void(0);"><i class="icon-arrow-left"></i>上一步</a></div>
+        </div>
+        <div class="app-body">
+            <div class="selected-info">
+                <span class="item">档期: <?=$date?></span><span class="item">(<?=$week?>)</span><span class="item"><?=$time?></span><span class="item store-info-name"><?=$store['name']?></span>
+            </div>
+            <!-- <dl class="section select-number" id="select-number" style="display: none;">
+                <dt><i class="icon-number5"></i><strong>选择人数</strong></dt>
+                <dd>
+                            <a href="javascript:void(0)" data-role="number-select" class="number activied" data-number="1">1</a>
+                            <a href="javascript:void(0)" data-role="number-select" class="number " data-number="2">2</a>
+                        </dd>
+            </dl> -->
+            <dl class="combos-product" id="combos-product">
+                <dt>
+                    <strong>可加选套餐</strong><span style="display: none;">(加选默认1人份，如需2人份请点“+”号)</span>
+                    <!--已选<span class="selected-product">『NaiveFace×1人』</span>，还可加选以下组合：-->
+                </dt>
+                <dd>
+                    <ul class="list">
+                        <?foreach($categorylist as $v){?>
+                        <li class="combo-number-1 clearfix" data-count="0" data-price="150" data-productid="<?=$v['id']?>" data-title="<?=$v['name']?>" data-maxcount="1" style="display: list-item;">
+                            <div class="img">
+                                <img src="<?=$v['icon']?>">
+                                <div class="mask"></div>
+                            </div>
+                            <div class="content">
+                                <div class="title-price">
+                                    <div class="title"><?=$v['name']?></div>
+                                    <div class="price"><strong>￥<?=$v['price']/100?></strong></div>
+                                </div>
+
+                                <!--<div class="original-discount">
+                                    <div class="original"><del>￥<?=$v['price']/100?></del></div>
+                                    <div class="discount"><span>省30元</span></div>
+                                </div>-->
+
+                            </div>
+                            <span class="action icon-unchecked" data-role="combo-add" data-maxcount="1"></span>
+                            <!--<div class="combo-count">拍摄人数<span data-role="combo-count" data-count="1">1</span></div>-->
+
+                        </li>
+                        <?}?>
+                    </ul>
+                </dd>
+
+            </dl>
+            <div class="cost-box clearfix">
+                <div>订单总额 <span class="total-cost">¥180.00</span></div>
+                <div>支付金额 <span class="deposit">¥60.00</span></div>
+            </div>
+            <div class="action">
+                <a href="javascript:history.back();" class="nb-btn nb-btn-default">重选档期</a>
+                <a href="javascript:;" id="confirm-order" class="nb-btn nb-btn-primary">下一步</a>
+            </div>
+            <div id="page-mask" class="page-mask"></div>
+        </div>
+    </div>
+    <script>
+        var params = {
+            'isVip': 0,
+            //'vipPrice': '0',
+            'defaultNumber': '1',
+            'baseUrl': '?c=order&a=createorder&step=payment&poolid=<?=$poolid?>&type=1&categoryid=<?=$categoryid?>&citycode=<?=$store["citycode"]?>&week=<?=$week?>&storeId=<?=$store["id"]?>&date=<?=$datelist?>&time=<?=$time?>',
+            'nextCanOrderCount' : '5',
+            'productId': '3',
+            'number':'1',
+            'selectProductPrice': '180',
+            'selectProductDeposit': '60.00'
+        };
+
+        function inArray(o, ary) {
+            for(var i = 0; i < ary.length; i++) {
+                if(o == ary[i]) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function selectStr() {
+            var productTit = 'NaiveFace';
+            var htmlAry = [productTit + '×' + params.number + '人'];
+            $('#combos-product li').each(function(){
+                if($(this).css('display') != 'none' && $(this).hasClass('list-active')){
+                    var count = $(this).data('count');
+                    var title = $(this).data('title');
+                    var str = title + '×' + count;
+                    htmlAry.push(str);
+                }
+            });
+            var ss = '『' + htmlAry.join(', ') + '』';
+            $('.selected-product').html(ss);
+        }
+        function calculateCost() {
+            var selectProductPrice = parseFloat(params.selectProductPrice);
+
+            if (params.defaultNumber == 2) {
+                var pp = selectProductPrice;
+                var dd = parseFloat(params.selectProductDeposit);
+            } else {
+                var pp = selectProductPrice * parseInt(params.number);
+                var dd = parseFloat(params.selectProductDeposit) * parseInt(params.number);
+            }
+
+
+            var maxcount = 0;
+            $('#combos-product li').each(function(){
+                if($(this).css('display') != 'none' && $(this).hasClass('list-active')){
+                    var thisCount = parseInt($(this).data('count'), 10);
+                    if (thisCount > maxcount) {
+                        maxcount = thisCount;
+                    }
+                    var _comboPrice = parseFloat($(this).data('price'));
+
+                    var comboPrice = _comboPrice * thisCount;
+                    pp = pp + comboPrice;
+
+                }
+            });
+            dd = dd + maxcount * 30;
+            $('.total-cost').html('¥' + pp.toFixed(2));
+            $('.deposit').html('¥' + (params.number * 60).toFixed(2));
+        }
+
+        $('.list .combo-number-'+params.number).show();
+
+
+        $('.list').on('click', 'li', function() {
+            var parElm = $(this);
+            if (parElm.hasClass('disable')) {
+                return;
+            }
+            parElm.find('[data-role="combo-add"]').toggleClass('icon-unchecked');
+            parElm.find('[data-role="combo-add"]').toggleClass('icon-checked');
+            parElm.toggleClass('list-active');
+            if (!parElm.hasClass('list-active')) {
+                parElm.attr('data-count', 0);
+            } else {
+                parElm.attr('data-count', 1);
+            }
+
+            calculateCost();
+
+        });
+
+        $('.person-count-add').on('click', function(e) {
+            e.stopPropagation();
+            var parElm = $(this).parents('li');
+            if(parElm.hasClass('list-active') && !$(this).hasClass('disable')) {
+                var countElm = parElm.find('.person-count strong');
+                var maxCount = parElm.attr('data-maxcount');
+                var currentCount = parElm.attr('data-count');
+                if (currentCount < maxCount) {
+                    $(this).removeClass('person-count-action-disable');
+                    currentCount++;
+                } else {
+                    $(this).addClass('person-count-action-disable');
+                }
+
+                if (currentCount == maxCount) {
+                    parElm.find('.persons-count-minus').removeClass('person-count-action-disable');
+                    parElm.find('.persons-count-add').addClass('person-count-action-disable');
+                }
+                countElm.html(currentCount);
+                parElm.attr('data-count', currentCount);
+                calculateCost();
+            }
+        });
+        $('.persons-count-minus').on('click', function(e) {
+            e.stopPropagation();
+            var parElm = $(this).parents('li');
+            if(parElm.hasClass('list-active') && !$(this).hasClass('disable')) {
+                var countElm = parElm.find('.person-count strong');
+                var currentCount = parElm.attr('data-count');
+                if (1 < currentCount) {
+                    $(this).removeClass('person-count-action-disable');
+                    currentCount--;
+                }else {
+                    $(this).addClass('person-count-action-disable');
+                }
+                if (currentCount == 1) {
+                    parElm.find('.persons-count-minus').addClass('person-count-action-disable');
+                    parElm.find('.person-count-add').removeClass('person-count-action-disable');
+                }
+                countElm.html(currentCount);
+                parElm.attr('data-count', currentCount);
+                calculateCost();
+            }
+        });
+
+        $('#confirm-order').click(function(){
+            // 获取拍摄人数
+            //var number = $('#select-number .activied').data('number');
+            // 获取可选组合
+            var combos = [];
+            $('#combos-product li').each(function(){
+                if($(this).css('display') != 'none' && $(this).hasClass('list-active')){
+                    var count = $(this).data('count');
+                    var productId = $(this).data('productid');
+                    combos.push(productId+'|'+count);
+                }
+            });
+            window.location = params['baseUrl']  +'&combos='+ combos.join(',');
+        });
+
+        calculateCost();
+        //setCombosStatus();
+        if(params['nextCanOrderCount'] > 0 )
+            $('.list .combo-number-1').removeClass('disable');
+
+        if(params['nextCanOrderCount'] > 1 )
+            $('.list .combo-number-2').removeClass('disable');
+        // $('.list .combo-number-1').show();
+        // $('.list .combo-number-2').show();
+    </script>
+    <?}else if($step=="payment"){?>
+    <link href="<?=$tpl_dir?>/css/order.css?v=1" rel="stylesheet" type="text/css">
+    <div class="app">
+        <div class="toolbar">
+            <div class="toolbar-logo"><img src="<?=$tpl_dir?>/imgs/logo.png"></div>
+            <div class="toolbar-menu" id="toolbar-menu"><a href="javascript:void(0)" data-role="icon-ment" class="icon-menu"></a></div>
+            <div class="toolbar-back" id="toolbar-back"><a href="javascript:void(0);"><i class="icon-arrow-left"></i>上一步</a></div>
+        </div>
+        <div class="app-body">
+            <form id="order-form" method="post">
+                <input type="hidden" name="categoryid" value="<?=$category['id']?>">
+                <input type="hidden" name="storeId" value="<?=$store['id']?>">
+                <input type="hidden" name="citycode" value="<?=$store['citycode']?>">
+                <input type="hidden" name="poolid" value="<?=$poolid?>">
+                <input type="hidden" name="isVip" value="0">
+                <input type="hidden" name="delay" value="<?=$delay?>">
+                <input type="hidden" name="date" value="<?=$datelist?>">
+                <input type="hidden" name="time" value="<?=$time?>">
+                <input type="hidden" name="number" value="1">
+                <input type="hidden" name="combos" value="">
+                <input type="hidden" name="coupon" id="coupon" value="">
+                <input type="hidden" name="item" value="<?=$categoryname?>">
+                <input type="hidden" name="total_price" id="total_price">
+                <input type="hidden" name="deposit-price" id="deposit-price">
+                <input type="hidden" name="tag" id="tag" value="default">
+                <div class="wrap">
+                    <div class="order-info">
+                        <h4>确认订单</h4>
+                        <h5>拍摄信息</h5>
+                        <ul>
+                            <li class="oi-vip">
+                                <label>拍摄日期：</label>
+                                <div><?=$date?>（<?=$week?>）<?=$time?></div>
+                            </li>
+                            <li class="oi-address">
+                                <label>拍摄门店：</label>
+                                <div><p><?=$store['name']?></p></div>
+                            </li>
+                            <li><label>预约姓名：</label><div><input style="float:left;padding:10px 8px;height:36px;width:110px;border:1px solid #B2C7EA;border-radius: 3px;font-size:14px;font-weight:100;color:#1e82d0;outline:none;" value="<?=$user['nickname']?>" id="buyer" name="buyer" /></div></li>
+                            <li><label>手机号码：</label><div><?=$user['telephone']?></div></li>
+                            <li><label>为了确保顺利拍摄，请填写真实姓名和电话。</label></li>
+                            <!-- li><label>拍摄人数：</label><div>1人</div></li -->
+                        </ul>
+                        <ul class="oi-products">
+                            <li>
+                                <label><b>套餐信息</b></label>
+                                <div id="order-products">
+                                    <table>
+                                        <tbody>
+                                            <tr data-price="<?=$category['price']/100?>" data-count="1">
+                                                <th><?=$category['name']?></th>
+                                                <td><? if($category['name']=='差价专用'){ ?><input style="padding:4px 2px;height:25px;width:80px;border:1px solid #B2C7EA;border-radius: 3px;font-size:14px;font-weight:100;color:#1e82d0;outline:none;" type="tel" id="cj_num" value="1"/><? }else{ ?>x1<? } ?> 份</td>
+                                            </tr>
+                                            <?foreach($categorylist as $v){?>
+                                            <tr data-price="<?=$v['price']/100?>" data-count="1">
+                                                <th><?=$v['name']?></th>
+                                                <td>x1 份</td>
+                                            </tr>
+                                            <?}?>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </li>
+                        </ul>
+                        <ul class="oi-time" <? if($category['name']=='差价专用'){ ?>style="display:none"<? } ?>>
+                            <li>
+                                <label><b>预计耗时</b></label>
+                                <div>
+                                    <p>约<?=$delay/3600?>小时</p>
+
+                                </div>
+                            </li>
+                        </ul>
+                        <ul class="oi-coupon" id="order-coupon" <? if($category['name']=='差价专用'){ ?>style="display:none"<? } ?>>
+                            <li>
+                                <label><b>优惠码</b></label>
+                                <div>
+                                    <span class="ui-input">
+                                        <input autocomplete="off" maxlength="8" name="coupon" placeholder="" type="text">
+                                        <a href="javascript:;" class="ui-input-clear icon-fail-fill"></a>
+                                    </span>
+                                    <p>可不填</p>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <ul class="order-info-price">
+                            <li><b>订单金额</b> ￥<b id="price-total"></b> </li>
+
+                            <li>
+                                <b>支付金额</b>
+                                <span>
+                                    ￥<b id="deposit" data-deposit="0"></b>
+                                </span>
+                            </li>
+                        </ul>
+                        <ul class="oi-time" <? if($category['name']=='差价专用'){ ?>style="display:none"<? } ?>>
+                            <li>
+                                <label><b style="color:#1e82d0">付全款</b></label>
+                                <div>
+                                    <input name="fullpay" id="fullpay" type="checkbox" value="1" />
+                                </div>
+                            </li>
+                        </ul>
+
+                    </div>
+                    <div class="order-tips order-tips-active" id="order-tips" style="margin-bottom:6em">
+                        <div class="order-tips-n">
+                            <!-- <p>请核对订单内容,付款后若取消订单,订金将受损失</p> -->
+                            <a href="javascript:;" class="icon-arrow-down open"><span class="icon-warning">查看退款规则</span></a>
+                        </div>
+                        <div class="order-tips-a" style="padding-bottom:1em">
+                            <!-- <span class="icon-close closed"></span> -->
+                            <h6 class="icon-warning">退款规则</h6>
+                            <? foreach($refund_rule as $k=>$v){ ?>
+                            <p>·<?=$v['mark']?></p>
+                            <? } ?>
+                            <!-- <a href="javascript:;" class="icon-arrow-up closed"></a> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="action order-btn">
+                    <a href="?c=order&a=createorder&step=products&citycode=520300" class="order-back">重选套餐</a>
+                    <a href="javascript:void(0);" id="confirm-order" class="order-confirm">确认并支付</a>
+                </div>
+            </form>
+            <style>
+                .store-address-dialog {
+                    color: #888888;
+                    position: fixed;
+                }
+
+                    .store-address-dialog .icon-store-info2 {
+                        font-size: 48px;
+                    }
+
+                    .store-address-dialog .dialog-box-header {
+                        border-bottom-color: #f3f3f3;
+                        margin: 0 15px 10px;
+                    }
+
+                    .store-address-dialog .dialog-box {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        margin-top: -120px;
+                        margin-left: -145px;
+                        padding: 0;
+                        overflow: hidden;
+                    }
+
+                    .store-address-dialog .dialog-box-content {
+                        border-bottom: none;
+                        padding: 0 15px;
+                    }
+
+                        .store-address-dialog .dialog-box-content p {
+                            position: relative;
+                            padding-left: 22px;
+                            margin-bottom: 19px;
+                        }
+
+                    .store-address-dialog p i {
+                        position: absolute;
+                        top: 3px;
+                        left: 0;
+                        width: 12px;
+                        height: 12px;
+                    }
+
+                    .store-address-dialog .desc p {
+                        padding: 0;
+                        margin: 0;
+                    }
+
+                    .store-address-dialog a.tela {
+                        padding: 7px 14px;
+                        border: 1px solid #e4e4e4;
+                        border-radius: 3px;
+                        color: #888888;
+                    }
+
+                        .store-address-dialog a.tela:hover {
+                            background: #e4e4e4;
+                        }
+
+                        .store-address-dialog a.tela:active {
+                            background-color: #cccccc;
+                            border-color: #cccccc;
+                            color: #FFFFFF;
+                        }
+            </style>
+            <div class="nb-dialog store-address-dialog" style="display: none;">
+                <div class="dialog-box" style="height: 278px; margin-top: -139px;">
+                    <div class="dialog-box-header">
+                        <p><span class="icon-store-info2"></span></p>
+                        <p style="height: 31px;"><?=$store['name']?></p>
+                        <a href="javascript:$('.store-address-dialog').hide();" class="icon-close close"></a>
+                    </div>
+                    <div class="dialog-box-content list" style="font-size: 12px;">
+                        <p><i class="icon-location-gray"></i><?=$store['address']?></p>
+                        <p><i class="icon-phone2"></i><a href="tel:<?=$store['tel']?>" class="tela" style=""><?=$store['tel']?></a></p>
+                        <p><i class="icon-email"></i><?=$store['email']?></p>
+                        <p><i class="icon-bus"></i><?=$store['transit']?></p>
+                    </div>
+                    <div class="desc"></div>
+                </div>
+                <div class="mask"></div>
+            </div>
+            <div id="page-mask" class="page-mask"></div>
+        </div>
+    </div>
+    <div id="alert-dialog" class="alert-dialog" style="display: none;">
+        <div class="alert-box">
+            <a href="javascript:$(&#39;#alert-dialog&#39;).hide();" class="close icon-close"></a>
+            <div class="alert-header">
+                <i class="icon-warning"></i>
+            </div>
+            <div class="alert-content">
+            </div>
+            <div class="alert-footer">
+                <a href="javascript:void(0)" class="action-btn">好</a>
+            </div>
+        </div>
+
+        <div class="mask"></div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#fullpay').click();
+            if($('#cj_num').length){
+            $('#cj_num').on('keyup',function(){
+            	var _v = ~~this.value;
+            	var _p = <?=$category['price']/100?>;
+            	$('#price-total').html(_v*_p);
+            	$('#deposit').html(_v*_p);
+            	$('#order-form')[0].item.value = '差价专用:'+_v;
+            });
+            }
+        });
+        var totalPrice;
+        var isVip = 0;
+        //优惠码金额
+        var couponCost = 0;
+        function customAlert(status, message, actionText, callback) {
+            var statusClass = '';
+            if(status == 'error') {
+                statusClass = 'error';
+            }
+            $('#alert-dialog').addClass(statusClass);
+            $('#alert-dialog .alert-content').html(message);
+            $('#alert-dialog .action-btn').html(actionText);
+            $('#alert-dialog .action-btn').on('click', function() {
+                if (callback != null) {
+                    callback($('#alert-dialog'));
+                }
+                $('#alert-dialog').hide();
+            });
+            $('#alert-dialog').show();
+            var h = $('#alert-dialog .alert-box').height();
+            $('#alert-dialog .alert-box').height(h);
+            $('#alert-dialog .alert-box').css('margin-top', -h/2)
+        }
+        $('.mask').on('click', function() {
+            $(this).parent().hide();
+        });
+
+        // 查看门店
+        $('.check-address').on('click', function() {
+            $('.store-address-dialog').toggle();
+            var h = $('.store-address-dialog .dialog-box').height();
+            $('.store-address-dialog .dialog-box').css({
+                'height': h + 'px',
+                'margin-top': -h/2+'px'
+            });
+        });
+        // 展开收起退款规则
+        (function(){
+            $('#order-tips').find('.open').click(function(){
+                $('#order-tips').addClass('order-tips-active');
+            }).end().find('.closed').click(function(){
+                $('#order-tips').removeClass('order-tips-active');
+            })
+        })();
+        //计算总价
+        (function(){
+            var totalPrice = 0;
+            $('#order-products tr').each(function(){
+                var price = parseFloat($(this).data('price'), 10);
+                //var VIPPrice = parseFloat($(this).data('vipprice'), 10);
+                price = price * parseInt($(this).data('count'), 10);
+                totalPrice += price;
+            });
+            $('#total_price').val(totalPrice);
+            $('#price-total').html(totalPrice.toFixed(0));
+            var deposit=parseFloat('<?=$configinfo['value']?>')/100;
+            $('#deposit').val(deposit);
+            $("#deposit-price").val(deposit);
+            $('#deposit').html(deposit);
+        })();
+        // 验证coupon
+        (function(){
+            var node = $('#order-coupon').find('input');
+            var isuse=true;
+            var validateCoupon = function(){
+                var coupon = node.val().replace(/\s/g, '');
+                if(coupon.length == 8){
+                    $.getJSON('?c=order&a=coupon&storeid=<?=$store['id']?>&code='+ coupon, function(result){
+                        if(result.success){
+                            node.parents('.oi-coupon')
+                                    .removeClass('oi-coupon-error')
+                                    .addClass('oi-coupon-success')
+                                    .find('p').css({
+                                        paddingTop: 0,
+                                        lineHeight: '36px',
+                                        color: '#7CDFA8'
+                                    }).html('优惠'+ parseFloat(result.msg.cost/100, 10).toFixed(0) +'元');
+                            $("#coupon").val(coupon);
+                            couponCost = parseFloat(result.msg.cost/100, 10);
+                            var totalPrice=parseFloat($("#price-total").html());
+                            var deposit=parseFloat('<?=$configinfo['value']?>')/100;
+                            if( $('#fullpay').is(':checked')){
+                                $('#deposit').html(totalPrice.toFixed(0)-couponCost);
+                                $('#deposit').val(totalPrice.toFixed(0)-couponCost);
+                                $("#deposit-price").val(totalPrice.toFixed(0)-couponCost);
+                            }
+                            else{
+                                $('#deposit').val(deposit-couponCost);
+                                $("#deposit-price").val(deposit-couponCost);
+                                $('#deposit').html(deposit-couponCost);
+                            }
+
+                        }else{
+                            node.parents('.oi-coupon')
+                                    .removeClass('oi-coupon-success')
+                                    .addClass('oi-coupon-error')
+                                    .find('p').css({
+                                        paddingTop: 0,
+                                        lineHeight: '36px',
+                                        color: '#FF8571'
+                                    }).html('优惠码无效');
+
+                        }
+                    });
+
+                }else{
+                    if(coupon.length > 0) {
+                        node.parents('.oi-coupon')
+                                .find('p').css({
+                                    paddingTop: 0,
+                                    lineHeight: '36px',
+                                    fontWeight: 100,
+                                    color: '#FF8571'
+                                }).html('8位字母数字');
+                    } else {
+                        node.parents('.oi-coupon')
+                            .removeClass('oi-coupon-error')
+                            .addClass('oi-coupon-success')
+                            .find('p').html('');
+
+                    }
+                    var totalPrice=parseFloat($("#price-total").html());
+                    var deposit=parseFloat('<?=$configinfo['value']?>')/100;
+                    if( $('#fullpay').is(':checked')){
+                        $('#deposit').html(totalPrice.toFixed(0));
+                        $('#deposit').val(totalPrice.toFixed(0));
+                        $("#deposit-price").val(totalPrice.toFixed(0));
+                    }
+                    else{
+                        $('#deposit').val(deposit);
+                        $("#deposit-price").val(deposit);
+                        $('#deposit').html(deposit);
+                    }
+                    couponCost=0;
+                }
+            };
+            $('#order-coupon').find('input').bind('input', function(){
+                validateCoupon();
+            })
+        })();
+        $('#fullpay').click(function(){
+            couponCost = parseFloat(couponCost);
+            var totalPrice=parseFloat($("#price-total").html());
+            if(totalPrice < 0){
+                newPrice = 0;
+            }
+            var deposit=parseFloat('<?=$configinfo['value']?>')/100;
+            if($(this).is(':checked')){
+                $('#deposit').html(totalPrice.toFixed(0)-couponCost);
+                $('#deposit').val(totalPrice.toFixed(0)-couponCost);
+                $("#deposit-price").val(totalPrice.toFixed(0)-couponCost);
+            }else{
+                $('#deposit').val(deposit-couponCost);
+                $("#deposit-price").val(deposit-couponCost);
+                $('#deposit').html(deposit-couponCost);
+                //do someting else
+            }
+        });
+        // input获得焦点时显示删除按钮
+        (function(){
+            $('.ui-input').find('input').click(function(e){
+                $('.ui-input-active').removeClass('ui-input-active');
+
+                if($(this).parents('.utel-box').size() > 0){
+                    $(this).parents('.utel-box').addClass('utel-box-active');
+                } else {
+                    $('.utel-box-active').removeClass('utel-box-active');
+                    $(this).parent().addClass('ui-input-active');
+                }
+                e.stopPropagation();
+            }).end().find('.ui-input-clear').click(function(e){
+                $(this).parent().addClass('ui-input-active').find('input').val('');
+                $(this).parents('.utel-code').removeClass('ui-input-success');
+                console.log($('#order-coupon input'))
+                if($('#order-coupon input').size() > 0){
+                    $('#order-coupon input').keyup();
+                }
+                var totalPrice=parseFloat($("#price-total").html());
+                var deposit=parseFloat('<?=$configinfo['value']?>')/100;
+                if($('#fullpay').is(':checked')){
+                    $('#deposit').html(totalPrice.toFixed(0));
+                    $('#deposit').val(totalPrice.toFixed(0));
+                    $("#deposit-price").val(totalPrice.toFixed(0));
+                }else{
+                    $('#deposit').val(deposit);
+                    $("#deposit-price").val(deposit);
+                    $('#deposit').html(deposit);
+                }
+                couponCost=0;
+                e.stopPropagation();
+            });
+            $('body').click(function(){
+                $('.ui-input-active').each(function(){
+                    $(this).removeClass('ui-input-active');
+                })
+            })
+        })();
+
+        // 手机号码校验
+        $('.order-telphone').bind('input', function(){
+            var tel = $.trim($(this).val());
+
+            if(tel.length == 11){
+                $(this).parents('.ui-input-error').removeClass('ui-input-error');
+            }
+        });
+
+        // 选择性别
+        $('.user-info .uname-sex a').click(function(){
+            var el = $(this);
+            el.parent().find('.active').removeClass('active');
+            el.addClass('active');
+            el.parent().find('input').val(el.data('sex'));
+        });
+
+        // 显示手机验证码
+        (function(){
+            var canSendCode = false;
+            // 验证码倒计时
+            var countDown = function(el, callback){
+                var count = el.data('countdown');
+                var timer = setInterval(function(){
+                    if(count <= 1){
+                        clearInterval(timer);
+                        callback();
+                    }else{
+                        el.removeData('countdown');
+                        el.html('重新获取('+ count +')');
+                        count--;
+                    }
+                }, 1000);
+            }
+
+            $('.user-tel .utel-box')
+                .find('input').bind('input', function(){
+                    var el = $(this);
+                    el.val(el.val().replace(/[^\d]/g, ''));
+                    var originPhone = el.attr('tel');
+                    var phone = el.val();
+
+                    if(phone.length == 11){
+                        // 修改了手机号或者以前没有输入过手机号时需要验证
+                        if(originPhone == '' || phone != originPhone){
+                            canSendCode = true;
+                            el.parents('.user-tel').find('.utel-code')
+                                    .removeClass('ui-input-success')
+                                    .removeClass('ui-input-error');
+                            el.parents('.utel-box').find('.ut-getcode').removeClass('ut-getcode-disable');
+                            el.parents('.user-tel').find('.utel-code').show();
+                        } else {
+                            canSendCode = false;
+                            el.parents('.utel-box').find('.ut-getcode').addClass('ut-getcode-disable');
+                            el.parents('.user-tel').find('.utel-code').hide();
+                        }
+                    } else {
+                        el.parents('.user-tel').find('.utel-code').hide();
+                    }
+                })
+                .keyup()
+                .end().find('.ut-getcode').click(function(){
+                    var el = $(this);
+                    var tel = el.parent().find('input').val();
+                    if(tel.length === 11 && canSendCode){
+                        canSendCode = false;
+                        el.addClass('ut-getcode-disable');
+                        $.getJSON('?c=order&a=sendcode&tel=' + tel, function (data) {
+                            if (!data.success) {
+                                canSendCode = true;
+                                customAlert('error', data.msg, '好');
+                            } else {
+                                el.data('countdown', 60);
+                                countDown(el, function () {
+                                    el.html('获取验证码');
+                                    canSendCode = true;
+                                });
+                            }
+                        });
+                    }
+                });
+
+            // 校验验证码
+            $('.utel-code input').bind('input', function () {
+                var el = $(this);
+                var code = el.val();
+                var tel = el.parents('.user-tel').find('.utel-box input').val();
+                if (code.length == 4) {
+                    $.getJSON('?c=order&a=validatecode&tel=' + tel + '&code=' + code, function (data) {
+                        if (!data.success) {
+                            el.parents('.utel-code').removeClass('ui-input-success').addClass('ui-input-error');
+                        } else {
+                            el.parents('.utel-code').removeClass('ui-input-error').addClass('ui-input-success');
+                        }
+                    });
+                }
+            });
+        })();
+        // 邮箱
+        (function(){
+            // 显示推荐邮箱列表
+            var showSuggest = function(el, email){
+                var suffix = ['qq.com', '163.com', '126.com', 'hotmail.com', 'gmail.com', '189.cn'];
+                var list = [];
+                var offset = el.offset();
+                var name = email.split('@').length > 1 ? email.split('@')[1] : null;
+                var node = $('#email-suggest');
+
+                if(node.length == 0){
+                    node = $('<div id="email-suggest" />');
+                    $('body').append(node);
+                    node.on('click', 'a', function(){
+                        if(el.size() > 0){
+                            el.val($(this).html()).focus().blur()
+                                    .parents('.user-email').removeClass('ui-input-error');
+                        }
+                        node.hide();
+                    })
+                }
+
+                $.each(suffix, function(index, site){
+                    if(name && name != ''){
+                        if(site.indexOf(name) > -1){
+                            list.push('<a href="javascript:;">'+ email.split('@')[0] +'@'+ site +'</a>');
+                        }
+                    } else {
+                        list.push('<a href="javascript:;">'+ email.split('@')[0] +'@'+ site +'</a>');
+                    }
+                });
+                node.css({
+                    top: offset.top + offset.height,
+                    left: offset.left,
+                    width: offset.width
+                }).html(list.join('')).show();
+            }
+            $('.user-email input').bind('input', function(){
+                var email = $(this).val();
+                if(/^(\w)+(\.\w+)*@(\w)*?$/.test(email)){
+                    showSuggest($(this), email);
+                }
+            })
+        })();
+
+        function hasError(){
+            var hasError = false;
+            $('.user-info').each(function(){
+                var name = $(this).find('.order-username').val();
+                var originPhone = $(this).find('.order-telphone').attr('tel');
+                var phone = $(this).find('.order-telphone').val();
+                var code = $(this).find('.order-telcode').val();
+                var email = $(this).find('.order-mail').val();
+
+                if(name == ''){
+                    hasError = true;
+                    $(this).find('.order-username').focus();
+                    $(this).find('.uname-box').addClass('ui-input-error');
+                    return false;
+                }else{
+                    $(this).find('.uname-box').removeClass('ui-input-error');
+                }
+
+                if(phone.length != 11){
+                    hasError = true;
+                    $(this).find('.order-telphone').focus();
+                    $(this).find('.utel-box').addClass('ui-input-error');
+                    return false;
+                }else{
+                    $(this).find('.utel-box').removeClass('ui-input-error');
+
+                    // 校验验证码
+                    if(!originPhone || originPhone == '' || originPhone != phone ){
+                        if(!$(this).find('.utel-code').hasClass('ui-input-success')){
+                            hasError = true;
+                            $(this).find('.order-code').focus();
+                            $(this).find('.utel-code').addClass('ui-input-error');
+                            return false;
+                        }
+                    }
+                }
+
+                if(email == '' || !/^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/.test(email)){
+                    hasError = true;
+                    $(this).find('.order-email').focus();
+                    $(this).find('.user-email').addClass('ui-input-error');
+                    return false;
+                }else{
+                    $(this).find('.user-email').removeClass('ui-input-error');
+                }
+            });
+            return hasError;
+        }
+
+        $('.user-info').last().find('input').blur(function(){
+            if(!hasError()){
+                $('#confirm-order').removeClass('order-confirm-disable');
+            }else{
+                $('#confirm-order').addClass('order-confirm-disable');
+            }
+        }).each(function(){
+            if(/^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/.test($(this).val())){
+                $(this).focus().blur();
+            }
+        });
+
+
+        var $loadingTimer;
+        function startLoading()
+        {
+            // List of words to loop on
+            var words = ['加载中...','加载中','加载中.', '加载中..'];
+
+            // Index of the words array
+            var index = 0;
+
+            $loadingTimer=window.setInterval(function(){
+                $('#confirm-order').html(words[index]);
+                // Increment the index modulo the length of words: 0, 1, 2, 0, 1, 2, etc
+                index = (index+1) % words.length;
+            }, 500);
+        }
+
+        //var creating = false;
+        $('#confirm-order').on('click',function(){
+            if(hasError()){
+                alert('出错啦...');
+                return;
+            }
+            var _self = $(this);
+            if(_self.hasClass('order-confirm-disable'))return;
+            $.ajax({
+                type: 'post',
+                url: '?c=order&a=createcard',
+                data: $('#order-form').serialize(),
+                dataType: 'json',
+                timeout: 5000,
+                success: function(data){
+                    if(data && data.errorcode === 0){
+                        var cardid = data.data;
+                        $.ajax({
+                            type: 'post',
+                            url: '?ajax=1&c=wxpayjs&a=api',
+                            data: {cardid:cardid},
+                            dataType: 'json',
+                            timeout: 5000,
+                            success: function(data){
+                                if(data && data.errorcode === 0){
+                                    JSAPI.chooseWXPay(data.data,function(res){
+                                        $.ajax({
+                                            type: 'post',
+                                            url: '?ajax=1&c=order&a=payquery',
+                                            data: {cardid:cardid},
+                                            dataType: 'json',
+                                            timeout: 5000,
+                                            success: function(data){
+                                                if(data && data.errorcode === 0){
+                                                    customAlert('error', '支付成功!', '我的订单', function(){
+                                                        window.location.href = '?c=order&a=myorder';
+                                                    });
+                                                }else{
+                                                    customAlert('error', data ? data.data : '支付确认', '我的订单', function(){
+                                                        window.location.href = '?c=order&a=myorder';
+                                                    });
+                                                }
+                                            },
+                                            error: function(xhr, type){
+                                                customAlert('error', '支付确认', '我的订单', function(){
+                                                    window.location.href = '?c=order&a=myorder';
+                                                });
+                                            }
+                                        });
+                                        return;
+                                    },function(res){
+                                        customAlert('error', '支付取消!', '我的订单', function(){
+                                            window.location.href = '?c=order&a=myorder';
+                                        });
+                                    });
+                                }else{
+                                    customAlert('error', data ? data.data : '操作失败', '好', function(){
+                                        window.location.href = '?c=order&a=myorder';
+                                    });
+                                }
+                            },
+                            error: function(xhr, type){
+                                customAlert('error', '网络超时，请重试!', '好', function(){
+                                    window.location.href = window.location.href + '&t=' + (new Date().getTime())
+                                });
+                            }
+                        });
+                        return;
+                    }else{
+                        customAlert('error', data ? data.data : '操作失败', '好');
+                        _self.removeClass('order-confirm-disable');
+                    }
+                },
+                beforeSend: function(xhr){
+                    _self.addClass('order-confirm-disable');
+                },
+                error: function(xhr, type){
+                    customAlert('error', '网络超时，请重试!', '好', function(){
+                        location.reload();
+                    });
+                }
+            });
+        });
+    </script>
+    <?}else{?>
+    <div class="app">
+        <div class="toolbar">
+            <div class="toolbar-logo">
+                <img src="<?=$tpl_dir?>/imgs/logo.png" />
+            </div>
+            <div class="toolbar-menu" id="toolbar-menu">
+                <a href="javascript:void(0)" data-role="icon-ment" class="icon-menu"></a>
+            </div>
+            <div class="toolbar-back" id="toolbar-back">
+                <a href="javascript:void(0);">
+                    <i class="icon-arrow-left"></i>上一步
+                </a>
+            </div>
+        </div>
+        <div class="app-body">
+            <div class="notice-wrap">
+                <h2>欢迎来到十七平</h2>
+                <div class="content">
+                    <dl class="notice-dl">
+                        <dt>预约项目说明</dt>
+                        <dd>
+                            <ul class="intro">
+                                <li>
+                                    预约成功后订单不可更改，如需取消将产生订金损失，退款规则如下：
+                                    <p style="margin-top:6px;margin-bottom:8px;line-height: 1.4">
+                                        <? foreach($refund_rule as $k=>$v){ ?>
+                                        <?=$v['mark']?><br />
+                                        <? } ?>
+                                    </p>
+                                </li>
+                                <li>如未按预定日期到店，订单则视为放弃，定金将不予退还。</li>
+                                <li>我们会提供精修后的数码底片，不提供未经处理的原始拍摄文件。</li>
+                                <li>除登记照外，暂时仅支持单人预约，如需多人请分别预约。</li>
+                            </ul>
+                        </dd>
+                    </dl>
+                </div>
+                <div class="action">
+                    <p style="font-size:1.2em;margin-top: 0;padding-top:0;padding-bottom:10px;color:#7CDFA8;">
+                        <input type="checkbox" value="1" id="agreeCheckbox" />
+                        <b id="agreeWrapper" style="font-weight:bold;display: inline-block; background:white;">我同意上述条款</b>
+                    </p>
+                    <a href="javascript:void(0);" id="goBooking" class="<?php if(!$userinfo['telephone']){ ?>validateTel<?php } ?> nb-btn nb-btn-disable">开始预约</a>
+                    <a href="?c=order&a=myorder" class="nb-btn nb-btn-default">我的订单</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        wx.ready(function(){
+            JSAPI.getLocation(function(location){
+                location_city = location || '';
+            },function(err){
+                alert(err);
+            });
+        });
+    </script>
+    <?}?>
+    <!-- 菜单 start -->
+    <div id="toolbar-submenu" class="toolbar-submenu">
+        <ul class="ts-menu" id="ts-menu">
+            <li><a href="?c=order&a=createorder"><i class="icon-order"></i>开始预约</a></li>
+            <li><a href="?c=order&a=myorder"><i class="icon-orderlist"></i>我的订单</a></li>
+            <li><a href="?c=order&a=Personal"><i class="icon-profile"></i>个人资料</a></li>
+            <li><a href="?c=order&a=negative"><i class="icon-vip2"></i>个人底片</a></li>
+            <li><a href="?c=order&a=address"><i class="icon-store-info1"></i>门店地址</a></li>
+            <li><a href="?c=order&a=help"><i class="icon-notice"></i>拍摄须知</a></li>
+        </ul>
+        <div class="mask"></div>
+    </div>
+    <!-- 菜单 end -->
+    <script type="text/javascript">
+        $('#toolbar-submenu').on('click', '.mask', function() {
+            $('#toolbar-submenu').hide();
+            var mentEl = $('#toolbar-menu').find('[data-role="icon-ment"]');
+            if (mentEl.hasClass('icon-menu')) {
+                mentEl.removeClass('icon-menu');
+                mentEl.addClass('icon-arrow-right');
+            } else {
+                mentEl.addClass('icon-menu');
+                mentEl.removeClass('icon-arrow-right');
+            }
+            $('#ts-menu').removeClass('ts-menu-active');
+        });
+        var toolbarLocationElm = $('#toolbar-location');
+        toolbarLocationElm.show();
+        toolbarLocationElm.on('click', function() {
+            $(this).find('[data-role="arrow"]').toggleClass('icon-arrow-down');
+            $(this).find('[data-role="arrow"]').toggleClass('icon-arrow-up');
+            $('#toolbar-citys').toggleClass('toolbar-citys-show');
+        });
+        $('#toolbar-back').click(function(){
+
+            if($('#schedules-calender-open').length)
+            {
+                if(!$('#schedules-calender-open').hasClass('schedules-calender-open-show'))
+                {
+                    window.location.href= window.location.href;
+                    return ;
+                }
+            }
+            history.back();
+        });
+        function decideBtn(){
+            setTimeout(function () {
+                if($('#agreeCheckbox').is(':checked'))
+                    $('#goBooking').removeClass('nb-btn-disable').addClass('nb-btn-primary');
+                else
+                    $('#goBooking').removeClass('nb-btn-primary').addClass('nb-btn-disable');
+            }, 100);
+        }
+        $('#agreeWrapper').on('click', function() {
+            if($('#agreeCheckbox').is(':checked'))
+                $('#agreeCheckbox').prop('checked',false).triggerHandler('click');
+            else
+                $('#agreeCheckbox').prop('checked',true).triggerHandler('click');
+            decideBtn();
+        });
+        $('#agreeCheckbox').on('click',function(){
+            decideBtn();
+        });
+        $('#toolbar-menu').click(function(){
+            var mentEl = $(this).find('[data-role="icon-ment"]');
+            $('#toolbar-submenu').toggle();
+            if (mentEl.hasClass('icon-menu')) {
+                mentEl.removeClass('icon-menu');
+                mentEl.addClass('icon-arrow-right');
+            } else {
+                mentEl.addClass('icon-menu');
+                mentEl.removeClass('icon-arrow-right');
+            }
+            setTimeout(function() {
+                $('#ts-menu').toggleClass('ts-menu-active');
+            }, 0);
+        });
+        $('#goBooking').on('click', function() {
+            if($(this).hasClass('nb-btn-disable'))return;
+            if($(this).hasClass('validateTel')){
+                window.location.href = '?c=order&a=personal&referer='+encodeURIComponent(window.location.href);
+            }else{
+                if (location_city) {
+                    window.location.href = '?<?=burl('step=products&citycode=')?>'+location_city;
+                } else {
+                    window.location.href = '?<?=burl('step=city')?>';
+                }
+            }
+        });
+
+        var location_city = '';
+        var location_name = '';
+
+        var JSAPI = {
+            previewImage: function(current, urls){
+                wx.previewImage({
+                    current: current,
+                    urls: urls || [current]
+                });
+            },
+            getLocation: function(success, fail){
+                var local_location = localStorage.getItem('data-location') || [];
+                if(local_location.length){
+                    local_location = JSON.parse(local_location);
+                    if(local_location['lastCacheTime'] > (new Date().getTime())){
+                        success(local_location['citycode']);
+                        return;
+                    }
+                }
+                wx.getLocation({
+                    type: 'gcj02',
+                    success: function(res){
+                        if(res.errMsg == 'getLocation:ok'){
+                            $.getJSON('?ajax=1&c=order&a=getLocation&lon='+res.longitude+'&lat='+res.latitude,function(data){
+                                if(data && data.errorcode === 0){
+                                    if(data.data){
+                                        localStorage.setItem('data-location', JSON.stringify({citycode:data.data,lastCacheTime:(new Date().getTime()+86400000)}));
+                                    }
+                                    success(data.data);
+                                }else{
+                                    fail && fail(data.data);
+                                }
+                            });
+                        }else{
+                            fail && fail(res.errMsg);
+                        }
+                    },
+                    cancel: function(res){
+                        fail && fail('获取位置不可用');
+                    },
+                    fail: function(res){
+                        fail && fail('未获取到位置')
+                    }
+                });
+            },
+            openLocation: function(lon, lat, name, address, scale, infoUrl){
+                if(lon && lat){
+                    wx.openLocation({
+                        longitude: lon,
+                        latitude: lat,
+                        name: name || '',
+                        address: address || '',
+                        scale: scale || 25,
+                        infoUrl: infoUrl || ''
+                    });
+                }
+            },
+            chooseWXPay: function(config, success, fail){
+                try{
+                    config = JSON.parse(config);
+                }catch(e){
+                    fail && fail(e);
+                    return;
+                }
+                config.success = success;
+                config.cancel = fail;
+                wx.chooseWXPay(config);
+            },
+            share: function(){
+                var _share = {
+                    title: document.title,
+                    desc: '十七平，一群热爱生活、热爱摄影的年轻人，把摄影当作一种情怀，追求创意、自然、美丽、简洁、大方的拍摄理念，致力于高端形象创意摄影。',
+                    link: '<?=APPLICATION_URL?>/?c=order&a=createorder',
+                    imgUrl: '<?=$tpl_dir?>/imgs/01.jpg'
+                };
+                wx.onMenuShareTimeline(_share);
+                wx.onMenuShareAppMessage(_share);
+            }
+        };
+
+        <?php if(isset($jssdk) && $jssdk){ ?>
+        wx.config({
+            debug: false,
+            appId: '<?=$jssdk['appId']?>',
+                timestamp: <?=$jssdk['timestamp']?>,
+            nonceStr: '<?=$jssdk['nonceStr']?>',
+            signature: '<?=$jssdk['signature']?>',
+            jsApiList: [
+              'hideMenuItems',
+              'onMenuShareTimeline',
+              'onMenuShareAppMessage',
+              'previewImage',
+              'getLocation',
+              'chooseWXPay'
+            ]
+        });
+        wx.error(function(res){
+            //window.location.href = window.location.href;
+        });
+        wx.ready(function () {
+            wx.hideMenuItems({
+                menuList: [
+                    'menuItem:share:qq',
+                    'menuItem:share:weiboApp',
+                    'menuItem:share:facebook',
+                    'menuItem:share:QZone'
+                ]
+            });
+            JSAPI.share();
+        });
+        <?php } ?>
+
+        $(function(){
+            if (/Android/gi.test(navigator.userAgent)) {
+                window.addEventListener('resize', function () {
+                    if (document.activeElement.tagName == 'INPUT' || document.activeElement.tagName == 'TEXTAREA') {
+                        window.setTimeout(function () {
+                            document.activeElement.scrollIntoViewIfNeeded();
+                        }, 0);
+                    }
+                })
+            }
+        });
+    </script>
+</body>
+</html>

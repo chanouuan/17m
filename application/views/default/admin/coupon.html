@@ -1,0 +1,209 @@
+<?php include('header.html'); ?>
+<link href="<?=$tpl_dir?>/css/pagination.css" rel="stylesheet" type="text/css">
+
+<div class="admin-content">
+    <div class="admin-content-body">
+        <div class="am-cf am-padding am-padding-bottom-0">
+            <div class="am-fl am-cf"> 优惠劵管理</div>
+        </div>
+        <hr>
+        <?if($action=="from"){?>
+        <div class="am-g">
+            <form method="post" action="?c=admin&a=coupon&action=save" onsubmit="return onFormSubmit(this);">
+                <div class="admin-content-body">
+                    <div class="am-form">
+                        <fieldset>
+                            <div class="am-form-group">
+                                <label for="doc-ipt-email-1">门店</label>
+                                <select name="storeid" id="storeid">
+                                    <option value="0">请选择</option>
+                                    <?foreach($storelist as $k=>$v){?>
+                                    <option value="<?=$v['id']?>"><?=$v['name']?></option>
+                                    <?}?>
+                                </select>
+                            </div>
+                            <div class="am-form-group">
+                                <label>用途</label>
+                                <select name="type" id="type">
+                                    <option value="0">通用</option>
+                                    <option value="1">评价奖励</option>
+                                </select>
+                                <p class="am-form-help">
+                                    1. 通　　用: 一般优惠劵类型，人工发放，无特殊性质。<br>
+                                    2. 评价奖励: 专用于顾客评价成功后自动发放。
+                                </p>
+                            </div>
+                            <div class="am-form-group">
+                                <label for="doc-ipt-email-1">优惠金额(元)</label>
+                                <input type="number" id="cost" name="cost">
+                            </div>
+                            <div class="am-form-group">
+                                <label for="doc-ipt-email-1">数量(张)</label>
+                                <input type="number" id="count" name="count" value="100">
+                            </div>
+                            <div class="am-form-group">
+                                <label for="doc-ipt-email-1">过期时间</label>
+                                <input type="text" class="date-control" id="expire" name="expire" value="<?=date('Y-m-d',time()+86400*30)?>">
+                            </div>
+                            <p><button type="submit" class="am-btn am-btn-success">提交</button></p>
+                        </fieldset>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <?}else{?>
+        <div class="am-g">
+            <form class="am-form-inline" role="form" action="?c=admin&a=coupon" method="get">
+            <input type="hidden" name="c" value="admin">
+            <input type="hidden" name="a" value="coupon">
+                <div class="am-form-group am-input-group-sm am-u-sm-4">
+                    <input maxlength="8" type="text" class="am-form-field" name="partner" value="<?=$_GET['partner']?>" placeholder="输入优惠码">
+                </div>
+                <div class="am-form-group am-input-group-sm am-u-sm-4">
+                    <select name="storeid" class="am-form-field" id="storeid">
+                        <option value="0">请选择门店</option>
+                        <?foreach($storelist as $k=>$v){?>
+                        <option value="<?=$v['id']?>" <?if($_GET['storeid']==$v['id']){?> selected <?}?>><?=$v['name']?></option>
+                        <?}?>
+                    </select>
+                </div>
+                <div class="am-form-group am-input-group-sm am-u-sm-4">
+                    <select name="type" class="am-form-field" id="type">
+                        <option value="" <?if($_GET['type']===''){?>selected<?}?>>请选择用途</option>
+                        <option value="0" <?if($_GET['type']==='0'){?>selected<?}?>>通用</option>
+                        <option value="1" <?if($_GET['type']==='1'){?>selected<?}?>>评价奖励</option>
+                    </select>
+                </div>
+                <div class="am-form-group am-input-group-sm am-u-sm-4">
+                    <select name="status" class="am-form-field" id="status">
+                        <option value="" <?if($_GET['status']===''){?>selected<?}?>>全部状态</option>
+                        <option value="1" <?if($_GET['status']==='1'){?>selected<?}?>>已使用</option>
+                        <option value="0" <?if($_GET['status']==='0'){?>selected<?}?>>未使用</option>
+                        <option value="2" <?if($_GET['status']==='2'){?>selected<?}?>>已派发</option>
+                    </select>
+                </div>
+                <div class="am-form-group am-input-group-sm am-u-sm-3">
+                    <button class="am-btn am-btn-default am-btn-sm" type="submit">搜索</button>
+                </div>
+            </form>
+        </div>
+        <div class="am-g">
+            <div style="margin:10px">
+                <div class="am-btn-toolbar">
+                    <div class="am-btn-group am-btn-group-xs">
+                        <a type="button" class="am-btn am-btn-default" href="?c=admin&a=coupon&action=from"><span class="am-icon-plus"></span>设置优惠码</a>
+                    </div>
+                </div>
+            </div>
+            <div class="am-g" style="margin:10px">
+                <div class="am-form  am-scrollable-horizontal">
+                    <table class="am-table am-table-bordered am-table-striped am-text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>用途</th>
+                                <th>面值(元)</th>
+                                <th>优惠码</th>
+                                <th>门店</th>
+                                <th>过期时间</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?foreach ($couponlist as $v){?>
+                            <tr>
+                                <td>
+                                    <?if($v['type']==1){?>
+                                    评价奖励
+                                    <?}else{?>
+                                    通用
+                                    <?}?>
+                                </td>
+                                <td><?=$v['cost']/100?></td>
+                                <td><?=$v['partner']?></td>
+                                <td><?=$v['storename']?></td>
+                                <td><?=$v['expire']?></td>
+                                <td>
+                                    <?if($v['status']=="1"){?>
+                                    <span style="color:red">已使用</span>
+                                    <?}elseif($v['status']=="0"){?>
+                                    <span style="color:green">未使用</span>
+                                    <?}elseif($v['status']=="2"){?>
+                                    <span style="color:green">已派发</span>
+                                    <?}?>
+                                   <td>
+                                   <a class="am-btn am-btn-danger am-btn-xs" onclick="deletesetpool(<?=$v['id']?>)">删除</a>
+                                </td>
+                            </tr>
+                        <?}?>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="am-cf" style="text-align: center; margin:1rem; font-size:1rem">
+                    每页<?=$page_count?> 共<?=$totalcount?> 条记录
+                    <div class="am-fr">
+                        <? if(count($pagestr)>1){ ?>
+                        <ul class="mui-pagination  mui-pagination-sm">
+                            <li class="mui-previous"><a href="?c=admin&a=coupon&page=1&name=<?=$name?>&search_starttime=<?=$search_starttime?>&search_endtime=<?=$search_endtime?>">首页</a></li>
+                            <? foreach($pagestr as $k=>$v){ ?>
+                            <? if($v==$page){ ?>
+                            <li class="mui-active"><a href="#"><?=$v?></a></li>
+                            <? }else{ ?>
+                            <li><a href="?c=admin&a=coupon&page=<?=$v?>&name=<?=$name?>&search_starttime=<?=$search_starttime?>&search_endtime=<?=$search_endtime?>"><?=$v?></a></li>
+                            <? } ?>
+                            <? } ?>
+                            <li class="mui-next"> <a href="?c=admin&a=coupon&page=<?=$totalpage?>&name=<?=$name?>&search_starttime=<?=$search_starttime?>&search_endtime=<?=$search_endtime?>">尾页</a></li>
+                        </ul>
+                        <? } ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?}?>
+    </div>
+</div>
+<script type="text/javascript">
+    function deletesetpool(id) {
+        layer.confirm('是否确认删除？', {
+            btn: ['确认', '取消']
+        }, function () {
+            $.ajax({
+                type: "POST",
+                async: true,
+                data: { action: "delete", id: id },
+                url: "?c=admin&a=coupon",
+                success: function (ret) {
+                    window.location.href = window.location.href;
+                },
+                error: function (data) {
+                    alert("请求失败");
+                }
+            });
+        });
+    }
+    
+    function onFormSubmit(from) {
+        var cost = $("#cost").val();
+        var storeid = $("#storeid").val();
+        var expire = $("#expire").val();
+        var count = $("#count").val();
+        if (storeid==0) {
+            layer.msg("请选择门店");
+            return false;
+        }
+        if (!cost) {
+            layer.msg("请输入优惠金额");
+            return false;
+        }
+        if (!count) {
+            layer.msg("请输入生成数量");
+            return false;
+        }
+        if (!expire) {
+            layer.msg("请输入过期时间");
+            return false;
+        }
+    }
+
+</script>
+<?php include('footer.html'); ?>

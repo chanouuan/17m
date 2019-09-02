@@ -1,0 +1,485 @@
+<?php include('header.html'); ?>
+<link href="<?=$tpl_dir?>/css/pagination.css" rel="stylesheet" type="text/css">
+
+<div class="admin-content">
+    <div class="admin-content-body">
+        <div class="am-cf am-padding am-padding-bottom-0">
+            <div class="am-fl am-cf"> 档期管理</div>
+        </div>
+        <hr>
+        <?if($action=="from"){?>
+        <div class="admin-content-body">
+            <div class="am-g am-margin-top">
+                <div class="am-u-sm-12 am-scrollable-horizontal">
+                    <form id="form" class="am-form" action="?c=admin&a=pool&action=save" method="POST" onsubmit="return onFormSubmit(this);">
+                        <input type="hidden" name="id" value="<?=$reslut['id']?>" />
+                        <div class="am-form-group">
+                            <select name="storeid" id="storeid">
+                                <option value="0">请选择</option>
+                                <?foreach($storelist as $k=>$v){?>
+                                <option value="<?=$v['id']?>"<?if($storeinfo['citycode']==$v['code']){?>   selected <?}?>><?=$v['name']?></option>
+                                <?}?>
+                            </select>
+                        </div>
+                        <div class="am-form-group">
+                            <label>开始时间<span style="color:#ff0000">*</span></label>
+                            <input datatype="*" class="date-control" nullmsg="请选择开始时间！" errormsg="请选择开始时间！" id="starttime" readonly="readonly" type="text" name="starttime" value="<?=$reslut['starttime']?>" placeholder="开始时间">
+                        </div>
+                        <div class="am-form-group">
+                            <label>结束时间<span style="color:#ff0000">*</span></label>
+                            <input datatype="*" class="date-control" nullmsg="请选择结束时间！" errormsg="请选择结束时间！" id="endtime" readonly="readonly" type="text" name="endtime" value="<?=$reslut['endtime']?>" placeholder="结束时间">
+                        </div>
+                        <div class="am-form-group">
+                            <label>可预约时段</label>
+                            <div style="clear: both;">
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input  <?if(in_array("00",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="00:00:00"> 00:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input  <?if(in_array("01",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="01:00:00"> 01:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input  <?if(in_array("02",$hour)){?> checked="checked" <?}?>   type="checkbox"  name="hour[]" value="02:00:00"> 02:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input  <?if(in_array("03",$hour)){?> checked="checked" <?}?>   type="checkbox" name="hour[]" value="03:00:00"> 03:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input  <?if(in_array("04",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="04:00:00"> 04:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input  <?if(in_array("05",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="05:00:00"> 05:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input  <?if(in_array("06",$hour)){?> checked="checked" <?}?>  type="checkbox"  name="hour[]" value="06:00:00"> 06:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input  <?if(in_array("07",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="07:00:00"> 07:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input  <?if(in_array("08",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="08:00:00"> 08:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input  <?if(in_array("09",$hour)){?> checked="checked" <?}?>  type="checkbox"  name="hour[]" value="09:00:00"> 09:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input  <?if(in_array("10",$hour)){?> checked="checked" <?}?>  type="checkbox"  name="hour[]" value="10:00:00"> 10:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input  <?if(in_array("11",$hour)){?> checked="checked" <?}?>  type="checkbox"  name="hour[]" value="11:00:00"> 11:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input  <?if(in_array("12",$hour)){?> checked="checked" <?}?>  type="checkbox"  name="hour[]" value="12:00:00"> 12:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input  <?if(in_array("13",$hour)){?> checked="checked" <?}?>  type="checkbox"  name="hour[]" value="13:00:00"> 13:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input  <?if(in_array("14",$hour)){?> checked="checked" <?}?>  type="checkbox"  name="hour[]" value="14:00:00"> 14:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input  <?if(in_array("15",$hour)){?> checked="checked" <?}?>  type="checkbox"  name="hour[]" value="15:00:00"> 15:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input  <?if(in_array("16",$hour)){?> checked="checked" <?}?>  type="checkbox"  name="hour[]" value="16:00:00"> 16:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input  <?if(in_array("17",$hour)){?> checked="checked" <?}?>  type="checkbox"  name="hour[]" value="17:00:00"> 17:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input  <?if(in_array("18",$hour)){?> checked="checked" <?}?>  type="checkbox"  name="hour[]" value="18:00:00"> 18:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input  <?if(in_array("19",$hour)){?> checked="checked" <?}?>  type="checkbox"  name="hour[]" value="19:00:00"> 19:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input  <?if(in_array("20",$hour)){?> checked="checked" <?}?>   type="checkbox" name="hour[]" value="20:00:00"> 20:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input  <?if(in_array("21",$hour)){?> checked="checked" <?}?>  type="checkbox"  name="hour[]" value="21:00:00"> 21:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input  <?if(in_array("22",$hour)){?> checked="checked" <?}?>   type="checkbox" name="hour[]" value="22:00":00> 22:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input  <?if(in_array("23",$hour)){?> checked="checked" <?}?>   type="checkbox" type="checkbox" name="hour[]" value="23:00"> 23:00
+                                </label>
+                            </div>
+                            <div style="clear: both;"></div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="doc-ipt-email-1">可预约数</label>
+                            <input type="text" class="" id="maxcount" name="maxcount" value="<?=$storeinfo['name']?>">
+                        </div>
+                        <p><button id="subBtn" type="submit" class="am-btn am-btn-success">提交</button></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <?}else if($action=="newfrom"){?>
+        <div class="admin-content-body">
+            <div class="am-g am-margin-top">
+                <div class="am-u-sm-12 am-scrollable-horizontal">
+                    <form id="form" class="am-form" action="?c=admin&a=pool&action=save" method="POST" onsubmit="return onFormSubmit(this);">
+                        <input type="hidden" name="id" value="<?=$reslut['id']?>" />
+                        <div class="am-form-group">
+                            <select name="storeid" id="storeid">
+                                <option value="0">请选择</option>
+                                <?foreach($storelist as $k=>$v){?>
+                                <option value="<?=$v['id']?>"<?if($storeinfo['citycode']==$v['code']){?>   selected <?}?>><?=$v['name']?></option>
+                                <?}?>
+                            </select>
+                        </div>
+                        <div class="am-form-group">
+                            <label>开始时间<span style="color:#ff0000">*</span></label>
+                            <input datatype="*" class="date-control" nullmsg="请选择开始时间！" errormsg="请选择开始时间！" id="starttime" readonly="readonly" type="text" name="starttime" value="<?=date('Y-m-d')?>" placeholder="开始时间">
+                        </div>
+                        <div class="am-form-group">
+                            <label>结束时间<span style="color:#ff0000">*</span></label>
+                            <input datatype="*" class="date-control" nullmsg="请选择结束时间！" errormsg="请选择结束时间！" id="endtime" readonly="readonly" type="text" name="endtime" value="" placeholder="结束时间">
+                        </div>
+                        <div class="am-form-group">
+                            <label>可预约时段</label>
+                            <div style="clear: both;">
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input <?if(in_array("00:00",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="00:00:00"> 00:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input <?if(in_array("00:30",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="00:30:00"> 00:30
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input <?if(in_array("01",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="01:00:00"> 01:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input <?if(in_array("01:30",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="01:30:00"> 01:30
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input <?if(in_array("02",$hour)){?> checked="checked" <?}?>   type="checkbox"  name="hour[]" value="02:00:00"> 02:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                   <input <?if(in_array("02:30",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="02:30:00"> 02:30
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input <?if(in_array("03",$hour)){?> checked="checked" <?}?>   type="checkbox" name="hour[]" value="03:00:00"> 03:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                   <input <?if(in_array("03:30",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="03:30:00"> 03:30
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input <?if(in_array("04",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="04:00:00"> 04:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                   <input <?if(in_array("04:30",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="04:30:00"> 04:30
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input <?if(in_array("05",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="05:00:00"> 05:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                   <input <?if(in_array("05:30",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="05:30:00"> 05:30
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input <?if(in_array("06",$hour)){?> checked="checked" <?}?>  type="checkbox"  name="hour[]" value="06:00:00"> 06:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                   <input <?if(in_array("06:30",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="06:30:00"> 06:30
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input <?if(in_array("07",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="07:00:00"> 07:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                   <input <?if(in_array("07:30",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="07:30:00"> 07:30
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input <?if(in_array("08",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="08:00:00"> 08:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                   <input <?if(in_array("08:30",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="08:30:00"> 08:30
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input <?if(in_array("09",$hour)){?> checked="checked" <?}?>  type="checkbox"  name="hour[]" value="09:00:00"> 09:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                   <input <?if(in_array("09:30",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="09:30:00"> 09:30
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input <?if(in_array("10",$hour)){?> checked="checked" <?}?>  type="checkbox"  name="hour[]" value="10:00:00"> 10:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                   <input <?if(in_array("10:30",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="10:30:00"> 10:30
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input <?if(in_array("11",$hour)){?> checked="checked" <?}?>  type="checkbox"  name="hour[]" value="11:00:00"> 11:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                   <input <?if(in_array("11:30",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="11:30:00"> 11:30
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input <?if(in_array("12",$hour)){?> checked="checked" <?}?>  type="checkbox"  name="hour[]" value="12:00:00"> 12:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                   <input <?if(in_array("12:30",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="12:30:00"> 12:30
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input <?if(in_array("13",$hour)){?> checked="checked" <?}?>  type="checkbox"  name="hour[]" value="13:00:00"> 13:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                   <input <?if(in_array("13:30",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="13:30:00"> 13:30
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input <?if(in_array("14",$hour)){?> checked="checked" <?}?>  type="checkbox"  name="hour[]" value="14:00:00"> 14:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                   <input <?if(in_array("14:30",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="14:30:00"> 14:30
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input <?if(in_array("15",$hour)){?> checked="checked" <?}?>  type="checkbox"  name="hour[]" value="15:00:00"> 15:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                   <input <?if(in_array("15:30",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="15:30:00"> 15:30
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input <?if(in_array("16",$hour)){?> checked="checked" <?}?>  type="checkbox"  name="hour[]" value="16:00:00"> 16:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                   <input <?if(in_array("16:30",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="16:30:00"> 16:30
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input <?if(in_array("17",$hour)){?> checked="checked" <?}?>  type="checkbox"  name="hour[]" value="17:00:00"> 17:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                   <input <?if(in_array("17:30",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="17:30:00"> 17:30
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input <?if(in_array("18",$hour)){?> checked="checked" <?}?>  type="checkbox"  name="hour[]" value="18:00:00"> 18:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                   <input <?if(in_array("18:30",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="18:30:00"> 18:30
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input <?if(in_array("19",$hour)){?> checked="checked" <?}?>  type="checkbox"  name="hour[]" value="19:00:00"> 19:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                   <input <?if(in_array("19:30",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="19:30:00"> 19:30
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input <?if(in_array("20",$hour)){?> checked="checked" <?}?>   type="checkbox" name="hour[]" value="20:00:00"> 20:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                   <input <?if(in_array("20:30",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="20:30:00"> 20:30
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input <?if(in_array("21",$hour)){?> checked="checked" <?}?>  type="checkbox"  name="hour[]" value="21:00:00"> 21:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                   <input <?if(in_array("21:30",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="21:30:00"> 21:30
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input <?if(in_array("22",$hour)){?> checked="checked" <?}?>   type="checkbox" name="hour[]" value="22:00":00> 22:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                   <input <?if(in_array("22:30",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="22:30:00"> 22:30
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                    <input <?if(in_array("23",$hour)){?> checked="checked" <?}?>   type="checkbox" type="checkbox" name="hour[]" value="23:00"> 23:00
+                                </label>
+                                <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
+                                   <input <?if(in_array("23:30",$hour)){?> checked="checked" <?}?>  type="checkbox" name="hour[]" value="23:30:00"> 23:30
+                                </label>
+                            </div>
+                            <div style="clear: both;"></div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="doc-ipt-email-1">可预约数</label>
+                            <input type="text" class="" id="maxcount" name="maxcount" value="2">
+                        </div>
+                        <div class="am-form-group" style="display:none">
+                            <label>是否覆盖原有档期</label>
+                            <label><input type="radio" name="savemode" value="1" checked="checked"> 是</label>
+                            <label><input type="radio" name="savemode" value="0"> 否</label>
+                        </div>
+                        <p><button id="subBtn" type="submit" class="am-btn am-btn-success">提交</button></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <?}else if($action=="edit"){?>
+        <div class="am-g">
+            <form method="post" action="?c=admin&a=pool&action=save">
+                <div class="admin-content-body">
+                    <input type="hidden" name="id" value="<?=$poolinfo['id']?>" />
+                    <div class="am-form">
+                        <fieldset>
+                            <div class="am-form-group">
+                                <label for="doc-ipt-email-1">门店</label>
+                                <select name="storeid" id="storeid">
+                                    <option value="0">请选择</option>
+                                    <?foreach($storelist as $k=>$v){?>
+                                    <option value="<?=$v['id']?>"  <?if($poolinfo['storeid']==$v['id']){?>   selected <?}?>><?=$v['name']?></option>
+                                    <?}?>
+                                </select>
+                            </div>
+                            <div class="am-form-group">
+                                <label>日期<span style="color:#ff0000">*</span></label>
+                                <input datatype="*" nullmsg="请选择日期！" errormsg="请选择日期！" id="today" readonly="readonly" type="text" name="today" value="<?=$poolinfo['today']?>" placeholder="开始时间">
+                            </div>
+                            <div class="am-form-group">
+                                <label>开始时间<span style="color:#ff0000">*</span></label>
+                                <input datatype="*" nullmsg="请选择开始时间！" errormsg="请选择开始时间！" id="starttime" readonly="readonly" type="text" name="starttime" value="<?=$poolinfo['starttime']?>" placeholder="开始时间">
+                            </div>
+                            <div class="am-form-group">
+                                <label>结束时间<span style="color:#ff0000">*</span></label>
+                                <input datatype="*" nullmsg="请选择结束时间！" errormsg="请选择结束时间！" id="endtime" readonly="readonly" type="text" name="endtime" value="<?=$poolinfo['endtime']?>" placeholder="开始时间">
+                            </div>
+                            <div class="am-form-group">
+                                <label for="doc-ipt-email-1">总数量</label>
+                                <input type="text" class="" id="maxcount" name="maxcount" value="<?=$poolinfo['maxcount']?>">
+                            </div>
+                            <p><button type="submit" class="am-btn am-btn-success">提交</button></p>
+                        </fieldset>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <?}else{?>
+        <div class="am-g">
+            <form class="am-form-inline" role="form" action="?c=admin&a=pool" method="post">
+                <div class="am-form-group am-input-group-sm am-u-sm-6">
+                    <input type="text" class="am-form-field date-control" name="search_starttime" id="search_starttime" value="<?=$search_starttime?>" placeholder="开始时间" readonly="">
+                </div>
+                <div class="am-form-group am-input-group-sm am-u-sm-6">
+                    <input type="text" class="am-form-field date-control" name="search_endtime" id="search_endtime" value="<?=$search_endtime?>" placeholder="结束时间" readonly="">
+                </div>
+                <div class="am-form-group am-input-group-sm am-u-sm-6">
+                    <select name="storeid" class="am-form-field" id="storeid">
+                        <option value="0">请选择</option>
+                        <?foreach($storelist as $k=>$v){?>
+                        <option value="<?=$v['id']?>"  <?if($storeid==$v['id']){?>   selected <?}?>><?=$v['name']?></option>
+                        <?}?>
+                    </select>
+                </div>
+
+                <div class="am-form-group am-input-group-sm am-u-sm-3">
+                    <button class="am-btn am-btn-default am-btn-sm" type="submit">搜索</button>
+                </div>
+            </form>
+        </div>
+        <div class="am-g">
+            <!--<div style="margin:10px">
+                <ul class="mui-pagination  mui-pagination-sm">
+                    <li class="<? if($search_starttime=='2008-06-01 00:00:00'&&$search_endtime=='2020-06-01 00:00:00'){ ?>mui-active<? } ?>"><a href="?c=admin&a=pool&search_starttime=2008-06-01 00:00:00&search_endtime=2020-06-01 00:00:00&phone=<?=$phone?>">全部</a></li>
+                    <li class="<? if($search_starttime==$today_start&&$search_endtime==$today_end){ ?>mui-active<? } ?>"><a href="?c=admin&a=pool&search_starttime=<?=$today_start?>&search_endtime=<?=$today_end?>&phone=<?=$phone?>">本日</a></li>
+                    <li class="<? if($search_starttime==$yesterday_start&&$search_endtime==$yesterday_end){ ?>mui-active<? } ?>"><a href="?c=admin&a=pool&search_starttime=<?=$yesterday_start?>&search_endtime=<?=$yesterday_end?>&phone=<?=$phone?>">昨日</a></li>
+                    <li class="<? if($search_starttime==$week_starttime&&$search_endtime==$week_endtime){ ?>mui-active<? } ?>"><a href="?c=admin&a=pool&search_starttime=<?=$week_starttime?>&search_endtime=<?=$week_endtime?>&phone=<?=$phone?>">本周</a></li>
+                    <li class="<? if($search_starttime==$lweek_starttime&&$search_endtime==$lweek_endtime){ ?>mui-active<? } ?>"><a href="?c=admin&a=pool&search_starttime=<?=$lweek_starttime?>&search_endtime=<?=$lweek_endtime?>&phone=<?=$phone?>">上周</a></li>
+                    <li class="<? if($search_starttime==$month_starttime&&$search_endtime==$month_endtime){ ?>mui-active<? } ?>"><a href="?c=admin&a=pool&search_starttime=<?=$month_starttime?>&search_endtime=<?=$month_endtime?>&phone=<?=$phone?>">本月</a></li>
+                    <li class=" <? if($search_starttime==$lmonth_starttime&&$search_endtime==$lmonth_endtime){ ?>mui-active<? } ?>"><a href="?c=admin&a=pool&search_starttime=<?=$lmonth_starttime?>&search_endtime=<?=$lmonth_endtime?>&phone=<?=$phone?>">上月</a></li>
+                    <li class=" <? if($search_starttime==$year_begin&&$search_endtime==$year_end){ ?>mui-active<? } ?>"><a href="?c=admin&a=pool&search_starttime=<?=$year_begin?>&search_endtime=<?=$year_end?>&phone=<?=$phone?>">本年</a></li>
+                    <li class=" <? if($search_starttime==$yesteryear_begin&&$search_endtime==$yesteryear_end){ ?>mui-active<? } ?>"><a href="?c=admin&a=pool&search_starttime=<?=$yesteryear_begin?>&search_endtime=<?=$yesteryear_end?>&phone=<?=$phone?>">去年</a></li>
+                </ul>
+            </div>-->
+
+            <div class="am-g" style="margin:10px">
+                <div class="am-btn-toolbar">
+                    <div class="am-btn-group am-btn-group-xs" style="margin-bottom:5px">
+                        <a type="button" class="am-btn am-btn-success" href="?c=admin&a=pool&action=newfrom"><span class="am-icon-plus"></span>新建</a>
+                    </div>
+                </div>
+                <div class="am-form  am-scrollable-horizontal">
+                    <table class="am-table am-table-bordered am-table-striped am-text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>门店</th>
+                                <th>日期</th>
+                                <th>开始时间</th>
+                                <th>结束时间</th>
+                                <th>已预约数量</th>
+                                <th>总数量</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?foreach ($Poollist as $v){?>
+                            <tr>
+                                <td><?=$v['id']?></td>
+                                <td><?=$v['storename']?></td>
+                                <td><?=$v['today']?></td>
+                                <td><?=$v['starttime']?></td>
+                                <td><?=$v['endtime']?></td>
+                                <td><?=$v['ordercount']?></td>
+                                <td><?=$v['maxcount']?></td>
+                                <td>
+                                    <a class="am-btn am-btn-default am-btn-xs am-text-secondary" href="?c=admin&a=pool&action=edit&id=<?=$v['id']?>"><span class="am-icon-pencil-square-o"></span> 编辑</a>
+                                    <a class="am-btn am-btn-danger am-btn-xs" onclick="deletesetpool(<?=$v['id']?>)">删除</a>
+                                </td>
+                            </tr>
+                            <?}?>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="am-cf" style="text-align: center; margin:1rem; font-size:1rem">
+                    每页<?=$page_count?> 共<?=$totalcount?> 条记录
+                    <div class="am-fr">
+                        <? if(count($pagestr)>1){ ?>
+                        <ul class="mui-pagination  mui-pagination-sm">
+                            <li class="mui-previous"><a href="?c=admin&a=pool&page=1&storeid=<?=$storeid?>&search_starttime=<?=$search_starttime?>&search_endtime=<?=$search_endtime?>">首页</a></li>
+                            <? foreach($pagestr as $k=>$v){ ?>
+                            <? if($v==$page){ ?>
+                            <li class="mui-active"><a href="#"><?=$v?></a></li>
+                            <? }else{ ?>
+                            <li><a href="?c=admin&a=pool&page=<?=$v?>&storeid=<?=$storeid?>&search_starttime=<?=$search_starttime?>&search_endtime=<?=$search_endtime?>"><?=$v?></a></li>
+                            <? } ?>
+                            <? } ?>
+                            <li class="mui-next"> <a href="?c=admin&storeid=<?=$storeid?>&a=pool&page=<?=$totalpage?>&name=<?=$name?>&search_starttime=<?=$search_starttime?>&search_endtime=<?=$search_endtime?>">尾页</a></li>
+                        </ul>
+                        <? } ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?}?>
+    </div>
+</div>
+<script type="text/javascript">
+    function onFormSubmit(from) {
+        var starttime = $("#starttime").val();
+        var endtime = $("#endtime").val();
+        var maxcount= $("#maxcount").val();
+        var storeid= $("#storeid").val();
+        if(storeid==0){
+            layer.msg("请选择门店");
+            return false;
+        }
+        if (!starttime) {
+            layer.msg("请输入开始日期");
+            return false;
+        }
+        if (!endtime) {
+            layer.msg("请输入结束日期");
+            return false;
+        }
+        if(!maxcount){
+            layer.msg("请输入可预约数");
+            return false;
+        }
+    }
+    function deletesetpool(id) {
+          layer.confirm('是否确认删除？', {
+              btn: ['确认', '取消']
+          }, function () {
+              $.ajax({
+                  type: "POST",
+                  async: true,
+                  data: { action: "delete", id: id },
+                  url: "?c=admin&a=pool",
+                  success: function (ret) {
+                      window.location.href = window.location.href;
+                  },
+                  error: function (data) {
+                      alert("请求失败");
+                  }
+              });
+          });
+      }
+</script>
+<?php include('footer.html'); ?>

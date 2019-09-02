@@ -1,0 +1,205 @@
+<?php include('header.html'); ?>
+<link href="<?=$tpl_dir?>/css/pagination.css" rel="stylesheet" type="text/css">
+<script src="<?=APPLICATION_URL?>/public/assets/js/jquery.min.js"></script>
+
+<div class="admin-content">
+    <div class="admin-content-body">
+        <div class="am-cf am-padding am-padding-bottom-0">
+            <div class="am-fl am-cf"> 用户管理</div>
+        </div>
+        <hr>
+        <?if($action=="from"){?>
+        <div class="am-g">
+            <form method="post" action="?c=admin&a=user&action=save">
+                <div class="admin-content-body">
+                    <input type="hidden" name="id" value="<?=$userinfo['id']?>" />
+                    <div class="am-form">
+                        <fieldset>
+                            <div class="am-form-group">
+                                <label for="doc-ipt-email-1">设置门店管理员</label>
+                                <select name="area" id="area">
+                                    <option value="-1">不设置</option>
+                                    <option <?if($userinfo['area']==0){?>selected<?}?> value="0">总店</option>
+                                    <?foreach($storelist as $k=>$v){?>
+                                    <option value="<?=$v['id']?>" <?if($userinfo['area']==$v['id']){?>selected<?}?>><?=$v['name']?></option>
+                                    <?}?>
+                                </select>
+                            </div>
+                            <p><button type="submit" class="am-btn am-btn-success">提交</button></p>
+                        </fieldset>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <?}else if($action=="edit"){?>
+        <div class="am-g">
+            <form method="post" action="?c=admin&a=user&action=editpass" onsubmit="return onFormSubmit(this);">
+                <div class="admin-content-body">
+                    <input type="hidden" name="id" value="<?=$userinfo['id']?>" />
+                    <div class="am-form">
+                        <fieldset>
+                            <div class="am-form-group">
+                                <label for="doc-ipt-email-1">手机号</label>
+                                <input type="number" id="telephone" maxlength="11" size="11" name="telephone" value="<?=$userinfo['telephone']?>">
+                            </div>
+                            <div class="am-form-group">
+                                <label for="doc-ipt-email-1">密码<?if($userinfo['id']){?>(不填写保持旧密码)<?}?></label>
+                                <input type="text" class="" id="password" name="password"  >
+                            </div>
+                            <p><button type="submit" class="am-btn am-btn-success">提交</button></p>
+                        </fieldset>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <?}else{?>
+        <div class="am-g">
+            <form class="am-form-inline" role="form" action="?c=admin&a=user" method="post">
+                <div class="am-form-group am-input-group-sm am-u-sm-3">
+                    <select name="storeid" class="am-form-field" id="storeid">
+                        <option value="">门店管理员</option>
+                        <option <?if(isset($storeid) && $storeid !== ''){?>selected <?}?> value="0">总店</option>
+                        <?foreach($storelist as $k=>$v){?>
+                        <option value="<?=$v['id']?>"  <?if($storeid==$v['id']){?>selected <?}?>><?=$v['name']?></option>
+                        <?}?>
+                    </select>
+                </div>
+                <div class="am-form-group am-input-group-sm am-u-sm-3">
+                    <input type="text" class="am-form-field" name="telephone" value="<?=$telephone?>" placeholder="手机号">
+                </div>
+                <div class="am-form-group am-input-group-sm am-u-sm-3">
+                    <button class="am-btn am-btn-default am-btn-sm" type="submit">搜索</button>
+                </div>
+            </form>
+        </div>
+        <div class="am-g">
+            <div class="am-g" style="margin:10px">
+                <div class="am-btn-toolbar">
+                    <div class="am-btn-group am-btn-group-xs" style="margin-bottom:5px">
+                        <a type="button" class="am-btn am-btn-success" href="?c=admin&a=user&action=edit"><span class="am-icon-plus"></span> 新增</a>
+                    </div>
+                </div>
+                <div class="am-form  am-scrollable-horizontal">
+                    <table class="am-table am-table-bordered am-table-striped am-text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>昵称</th>
+                                <th>头像</th>
+                                <th>电话号码</th>
+                                <th>管理门店</th>
+                                <th>性别</th>
+                                <th>创建时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?foreach ($userlist as $v){?>
+                            <tr>
+                                <td><?=$v['id']?></td>
+                                <td><?=$v['nickname']?></td>
+                                <td><?php if($v['avatar']){ ?><img width="32" height="32" src="<?=httpurl(avatar($v['id']))?>"><? } ?></td>
+                                <td><?=$v['telephone']?></td>
+                                <td><?=$v['store']?></td>
+                                <td>
+                                    <?if($v['gender']=="1"){?>男
+                                    <?}else if($v['gender']=="2"){?>女
+                                    <?}?>
+                               </td>
+                                <td><?=date('Y-m-d H:i',$v['createtime'])?></td>
+                                <td>
+                                    <?php if(Auth::check('user/auth',$user_info['id'])){ ?>
+                                    <a class="am-btn am-btn-default am-btn-xs am-text-secondary" href="?c=admin&a=user&action=from&id=<?=$v['id']?>"><span class="am-icon-pencil-square-o"></span>管理门店</a>
+                                    <?php } ?>
+                                    <?php if(!$v['store'] || Auth::check('user/auth',$user_info['id'])){ ?>
+                                    <a class="am-btn am-btn-warning am-btn-xs " href="?c=admin&a=user&action=edit&id=<?=$v['id']?>"><span class="am-icon-pencil-square-o"></span>修改密码</a>
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                        <?}?>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="am-cf" style="text-align: center; margin:1rem; font-size:1rem">
+                    每页<?=$page_count?> 共<?=$totalcount?> 条记录
+                    <div class="am-fr">
+                        <? if(count($pagestr)>1){ ?>
+                        <ul class="mui-pagination  mui-pagination-sm">
+                            <li class="mui-previous"><a href="?c=admin&a=user&page=1&name=<?=$name?>&search_starttime=<?=$search_starttime?>&search_endtime=<?=$search_endtime?>">首页</a></li>
+                            <? foreach($pagestr as $k=>$v){ ?>
+                            <? if($v==$page){ ?>
+                            <li class="mui-active"><a href="#"><?=$v?></a></li>
+                            <? }else{ ?>
+                            <li><a href="?c=admin&a=user&page=<?=$v?>&name=<?=$name?>&search_starttime=<?=$search_starttime?>&search_endtime=<?=$search_endtime?>"><?=$v?></a></li>
+                            <? } ?>
+                            <? } ?>
+                            <li class="mui-next"> <a href="?c=admin&a=user&page=<?=$totalpage?>&name=<?=$name?>&search_starttime=<?=$search_starttime?>&search_endtime=<?=$search_endtime?>">尾页</a></li>
+                        </ul>
+                        <? } ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?}?>
+    </div>
+</div>
+<script type="text/javascript">
+    function deletesetpool(id) {
+        layer.confirm('是否确认删除？', {
+            btn: ['确认', '取消']
+        }, function () {
+            $.ajax({
+                type: "POST",
+                async: true,
+                data: { action: "delete", id: id },
+                url: "?c=admin&a=pool",
+                success: function (ret) {
+                    window.location.href = window.location.href;
+                },
+                error: function (data) {
+                    alert("请求失败");
+                }
+            });
+        });
+    }
+    function onFormSubmit() {
+        var telephone = $("#telephone").val();
+        var id='<?=$userinfo['id']?>';
+        var password = $("#password").val();
+      
+        if (!(/^1[34578]\d{9}$/.test(telephone))) {
+            layer.alert("手机号码有误，请重填");
+            return false;
+        }
+        if(id==''){
+            if(!password){
+                layer.alert("密码不能为空，请填写");
+                return false;
+            } 
+        }
+    }
+    $(function () {
+        var currYear = (new Date()).getFullYear();
+        //初始化日期控件
+        var opt = {};
+        opt.date = { preset: 'date' };
+        opt.datetime = { preset: 'datetime' };
+        opt.time = { preset: 'time' };
+        opt.default = {
+            theme: 'android-ics light', //皮肤样式
+            display: 'modal', //显示方式
+            mode: 'scroller', //日期选择模式
+            dateFormat: 'yyyy-mm-dd',
+            lang: 'zh',
+            showNow: true,
+            nowText: "今天",
+            startYear: currYear, //开始年份
+            endYear: currYear + 10 //结束年份
+        };
+        $("#starttime").mobiscroll($.extend(opt['date'], opt['default']));
+        $("#endtime").mobiscroll($.extend(opt['date'], opt['default']));
+
+    });
+</script>
+<?php include('footer.html'); ?>

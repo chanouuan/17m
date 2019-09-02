@@ -1,0 +1,305 @@
+﻿<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>17平照相馆到店信息确认表</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="<?=APPLICATION_URL?>/public/assets/css/amazeui.min.css" />
+    <script src="<?=APPLICATION_URL?>/public/assets/js/jquery.min.js"></script>
+    <link rel="stylesheet" href="<?=APPLICATION_URL?>/public/assets/css/admin.css">
+    <style>
+        html, td {
+            font-family: 楷体;
+            font-size: 12pt;
+            text-align:center;
+            vertical-align: middle;
+            vertical-align:middle;
+            color:#000000;
+        }
+
+
+.table-d table{border:1px solid #000000;border-collapse: collapse}
+.table-d table tr{border:1px solid #000000;}
+.table-d table td{border:1px solid #000000;vertical-align:middle !important;}
+    </style>
+    <script type="text/javascript">
+        function printqweb()
+        {
+            $("#btnPrint").hide();
+            $("#back").hide();
+            window.print()
+            window.location.reload()
+        }
+        function printsetup() {
+            // 打印页面设置
+            wb.execwb(8, 1);
+        }
+        function printpreview() {
+            // 打印页面预览
+            wb.execwb(7, 1);
+        }
+
+        function printit() {
+            if (confirm('确定打印吗？')) {
+                wb.execwb(6, 6)
+            }
+        }
+    </script>
+</head>
+<body style="overflow-y:auto">
+    <a id="back" class="am-btn am-btn-primary am-btn-xs" href="?c=admin&a=order" style="margin-top:10px">返回上步</a>
+    <input id="btnPrint" type="button" value="打印word" onclick="printqweb()" class="am-btn am-btn-primary am-btn-xs" style="margin-top:10px" /> 
+    <div class="am-form  am-scrollable-horizontal table-d " style="margin:0 auto ;width:700px;margin-top:20px">
+        <div style=" font-family: 楷体;font-size:22pt;margin-bottom:10px">17平工作室顾客信息确认表</div>
+        <div style="text-align:center;margin:0 auto"><img style="position:absolute;margin-left:-330px;margin-top:80px ;filter:alpha(opacity=50); -moz-opacity:0.5;   -khtml-opacity: 0.5;  opacity: 0.5; " src="<?=APPLICATION_URL?>/application/views/mobile/imgs/biaozhi.png" /></div>
+        <table id="LODOP_OB"   style="width:100%;height:960px;border:1px solid #000000;border-collapse: collapse">
+            <tbody>
+                <tr>
+                    <td>姓名</td>
+                    <td colspan="6"><?=$storeinfo['buyer']?>&nbsp;</td>
+                    <td>预约时间</td>
+                    <td colspan="3"><?=$storeinfo['ordertime']?></td>
+                </tr>
+                <tr>
+                    <td>性别</td>
+                    <td colspan="2">
+                        <?if($storeinfo['buyersex']=="1"){?>
+                        男
+                        <?}else if($storeinfo['buyersex']=="2"){?>女<?}?>
+                    </td>
+                    <td colspan="2">手机</td>
+                    <td colspan="3"><?=$storeinfo['buyerphone']?></td>
+                    <td>电子邮箱</td>
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <td>地址</td>
+                    <td colspan="7">　</td>
+                    <td>来源</td>
+                    <td colspan="2"></td>
+
+                </tr>
+                <tr>
+                    <td>套餐类型</td>
+                    <td> 底色</td>
+                    <td colspan="5">尺寸</td>
+                    <td>加洗/加底色</td>
+                    <td colspan="3">备注</td>
+                </tr>
+                <tr>
+                    <td rowspan="7">证件照</td>
+                    <td>卡其色</td>
+                    <td colspan="2">1寸</td>
+                    <td>2寸</td>
+                    <td>5寸</td>
+                    <td>6寸</td>
+                    <td></td>
+                    <td colspan="3"></td>
+                </tr>
+                <tr>
+                    <td>深灰色</td>
+                    <td colspan="2">1寸</td>
+                    <td>2寸</td>
+                    <td>5寸</td>
+                    <td>6寸</td>
+                    <td></td>
+                    <td colspan="3"></td>
+
+                </tr>
+                <tr>
+                    <td>蓝色</td>
+                    <td colspan="2">1寸</td>
+                    <td>2寸</td>
+                    <td>5寸</td>
+                    <td>6寸</td>
+                    <td></td>
+                    <td>司法考试</td>
+                    <td colspan="2">　</td>
+
+                </tr>
+                <tr>
+                    <td rowspan="2">白色</td>
+                    <td colspan="2" rowspan="2">1寸</td>
+                    <td rowspan="2">2寸</td>
+                    <td rowspan="2">5寸</td>
+                    <td rowspan="2">6寸</td>
+                    <td rowspan="2"></td>
+                    <td>身份证</td>
+                    <td>护照</td>
+                    <td>驾照</td>
+
+                </tr>
+                <tr>
+                    <td>国外签证</td>
+                    <td>美国签证</td>
+                    <td>日本签证</td>
+
+                </tr>
+                <tr>
+                    <td>红色</td>
+                    <td colspan="2">1寸</td>
+                    <td>2寸</td>
+                    <td>5寸</td>
+                    <td>6寸</td>
+                    <td>　</td>
+                    <td colspan="3">　</td>
+
+                </tr>
+                <tr>
+                    <td>粉色</td>
+                    <td colspan="2">1寸</td>
+                    <td>2寸</td>
+                    <td>5寸</td>
+                    <td>6寸</td>
+                    <td>　</td>
+                    <td colspan="3">　</td>
+
+                </tr>
+                <tr>
+                    <td rowspan="2">结婚照</td>
+                    <td rowspan="2">红色</td>
+                    <td colspan="3" rowspan="2">大2寸</td>
+                    <td colspan="2" rowspan="2">　</td>
+                    <td rowspan="2">　</td>
+                    <td colspan="3" rowspan="2">　</td>
+                </tr>
+                <tr></tr>
+                <tr>
+                    <td rowspan="2">职业形象</td>
+                    <td>白色</td>
+                    <td colspan="3">5寸</td>
+                    <td colspan="2">6寸</td>
+                    <td rowspan="2">　</td>
+                    <td colspan="3" rowspan="2">　</td>
+
+                </tr>
+                <tr>
+                    <td>灰色</td>
+                    <td colspan="3">5寸</td>
+                    <td colspan="2">6寸</td>
+
+                </tr>
+                <tr>
+                    <td rowspan="2">工作确认</td>
+                    <td>化妆师</td>
+                    <td colspan="3">摄影师</td>
+                    <td colspan="2">修图师</td>
+                    <td>审核</td>
+                    <td>打印</td>
+                    <td>发送电子版</td>
+                    <td>取件</td>
+
+                </tr>
+                <tr>
+                    <td>　</td>
+                    <td colspan="3">　</td>
+                    <td colspan="2"> 　</td>
+                    <td>　</td>
+                    <td><p style="margin:0pt">　</td>
+                    <td><p style="margin:0pt">　</td>
+                    <td><p style="margin:0pt">　</td>
+
+                </tr>
+
+                <tr>
+                    <td rowspan="2">订单详情</td>
+                    <td colspan="7" rowspan="2">　<?= explode(":",$storeinfo['item'])[0]?></td>
+                    <td>预付定金</td>
+                    <td>到店尾款</td>
+                    <td>总额</td>
+                </tr>
+                <tr>
+                    <td><?=($storeinfo['downpay']+$storeinfo['coupon'])/100?></td>
+                    <td><?=($storeinfo['pay']-$storeinfo['downpay']-$storeinfo['coupon'])/100?></td>
+                    <td><?=($storeinfo['pay'])/100?></td>
+
+                </tr>
+                <tr>
+                    <td rowspan="4">
+                        满意度<br />评价
+                    </td>
+                    <td colspan="2">
+                        前台
+                    </td>
+                    <td colspan="2">
+                        摄影师
+                    </td>
+                    <td colspan="2">
+                        化妆师
+                    </td>
+                    <td colspan="2">
+                        后期修图
+
+                    </td>
+                    <td colspan="2">
+                        建议意见
+                    
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        满意
+                    </td>
+                    <td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td >
+                        满意
+                    </td>
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td>
+                        满意
+                    </td>
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td>
+                        满意
+                    </td>
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td colspan="2" rowspan="3"></td>
+                </tr>
+                <tr>
+                    <td >
+                       基本<br />满意
+                    </td>
+                    <td></td>
+                    <td>
+                        基本<br />满意
+                    </td>
+                    <td></td>
+                    <td>
+                        基本<br />满意
+                    </td>
+                    <td></td>
+                    <td>
+                        基本<br />满意
+                    </td>
+                    <td></td>
+               
+                </tr>
+                <tr>
+                    <td >
+                        不满意
+                    </td>
+                    <td ></td>
+                    <td>
+                        不满意
+                    </td>
+                    <td></td>
+                    <td>
+                        不满意
+                    </td>
+                    <td></td>
+                    <td>
+                        不满意
+                    </td>
+                    <td></td>
+                 
+                </tr>
+                <tr>
+                    <td colspan="8">订单归档确认： &nbsp;&nbsp;&nbsp;年&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;日</td>
+                    <td colspan="5"> 归档人：</td>
+                </tr>
+            </tbody>
+        </table>
+        <img style="position:absolute" />
+    </div>
+</body>
+</html>

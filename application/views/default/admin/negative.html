@@ -1,0 +1,212 @@
+<?php include('header.html'); ?>
+<link href="<?=$tpl_dir?>/css/pagination.css" rel="stylesheet" type="text/css">
+<script src="<?=APPLICATION_URL?>/public/assets/js/jquery.min.js"></script>
+  <?if($action=="from"){?>
+<div class="admin-content">
+    <div class="admin-content-body">
+        <div class="am-cf am-padding am-padding-bottom-0">
+            <div class="am-fl am-cf">底片管理</div>
+        </div>
+        <hr>
+        <div class="am-g">
+            <div class="am-panel am-panel-secondary">
+                <div class="am-panel-hd am-cf" data-am-collapse="{target: '#collapse-panel-4'}">订单信息<span class="am-icon-chevron-down am-fr"></span></div>
+                <div id="collapse-panel-4" class="am-panel-bd am-collapse am-in">
+                    <table class="am-table am-table-bordered">
+                        <tr>
+                            <td>订单编号</td>
+                            <td><?=$storeinfo['ordercode']?></td>
+                        </tr>
+                        <tr>
+                            <td>创建时间</td>
+                            <td><?=$storeinfo['createtime']?></td>
+                        </tr>
+                        <tr>
+                            <td>姓名</td>
+                            <td><?=$storeinfo['buyer']?></td>
+                        </tr>
+                        <tr>
+                            <td>联系方式</td>
+                            <td><a href="tel:<?=$storeinfo['buyerphone']?>"><?=$storeinfo['buyerphone']?></a></td>
+                        </tr>
+                        <tr>
+                            <td>拍摄日期</td>
+                            <td> <?=date('Y年m月d日',strtotime($storeinfo['ordertime'])) ?> (<?=$storeinfo['week']?>) <?=$storeinfo['time']?></td>
+                        </tr>
+                        <tr>
+                            <td>套餐信息</td>
+                            <td><?=$storeinfo['item']?></td>
+                        </tr>
+                        <tr>
+                            <td>订单金额</td>
+                            <td><?=$storeinfo['pay']/100?></td>
+                        </tr>
+                        <tr>
+                            <td>定金金额</td>
+                            <td><?=$storeinfo['downpay']/100?></td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+            
+        </div>
+
+    </div>
+</div>
+<?}else{?>
+<div class="admin-content">
+    <div class="admin-content-body">
+        <div class="am-cf am-padding am-padding-bottom-0">
+            <div class="am-fl am-cf">底片管理</div>
+        </div>
+        <hr>
+        <div class="am-g">
+            <form class="am-form-inline" role="form" action="?c=admin&a=negative" method="post">
+                <div class="am-form-group am-input-group-sm am-u-sm-6">
+                    <input type="text" class="am-form-field" name="search_starttime" id="search_starttime" value="<?=$search_starttime?>" placeholder="开始时间" readonly="">
+                </div>
+                <div class="am-form-group am-input-group-sm am-u-sm-6">
+                    <input type="text" class="am-form-field" name="search_endtime" id="search_endtime" value="<?=$search_endtime?>" placeholder="结束时间" readonly="">
+                </div>
+                <div class="am-form-group am-input-group-sm am-u-sm-6">
+                    <input type="text" class="am-form-field" name="buyerphone" value="<?=$buyerphone?>" placeholder="联系电话">
+                </div>
+                <div class="am-form-group am-input-group-sm am-u-sm-3">
+                    <button class="am-btn am-btn-default am-btn-sm" type="submit">搜索</button>
+                </div>
+            </form>
+        </div>
+        <div class="am-g">
+            <div style="margin:10px">
+                <ul class="mui-pagination  mui-pagination-sm">
+                    <li class="<? if($search_starttime=='2008-06-01 00:00:00'&&$search_endtime=='2020-06-01 00:00:00'){ ?>mui-active<? } ?>"><a href="?c=admin&a=negative&search_starttime=2008-06-01 00:00:00&search_endtime=2020-06-01 00:00:00&phone=<?=$phone?>">全部</a></li>
+                    <li class="<? if($search_starttime==$today_start&&$search_endtime==$today_end){ ?>mui-active<? } ?>"><a href="?c=admin&a=negative&search_starttime=<?=$today_start?>&search_endtime=<?=$today_end?>&phone=<?=$phone?>">本日</a></li>
+                    <li class="<? if($search_starttime==$yesterday_start&&$search_endtime==$yesterday_end){ ?>mui-active<? } ?>"><a href="?c=admin&a=negative&search_starttime=<?=$yesterday_start?>&search_endtime=<?=$yesterday_end?>&phone=<?=$phone?>">昨日</a></li>
+                    <li class="<? if($search_starttime==$week_starttime&&$search_endtime==$week_endtime){ ?>mui-active<? } ?>"><a href="?c=admin&a=negative&search_starttime=<?=$week_starttime?>&search_endtime=<?=$week_endtime?>&phone=<?=$phone?>">本周</a></li>
+                    <li class="<? if($search_starttime==$lweek_starttime&&$search_endtime==$lweek_endtime){ ?>mui-active<? } ?>"><a href="?c=admin&a=negative&search_starttime=<?=$lweek_starttime?>&search_endtime=<?=$lweek_endtime?>&phone=<?=$phone?>">上周</a></li>
+                    <li class="<? if($search_starttime==$month_starttime&&$search_endtime==$month_endtime){ ?>mui-active<? } ?>"><a href="?c=admin&a=negative&search_starttime=<?=$month_starttime?>&search_endtime=<?=$month_endtime?>&phone=<?=$phone?>">本月</a></li>
+                    <li class=" <? if($search_starttime==$lmonth_starttime&&$search_endtime==$lmonth_endtime){ ?>mui-active<? } ?>"><a href="?c=admin&a=negative&search_starttime=<?=$lmonth_starttime?>&search_endtime=<?=$lmonth_endtime?>&phone=<?=$phone?>">上月</a></li>
+                    <li class=" <? if($search_starttime==$year_begin&&$search_endtime==$year_end){ ?>mui-active<? } ?>"><a href="?c=admin&a=negative&search_starttime=<?=$year_begin?>&search_endtime=<?=$year_end?>&phone=<?=$phone?>">本年</a></li>
+                    <li class=" <? if($search_starttime==$yesteryear_begin&&$search_endtime==$yesteryear_end){ ?>mui-active<? } ?>"><a href="?c=admin&a=negative&search_starttime=<?=$yesteryear_begin?>&search_endtime=<?=$yesteryear_end?>&phone=<?=$phone?>">去年</a></li>
+                </ul>
+            </div>
+            <div class="am-g" style="margin:10px">
+                <div class="am-form  am-scrollable-horizontal">
+                    <table class="am-table am-table-bordered am-table-striped am-text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>拍摄门店</th>
+                                <th>地址</th>
+                                <th>订单编码</th>
+                                <th>项目</th>
+                                <th>姓名</th>
+                                <th>联系方式</th>
+                                <th>金额</th>
+                                <th>定金</th>
+                                <th>预约时间</th>
+                                <th>创建时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?foreach ($Orderlist as $v){?>
+                            <tr>
+                                <td><?=$v['name']?></td>
+                                <td><?=$v['address']?></td>
+                                <td><?=$v['ordercode']?></td>
+                                <td><?=$v['item']?></td>
+                                <td><?=$v['buyer']?></td>
+                                <td><?=$v['buyerphone']?></td>
+                                <td><?=$v['pay']/100?></td>
+                                <td><?=$v['downpay']/100?></td>
+                                <td><?=$v['ordertime']?></td>
+                                <td><?=$v['createtime']?></td>
+                                <td>
+                                    <a class="am-btn am-btn-default am-btn-xs am-text-secondary" href="?c=admin&a=negative&action=from&id=<?=$v['id']?>"><span class="am-icon-pencil-square-o"></span> 上传底片</a>
+                                </td>
+                            </tr>
+                            <?}?>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="am-cf" style="text-align: center; margin:1rem; font-size:1rem">
+                    每页<?=$page_count?> 共<?=$totalcount?> 条记录
+                    <div class="am-fr">
+                        <? if(count($pagestr)>1){ ?>
+                        <ul class="mui-pagination  mui-pagination-sm">
+                            <li class="mui-previous"><a href="?c=admin&a=city&page=1&name=<?=$name?>&search_starttime=<?=$search_starttime?>&search_endtime=<?=$search_endtime?>">首页</a></li>
+                            <? foreach($pagestr as $k=>$v){ ?>
+                            <? if($v==$page){ ?>
+                            <li class="mui-active"><a href="#"><?=$v?></a></li>
+                            <? }else{ ?>
+                            <li><a href="?c=admin&a=city&page=<?=$v?>&name=<?=$name?>&search_starttime=<?=$search_starttime?>&search_endtime=<?=$search_endtime?>"><?=$v?></a></li>
+                            <? } ?>
+                            <? } ?>
+                            <li class="mui-next"> <a href="?c=admin&a=city&page=<?=$totalpage?>&name=<?=$name?>&search_starttime=<?=$search_starttime?>&search_endtime=<?=$search_endtime?>">尾页</a></li>
+                        </ul>
+                        <? } ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<?}?>
+<script type="text/javascript">
+    function onFormSubmit(from) {
+        var code = $("#code").val();
+        var name = $("#name").val();
+
+        if (!code) {
+            layer.msg("请输入城市编码");
+            return false;
+        }
+        if (!name) {
+            layer.msg("请输入名称");
+            return false;
+        }
+    }
+    function deletesetCity(id) {
+        layer.confirm('是否确认删除？', {
+            btn: ['确认', '取消']
+        }, function () {
+            $.ajax({
+                type: "POST",
+                async: true,
+                data: { action: "delete", id: id },
+                url: "?c=admin&a=city",
+                success: function (ret) {
+                    window.location.href = window.location.href;
+                },
+                error: function (data) {
+                    alert("请求失败");
+                }
+            });
+        });
+    }
+    $(function () {
+        var currYear = (new Date()).getFullYear();
+        //初始化日期控件
+        var opt = {};
+        opt.date = { preset: 'date' };
+        opt.datetime = { preset: 'datetime' };
+        opt.time = { preset: 'time' };
+        opt.default = {
+            theme: 'android-ics light', //皮肤样式
+            display: 'modal', //显示方式
+            mode: 'scroller', //日期选择模式
+            dateFormat: 'yyyy-mm-dd',
+            lang: 'zh',
+            showNow: true,
+            nowText: "今天",
+            startYear: currYear, //开始年份
+            endYear: currYear + 10 //结束年份
+        };
+        $("#search_starttime").mobiscroll($.extend(opt['date'], opt['default']));
+        $("#search_endtime").mobiscroll($.extend(opt['date'], opt['default']));
+
+    });
+</script>
+<?php include('footer.html'); ?>

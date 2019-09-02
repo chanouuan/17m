@@ -1,0 +1,40 @@
+.captain {margin-bottom: 13px;}
+.search-city {
+    margin: 20px 0 30px 0;
+}
+.search-city dt {
+    font-size:12px;
+    font-weight:100;
+    color:#757575;
+    line-height:18px;
+    text-align:left;
+    margin-bottom: 10px;
+}
+.search-city dd {
+    background:#FFFFFF;
+    border:1px solid #4F83D7;
+    border-radius:2px;
+    height:42px;
+    line-height: 42px;
+    position: relative;
+}
+.search-city dd .icon {
+    display: inline-block;
+    width:16px; height:100%;
+    background: url(../images/search_icon.png) no-repeat center center;
+    background-size: 100%;
+    margin: 0 10px;
+    position: relative;
+    z-index: 2;
+}
+.search-city input[type="text"] {
+    border: none;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0; left: 0;
+    padding: 10px 0 10px 36px;
+    line-height:20px;
+    z-index: 1;
+}
+.search-city input:focus {outline:none;}

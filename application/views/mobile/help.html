@@ -1,0 +1,401 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+<title>十七平创意摄影工作室</title>
+    <link href="<?=$tpl_dir?>/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="<?=$tpl_dir?>/css/common2.css?v=1" rel="stylesheet" type="text/css">    
+    <link href="<?=$tpl_dir?>/css/notice.css" rel="stylesheet" type="text/css">
+<style>
+    * h6 {
+        padding:0 16px;
+        font-size:11px;
+    }
+    .colorlist {
+        padding:0 16px 12px;
+    }
+    .colorlist ul {
+        margin:0 -10px;
+    }
+    .colorlist li {
+        float:left;
+        width:20%;
+        font-size:11px;
+        text-align:center;
+        box-sizing:border-box;
+        -webkit-box-sizing:border-box;
+        padding:12px 10px 0;
+    }
+    .colorlist li span {
+        display:block;
+        padding:100% 0 0;
+    }
+    .colorlist li span.color-1 {
+        background:#A4B8E4;
+    }
+    .colorlist li span.color-2 {
+        background:#F7E2E5;
+    }
+    .colorlist li span.color-3 {
+        background:#5E6D72;
+    }
+    .colorlist li span.color-4 {
+        background:#A8AA9D;
+    }
+    .colorlist li span.color-5 {
+        background:#9A5151;
+    }
+    .colorlist li span.color-6 {
+        background:#D99B60;
+    }
+    .colorlist li span.color-7 {
+        background:#D486A0;
+    }
+    .colorlist li span.color-8 {
+        background:#8E67AA;
+    }
+    .colorlist li span.color-9 {
+        background:#037482;
+    }
+    .colorlist li span.color-10 {
+        background:#284556;
+    }
+    .colorlist li i {
+        display:block;
+        font-size:11px;
+        padding:1px 0 0;
+    }
+    .data {
+        font-size:11px;
+        padding:0 16px 16px;
+    }
+    .data table {
+        width:100%;
+        text-align:center;
+    }
+    .data th {
+        border:#E5E5E5 1px solid;
+        padding:6px 0;
+        font-weight:700;
+    }
+    .data td {
+        border:#E5E5E5 1px solid;
+        padding:6px 0;
+    }
+    .works {
+        width:100%;
+        padding:0 16px;
+        text-align:center;
+    }
+    .notice-wrap .icon {
+        font-size:56px;
+        color:#FFCE00;
+        text-align:center;
+    }
+    .notice-wrap h4 {
+        font-size:16px;
+        color:#666;
+        text-align:center;
+        border-bottom:1px solid #E4E4E4;
+        font-weight:900;
+        padding:0px 0 18px 0;
+        margin:0 0 12px 0;
+    }
+</style>
+</head>
+<body id="id1">
+
+    <style>
+    @media (min-device-width:414px) and (max-device-width:736px) and (-webkit-min-device-pixel-ratio:3){
+        /*iphone6plus*/
+    }
+</style>
+<div class="app">
+    <div class="toolbar">
+        <div class="toolbar-logo"><img src="<?=$tpl_dir?>/imgs/logo.png"></div>
+        <div class="toolbar-menu" id="toolbar-menu"><a href="javascript:void(0)" data-role="icon-ment" class="icon-menu"></a></div>
+        <div class="toolbar-back" id="toolbar-back"><a href="javascript:void(0);"><i class="icon-arrow-left"></i>上一步</a></div>
+        <div class="toolbar-location" id="toolbar-location"><a href="javascript:void(0);"><i class="icon-location-white"></i><strong data-role="location"></strong><i data-role="arrow" class="icon-arrow-down"></i></a></div>
+    </div>
+
+
+    <div class="app-body">
+        <div class="wrap">
+    <div class="app-body">
+        <div class="notice-wrap">
+            <p class="icon"><i class="icon-notice"></i></p>
+            <h4>注意事项</h4>
+
+            <div class="content" style="padding-bottom: 68px;">
+                <dl class="notice-dl">
+                    <dt>关于服装</dt>
+                    <dd>
+                        <ul class="intro">
+                            <li>我们备有有限款式的服装和配饰：正装外套、正装衬衫、不修身的休闲情侣装、眼镜框、领带、领结等；</li>
+                            <li>如果你很在意合身程度、个性化或你有轻微的洁癖，我们十分建议你自行准备服装。那样也许会更适合自己；</li>
+                            <li>自备服装原则：勿夸张花哨，尽量有领；个别证件的服装以当地相关部门的要求为准。</li>
+                        </ul>
+                        <h6> 建议选用纯色的衣服(不要太鲜艳)，推荐以下颜色： </h6>
+
+                        <div class="colorlist">
+                            <ul class="clearfix">
+                                <li><span class="color-1"> </span> 浅蓝</li>
+                                <li><span class="color-2"> </span> 浅粉</li>
+                                <li><span class="color-3"> </span> 雅灰</li>
+                                <li><span class="color-4"> </span> 卡其</li>
+                                <li><span class="color-5"> </span> 酒红</li>
+                                <li><span class="color-6"> </span> 橡木黄</li>
+                                <li><span class="color-7"> </span> 玫瑰粉</li>
+                                <li><span class="color-8"> </span> 淡紫</li>
+                                <li><span class="color-9"> </span> 蓝绿</li>
+                                <li><span class="color-10"> </span> 蓝灰</li>
+                            </ul>
+                        </div>
+                    </dd>
+                    <dt>关于妆容</dt>
+                    <dd>
+                        <ul class="intro">
+                            <li>我们提供适合普通用途的日常妆容和简单的发型打理，但如果要洗头、剪发、烫发请自行准备；</li>
+                            <li>我们十分建议你在拍摄前将发型修剪合适，并在到店时保持头发柔顺；男士请刮胡子、修剪鼻毛；</li>
+                            <li>近视的话请佩戴隐形眼镜；正规证件不可戴美瞳；</li>
+                        </ul>
+                    </dd>
+                    <dt>关于状态</dt>
+                    <dd style="padding-bottom: 15px; border-bottom: none">
+                        <ul class="intro">
+                            <li>请在拍摄前保持睡眠充足，并在拍摄前一晚避免过度饮水导致水肿。</li>
+                        </ul>
+                    </dd>
+                </dl>
+            </div>
+            <div class="action"><a href="?c=order&a=myorder" class="nb-btn nb-btn-default">我的订单</a>
+            </div>
+        </div>
+    </div>
+</div>
+        <div id="page-mask" class="page-mask"></div>
+    </div>
+</div>
+
+    <div id="toolbar-submenu" class="toolbar-submenu">
+        <ul class="ts-menu" id="ts-menu">
+            <li><a href="?c=order&a=createorder"><i class="icon-order"></i>开始预约</a></li>
+            <li><a href="?c=order&a=myorder"><i class="icon-orderlist"></i>我的订单</a></li>
+            <li><a href="?c=order&a=Personal"><i class="icon-profile"></i>个人资料</a></li>
+            <li><a href="?c=order&a=negative"><i class="icon-vip2"></i>个人底片</a></li>
+            <li><a href="?c=order&a=address"><i class="icon-store-info1"></i>门店地址</a></li>
+            <li><a href="?c=order&a=help"><i class="icon-notice"></i>拍摄须知</a></li>
+        </ul>
+        <div class="mask"></div>
+    </div>
+
+
+<style>
+    .vip-dialog {
+        font-size:14px;
+        color:#8446ac;
+        line-height:17px;
+        text-align:left;
+        position: fixed;
+        top: 0;
+        left: 0;
+    }
+    .vip-dialog .dialog-box {
+        top: 50%;
+        left: 50%;
+        margin-left: -145px;
+        position: absolute;
+    }
+    .vip-dialog .dialog-box-header {
+        padding-top: 24px;
+        text-align: center;
+    }
+    .vip-dialog .icon-vip2 {
+        width: 48px;
+        height: 48px;
+        font-size: 48px;
+        color: #8446ac;
+    }
+    .vip-dialog .list {
+        padding: 13px 0;
+    }
+    .vip-dialog .list p {
+        padding: 0;
+        line-height: 24px;
+        width: 80%;
+        margin: 0 auto;
+    }
+    .vip-dialog .list [class^="icon-"] {
+        margin-right: 5px;
+    }
+    .vip-dialog .nb-btn-primary {
+        background:#8446ac;
+        width:135px;
+        height: 40px;
+        display: inline-block;
+        border-color: #8446ac;
+        line-height: 39px;
+    }
+    .vip-dialog .nb-btn-primary:active {
+        background: #651D93;
+        border-color: #651D93;
+        opacity: 1;
+        color: #FFFFFF;
+    }
+</style>
+<div class="nb-dialog vip-dialog" style="display: none;">
+    <div class="dialog-box">
+        <div class="dialog-box-header">
+            <p><span class="icon-vip2"></span></p>
+            <p style="height: 31px;">VIP拍摄服务优势</p>
+            <a href="javascript:$('.vip-dialog').hide();" class="close"><i class="icon-close"></i></a>
+        </div>
+        <div class="dialog-box-content list" style="font-size: 12px; border-bottom: none;">
+            <p><span class="icon-stuff"></span>表现最佳的员工组成的服务团队</p>
+            <p><span class="icon-Makeup-vip"></span>精选的更高级别的化妆品及工具</p>
+            <p><span class="icon-clothes"></span>精选的更高级别的拍摄用服装</p>
+            <p><span class="icon-private"></span>专享全程无干扰私密空间</p>
+            <p><span class="icon-background"></span>专享进口梦幻背景布</p>
+            <p><span class="icon-register"></span>更灵活的独立预约通道</p>
+            <p><span class="icon-heart"></span>对你全程关注的服务</p>
+        </div>
+            </div>
+    <div class="mask"></div>
+</div>
+    <div id="alert-dialog" class="alert-dialog" style="display: none;">
+        <div class="alert-box">
+            <a href="javascript:$('#alert-dialog').hide();" class="close icon-close"></a>
+            <div class="alert-header">
+                <i class="icon-warning"></i>
+            </div>
+            <div class="alert-content">
+            </div>
+            <div class="alert-footer">
+                <a href="javascript:void(0)" class="action-btn">好</a>
+            </div>
+        </div>
+        <div class="mask"></div>
+    </div>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="<?=APPLICATION_URL?>/public/js/zepto.min.js"></script>
+    <script src="<?=APPLICATION_URL?>/public/js/callbacks.js"></script>
+    <script src="<?=APPLICATION_URL?>/public/js/deferred.js"></script>
+    <script src="<?=APPLICATION_URL?>/public/weui/1.1.1/weui.min.js"></script>
+    <script src="<?=APPLICATION_URL?>/public/laytpl/laytpl.js"></script>
+      <script>
+        $('#toolbar-menu').click(function(){
+            var mentEl = $(this).find('[data-role="icon-ment"]');
+            $('#toolbar-submenu').toggle();
+            if (mentEl.hasClass('icon-menu')) {
+                mentEl.removeClass('icon-menu');
+                mentEl.addClass('icon-arrow-right');
+            } else {
+                mentEl.addClass('icon-menu');
+                mentEl.removeClass('icon-arrow-right');
+            }
+
+            setTimeout(function() {
+                $('#ts-menu').toggleClass('ts-menu-active');
+            }, 0);
+        });
+
+
+        $('#toolbar-back').click(function(){
+
+            // if($('#store-multi-name').length && $('#store-box-open').length )
+            // {
+            //     if(!$('#store-box-open').hasClass('store-box-open-show'))
+            //     {
+            //         storeMultiNameClicked();
+            //         return ;
+            //     }
+            //     else
+            //     {
+            //         $('#store-box-open').removeClass('store-box-open-show');
+            //         history.back();
+            //     }
+            // }
+
+
+            if($('#schedules-calender-open').length)
+            {
+                if(!$('#schedules-calender-open').hasClass('schedules-calender-open-show')) 
+                {
+                        $('#schedules-calender-open').addClass('schedules-calender-open-show');
+                        return ;
+                }
+            }
+
+            
+
+            history.back();
+        });
+ 
+
+
+
+
+
+        $('#toolbar-submenu').on('click', '.mask', function() {
+            $('#toolbar-submenu').hide();
+            var mentEl = $('#toolbar-menu').find('[data-role="icon-ment"]');
+            if (mentEl.hasClass('icon-menu')) {
+                mentEl.removeClass('icon-menu');
+                mentEl.addClass('icon-arrow-right');
+            } else {
+                mentEl.addClass('icon-menu');
+                mentEl.removeClass('icon-arrow-right');
+            }
+            $('#ts-menu').removeClass('ts-menu-active');
+        });
+
+
+        if (window['runParams'] && runParams.toolbarLocationShow) {
+            var toolbarLocationElm = $('#toolbar-location');
+            toolbarLocationElm.show();
+            toolbarLocationElm.on('click', function() {
+                $(this).find('[data-role="arrow"]').toggleClass('icon-arrow-down');
+                $(this).find('[data-role="arrow"]').toggleClass('icon-arrow-up');
+                $('#toolbar-citys').toggleClass('toolbar-citys-show');
+            });
+        }
+
+        function customAlert(status, message, actionText, callback) {
+            var statusClass = '';
+            if(status == 'error') {
+                statusClass = 'error';
+            }
+            $('#alert-dialog').addClass(statusClass);
+            $('#alert-dialog .alert-content').html(message);
+            $('#alert-dialog .action-btn').html(actionText);
+            $('#alert-dialog .action-btn').on('click', function() {
+                if (callback != null) {
+                    callback($('#alert-dialog'));
+                }
+                $('#alert-dialog').hide();
+            });
+            $('#alert-dialog').show();
+            var h = $('#alert-dialog .alert-box').height();
+            $('#alert-dialog .alert-box').height(h);
+            $('#alert-dialog .alert-box').css('margin-top', -h/2)
+        }
+
+        $('.mask').on('click', function() {
+            $(this).parent().hide();
+        });
+    </script>
+    
+
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?062b790712f25dd7dbc38c7bc21c91c7";
+      var s = document.getElementsByTagName("script")[0]; 
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+
+</body></html>

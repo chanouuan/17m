@@ -1,0 +1,220 @@
+<?php include('header.html'); ?>
+
+<?php if(empty($_GET['action'])){ ?>
+
+<div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-cf am-padding am-padding-bottom-0">
+        <div class="am-fl am-cf"><small>评价管理</small></div>
+      </div>
+      <hr>
+      <div class="am-g">
+	      	<form class="am-form-inline" role="form" action="?" method="get">
+		      <input type="hidden" name="c" value="admin">  
+		      <input type="hidden" name="a" value="comment">  
+              <div class="am-form-group am-input-group-sm am-u-sm-4">
+                 <select name="search_storeid" class="am-form-field">
+                     <option value="0">请选择门店</option>
+                     <?foreach($storelist as $k=>$v){?>
+                     <option value="<?=$v['id']?>" <?if($_GET['search_storeid']==$v['id']){?>selected="selected"<?}?>><?=$v['name']?></option>
+                     <?}?>
+                 </select>
+              </div>
+              <div class="am-form-group am-input-group-sm am-u-sm-4">
+                 <select name="search_server" class="am-form-field">
+                     <option value="0">请选择服务</option>
+                     <option value="score1" <?if($_GET['search_server']=='score1'){?>selected="selected"<?}?>>前台</option>
+                     <option value="score2" <?if($_GET['search_server']=='score2'){?>selected="selected"<?}?>>化妆师</option>
+                     <option value="score3" <?if($_GET['search_server']=='score3'){?>selected="selected"<?}?>>摄影师</option>
+                     <option value="score4" <?if($_GET['search_server']=='score4'){?>selected="selected"<?}?>>修图师</option>
+                 </select>
+              </div>
+              <div class="am-form-group am-input-group-sm am-u-sm-4">
+                 <select name="search_score" class="am-form-field">
+                     <option value="0">请选择评分</option>
+                     <option value="1" <?if($_GET['search_score']==1){?>selected="selected"<?}?>>一颗星</option>
+                     <option value="2" <?if($_GET['search_score']==2){?>selected="selected"<?}?>>二颗星</option>
+                     <option value="3" <?if($_GET['search_score']==3){?>selected="selected"<?}?>>三颗星</option>
+                     <option value="4" <?if($_GET['search_score']==4){?>selected="selected"<?}?>>四颗星</option>
+                     <option value="5" <?if($_GET['search_score']==5){?>selected="selected"<?}?>>五颗星</option>
+                 </select>
+              </div>
+              <div class="am-form-group am-input-group-sm am-u-sm-4">
+                 <input type="text"  class="am-form-field date-control" name="search_starttime" value="<?=$_GET['search_starttime']?>" placeholder="评价开始时间">
+              </div>
+              <div class="am-form-group am-input-group-sm am-u-sm-4">
+                 <input type="text"  class="am-form-field date-control" name="search_endtime" value="<?=$_GET['search_endtime']?>" placeholder="评价结束时间">
+              </div>
+              <div class="am-form-group am-input-group-sm am-u-sm-4">
+                <button class="am-btn am-btn-default am-btn-sm" type="submit">搜索</button>
+              </div>
+	        </form>
+      </div>
+      <div class="am-g">
+          <div class="am-u-sm-12 am-margin-top">
+            <a class="am-btn am-btn-xs am-btn-secondary" href="?<?=burl('search_starttime=&search_endtime=&page=1')?>">全部</a>
+            <a class="am-btn am-btn-xs am-btn-secondary" href="?<?=burl('search_starttime='.$search_date['lmonth_starttime'].'&search_endtime='.$search_date['lmonth_endtime'].'&page=1')?>">上月</a>
+            <a class="am-btn am-btn-xs am-btn-secondary" href="?<?=burl('search_starttime='.$search_date['month_starttime'].'&search_endtime='.$search_date['month_endtime'].'&page=1')?>">本月</a>
+            <a class="am-btn am-btn-xs am-btn-secondary" href="?<?=burl('search_starttime='.$search_date['year_starttime'].'&search_endtime='.$search_date['year_endtime'].'&page=1')?>">本年</a>
+          </div>
+      </div>
+      <div class="am-g">
+        <div class="am-u-sm-12 am-margin-top">
+           <a class="am-btn am-btn-warning am-btn-xs" href="?<?=burl('action=chart')?>">导出服务评分</a>
+        </div>
+      </div>
+      <div class="am-g am-margin-top">
+        <div class="am-u-sm-12 am-scrollable-horizontal">
+            <table class="am-table am-table-bordered am-table-striped am-text-nowrap">
+              <thead>
+              <tr>
+                <th>门店</th>
+                <th>评价人</th>
+                <th>内容</th>
+                <th>前台评分</th>
+                <th>化妆师评分</th>
+                <th>摄影师评分</th>
+                <th>修图师评分</th>
+                <th>发表时间</th>
+            	<th>操作</th>
+              </tr>
+              </thead>
+              <tbody id="pagelist">
+              <?php foreach($list as $k=>$v){ ?>
+              <tr>
+                <td><?=$storelist[$v['storeid']]['name']?></td>
+                <td><?=$v['rater']?></td>
+                <td><?=msubstr($v['message'],0,20)?></td>
+                <td><img style="width:60px;" src="/public/img/level/<?=$v['score1']?>.png"></td>
+                <td><img style="width:60px;" src="/public/img/level/<?=$v['score2']?>.png"></td>
+                <td><img style="width:60px;" src="/public/img/level/<?=$v['score3']?>.png"></td>
+                <td><img style="width:60px;" src="/public/img/level/<?=$v['score4']?>.png"></td>
+                <td><?=$v['createtime']?></td>
+				<td><a href="?<?=burl('action=view&id='.$v['id'])?>" class="am-btn am-btn-secondary am-btn-xs">详情</a></td>
+              </tr>
+              <?php } ?>
+              </tbody>
+            </table>
+        </div>
+		<div class="am-u-sm-12 am-cf">
+          共 <?=$pagesize['totalcount']?> 条记录
+          <div id="pagecontent" style="text-align: center; margin:1rem; font-size:1rem">
+          <?php if($pagesize['totalpage']){ ?>
+            <ul class="am-pagination am-pagination-centered">
+            <?php foreach($pagesize['scrollpage'] as $k=>$v){ ?>
+              <li <?php if($pagesize['page']==$k){ ?>class="am-active"<?php } ?>><a href="?<?=burl('page='.$k)?>"><?=$v?></a></li>
+            <?php } ?>
+            </ul>
+          <?php } ?>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<?php }elseif($_GET['action']=='view'){ ?>
+
+<div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-cf am-padding am-padding-bottom-0">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg"><a href="?<?=burl('action=')?>">返回</a></strong> / <small>详情</small></div>
+      </div>
+      <hr>
+        <div class="am-padding">
+            <div class="am-panel-group">
+                <div class="am-panel am-panel-default">
+                   <div class="am-panel-hd">订单信息</div>
+                   <ul class="am-list am-list-static">
+                       <li>门店：<?=$info['storename']?></li>
+                       <li>拍摄时间：<?=$info['ordertime']?></li>
+                   </ul>
+                </div>
+                <div class="am-panel am-panel-default">
+                   <div class="am-panel-hd">评价信息</div>
+                   <ul class="am-list am-list-static">
+                       <li>评价人：<?=$info['rater']?> (UID:<?=$info['raterid']?>)</li>
+                       <li>内容：<?=$info['message']?></li>
+                       <li>发表时间：<?=$info['createtime']?></li>
+                   </ul>
+                </div>
+                <div class="am-panel am-panel-default">
+                   <div class="am-panel-hd">评分信息</div>
+                   <ul class="am-list am-list-static">
+                       <li>前　台：<img style="width:100px;" src="/public/img/level/<?=$info['score1']?>.png"></li>
+                       <li>化妆师：<img style="width:100px;" src="/public/img/level/<?=$info['score2']?>.png"></li>
+                       <li>摄影师：<img style="width:100px;" src="/public/img/level/<?=$info['score3']?>.png"></li>
+                       <li>修图师：<img style="width:100px;" src="/public/img/level/<?=$info['score4']?>.png"></li>
+                   </ul>
+                </div>
+                <div class="am-panel am-panel-default">
+                   <div class="am-panel-hd">优惠劵 <b style="color:red"><?=$info['coupon']?1:0?></b> 张</div>
+                   <ul class="am-list am-list-static">
+                   <? if($info['coupon']){ ?>
+                        <li>优惠码：
+                         <?=$info['coupon']?> 
+                         <? if(!$info['coupon_info']){ ?>
+                         <span style="color:red">(不可用)</span>
+                         <? }elseif($info['coupon_info']['status']==1){ ?>
+                         <span style="color:red">(已使用)</span>
+                         <? }elseif(strtotime($info['coupon_info']['expire'])<TIMESTAMP){ ?>
+                         <span style="color:red">(已过期)</span>
+                         <? }else{ ?>
+                         <span style="color:green">(可用)</span>
+                         <? } ?>
+                        </li>
+                        <? if($info['coupon_info']){ ?>
+                        <li>面　值：<?=$info['coupon_info']['cost']/100?>元</li>
+                        <li>截　止：<?=$info['coupon_info']['expire']?></li>
+                        <? } ?>
+                   <? } ?>
+                   </ul>
+                </div>
+            </div>
+            <p>
+                <a href="?c=admin&a=order&action=from&id=<?=$info['orderid']?>" class="complete am-btn am-btn-success">查看订单</a>
+            </p>
+      </div>
+    </div>
+</div>
+
+<?php }elseif($_GET['action']=='chart'){ ?>
+
+<div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-cf am-padding am-padding-bottom-0">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg"><a href="?<?=burl('action=')?>">返回</a></strong> / <small>服务评分</small></div>
+      </div>
+      <hr>
+        <div class="am-padding">
+            <div class="am-panel-group">
+                <? if($_GET['search_starttime']&&$_GET['search_endtime']){ ?>
+                <div class="am-panel am-panel-default">
+                   <div class="am-panel-hd">评价时间段</div>
+                   <ul class="am-list am-list-static">
+                       <li>开始时间：<?=$_GET['search_starttime']?></li>
+                       <li>结束时间：<?=$_GET['search_endtime']?></li>
+                   </ul>
+                </div>
+                <? } ?>
+                <? if(!$score_list){ ?>
+                <p>无评价内容</p>
+                <? } ?>
+                <? foreach($score_list as $k=>$v){ ?>
+                <div class="am-panel am-panel-default">
+                   <div class="am-panel-hd">门店 - <?=$v['store_name']?></div>
+                   <ul class="am-list am-list-static">
+                       <li>前　台：<img style="width:100px;" src="/public/img/level/<?=round($v['score1'])?>.png"> （评分: <?=$v['score1']?>）</li>
+                       <li>化妆师：<img style="width:100px;" src="/public/img/level/<?=round($v['score2'])?>.png"> （评分: <?=$v['score2']?>）</li>
+                       <li>摄影师：<img style="width:100px;" src="/public/img/level/<?=round($v['score3'])?>.png"> （评分: <?=$v['score3']?>）</li>
+                       <li>修图师：<img style="width:100px;" src="/public/img/level/<?=round($v['score4'])?>.png"> （评分: <?=$v['score4']?>）</li>
+                   </ul>
+                </div>
+                <? } ?>
+            </div>
+      </div>
+    </div>
+</div>
+
+<?php } ?>
+
+<?php include('footer.html'); ?>

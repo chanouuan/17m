@@ -1,0 +1,72 @@
+.wrap {padding-top:15px;}
+h2 {margin:0 0 17px 0;font-size:16px;color:#666;text-align:center;}
+h2:before {margin-right:10px;}
+
+.promise-tips {padding-bottom:11px;text-align:center;color:#ccc;border-bottom:1px solid #E4E4E4;}
+
+.user-profile {padding-top:0;}
+
+#user-form {padding-bottom:80px;}
+/* 用户信息 */
+.user-info {}
+.user-info li {margin-bottom:8px;height:65px;overflow:hidden;}
+.user-info label {display:block;margin-bottom:4px;height:17px;line-height:17px;color:#888;}
+.ui-input {position:relative;display:inline-block;overflow:hidden;}
+.ui-input input {float:left;padding:10px 8px;height:42px;width:100%;border:1px solid #B2C7EA;border-radius: 3px;font-size:14px;font-weight:600;color:#1e82d0;outline:none;}
+.ui-input-active input {border-color:#1e82d0}
+.ui-input .ui-input-clear {position:absolute;display:none;top:1px;right:1px;height:40px;width:24px;border-radius:0 3px 3px 0;background:#fff;}
+.ui-input .ui-input-clear:before {position:absolute;top:15px;left:6px;color:#CCCCCC;}
+.ui-input-active .ui-input-clear {display:block;}
+/* 成功 */
+.ui-input-success {}
+.ui-input-success .ui-input:after {position:absolute;top:14px;right:7px;font-family:'NaiveBlueSymbols' !important;content:'\e936';color:#7CDFA8;-webkit-font-smoothing: antialiased;background:#fff;}
+/* 失败 */
+.ui-input-error {}
+.ui-input-error label {color:#FF8571;}
+.ui-input-error .ui-input input {border-color:#FF8571 !important;color:#FF8571 !important;}
+.ui-input-error .ui-input-clear {}
+.utel-box-active .ui-input-clear {display:block !important;}
+.ui-input-error .ui-input-clear:before {color:#FF8571;}
+
+/* 姓名 */
+.user-name {}
+.uname-box {float:left;padding-right:25px;width:145px;}
+.uname-sex {overflow:hidden;}
+.uname-sex a {position:relative;float:left;margin:12px 20px 0 0;padding-left:18px;height:18px;line-height:18px;color:#B2C7EA;}
+.uname-sex .active {color:#1e82d0;}
+.uname-sex a:hover {text-decoration:none;}
+.uname-sex a:before {content:'';position:absolute;top:2px;left:0;width:14px;height:14px;border:1px solid #B2C7EA;border-radius:100%;overflow:hidden;}
+.uname-sex .active:before {border-color:#1e82d0;background:#1e82d0 url(../imgs/radio_checked.png) no-repeat 50% 50%;background-size:10px;}
+
+/* 手机 */
+.user-tel {}
+.utel-box {float:left;width:213px;overflow:hidden;}
+.utel-box .ui-input {float:left;width:130px;}
+.utel-box .ui-input input {border-right:0;border-radius:3px 0 0 3px;}
+.utel-box .ut-getcode {float:left;width:70px;line-height:40px;border:1px solid #1e82d0;border-left:0;border-radius:0 3px 3px 0;text-align:center;color:#fff;background:#1e82d0;}
+.utel-box .ut-getcode-disable {border-color:#B2C7EA;color:#666;background:#E4E4E4;}
+.utel-code {display:none;overflow:hidden;}
+.user-tel .ui-input-success .ui-input input {color:#7CDFA8;}
+.utel-box-active .ui-input input {border-color:#1e82d0;}
+.utel-box-active .ut-getcode {border-color:#1e82d0 !important;}
+
+/* 邮箱 */
+.user-email {}
+.user-email .ui-input {width:100%;}
+
+#email-suggest {position:absolute;z-index:1000;border-radius:3px;box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.30);color:#888;background:#fff;overflow:hidden;}
+#email-suggest a {display:block;padding-left:8px;height:32px;line-height:32px;text-decoration:none;color:#888;}
+#email-suggest a:active {background:#F3F3F3;}
+
+.action {position:fixed;left:0;bottom:0;right:0;height:78px;padding:18px;font-size:0;background:#fff;border-top:1px solid #E5E5E5;overflow:hidden;}
+.action a {display:inline-block;margin:0 10px;width:120px;height:42px;line-height:42px;border-radius:3px;text-align:center;font-size:14px;font-weight:600;}
+.order-back {border:1px solid #B2C7EA;color:#1e82d0;background:#fff;}
+.action .order-confirm {color:#fff;background:#FF8571;}
+.action .order-confirm-disable, .action .order-confir-disable:hover {color:#fff;background:#E4E4E4;}
+
+.save-success {display:none;}
+.save-success .dialog-box {position:absolute;top:50%;left:50%;margin:-118px 0 0 -70px;width:140px;height:140px;border-radius:3px;background:#fff;color:#7CDFA8;text-align:center;}
+.save-success .dialog-box i {display:block;margin:30px auto 15px;width:48px;font-size:48px;}
+
+.utel-box.ui-input-error .ut-getcode-disable,
+.utel-box.ui-input-error .ut-getcode {border-color:#FF8571 !important;}

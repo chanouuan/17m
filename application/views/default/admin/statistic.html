@@ -1,0 +1,181 @@
+<?php include('header.html'); ?>
+<link href="<?=$tpl_dir?>/css/pagination.css" rel="stylesheet" type="text/css">
+<script src="<?=APPLICATION_URL?>/public/assets/js/jquery.min.js"></script>
+<script src="<?=APPLICATION_URL?>/public/echarts/echarts.min.js"></script>
+
+  <div id="admin-content" class="admin-content">
+    <div class="admin-content-body">
+        <div class="am-cf am-padding am-padding-bottom-0">
+            <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">首页</strong> / <small>统计分析</small></div>
+        </div>
+        <hr>
+        <div class="am-g">
+            <div class="am-u-sm-12">
+                <div class="am-alert am-alert-secondary">
+                    <p><strong>截至目前：</strong>支付总额<strong class="am-text-danger"><?=round_dollar($sumcount['sum'])?></strong>元,下单总量<strong class="am-text-danger"><?=intval($sumcount['count'])?></strong>次</p> 
+                    <p><strong>其中(<?=substr($search_starttime,0,10)?>至<?=substr($search_endtime,0,10)?>)：</strong>收入<strong class="am-text-danger"><?=$current_sum?></strong>元,下单量<strong class="am-text-danger"><?=$current_count?></strong>次</p> 
+                </div>
+            </div>
+        </div>
+        <div class="am-g">
+            <form class="am-form-inline" role="form" action="?c=admin&a=statistic" method="post">
+                <?if($userinfo['area']==0){?>
+                <div class="am-form-group am-input-group-sm am-u-sm-6">
+                    <select name="storeid" id="storeid" class="am-form-field">
+                        <option value=" 0">
+                        请选择</option>
+                        <?foreach($storelist as $k=>$v){?>
+                        <option value="<?=$v['id']?>"<?if($storeid==$v['id']){?>   selected <?}?>><?=$v['name']?></option>
+                        <?}?>
+                    </select>
+                </div>
+                <?}?>
+                <div class="am-form-group am-input-group-sm am-u-sm-6">
+                    <input type="text" class="am-form-field date-control" name="search_starttime" id="search_starttime" value="<?=$search_starttime?>" placeholder="开始时间" readonly="">
+                </div>
+                <div class="am-form-group am-input-group-sm am-u-sm-6">
+                    <input type="text" class="am-form-field date-control" name="search_endtime" id="search_endtime" value="<?=$search_endtime?>" placeholder="结束时间" readonly="">
+                </div>
+                <div class="am-form-group am-input-group-sm am-u-sm-6">
+                    <button class="am-btn am-btn-success am-btn-sm" type="submit">搜索</button>
+                </div>
+            </form>
+        </div>
+        <div class="am-g am-margin-top" style="margin:10px">
+            <ul class="mui-pagination  mui-pagination-sm">
+                <li class="<? if($search_starttime==$week_starttime&&$search_endtime==$week_endtime){ ?>mui-active<? } ?>"><a href="?c=admin&a=statistic&search_starttime=<?=$week_starttime?>&search_endtime=<?=$week_endtime?>&phone=<?=$phone?>">本周</a></li>
+                <li class="<? if($search_starttime==$lweek_starttime&&$search_endtime==$lweek_endtime){ ?>mui-active<? } ?>"><a href="?c=admin&a=statistic&search_starttime=<?=$lweek_starttime?>&search_endtime=<?=$lweek_endtime?>&phone=<?=$phone?>">上周</a></li>
+                <li class="<? if($search_starttime==$month_starttime&&$search_endtime==$month_endtime){ ?>mui-active<? } ?>"><a href="?c=admin&a=statistic&search_starttime=<?=$month_starttime?>&search_endtime=<?=$month_endtime?>&phone=<?=$phone?>">本月</a></li>
+                <li class="<? if($search_starttime==$lmonth_starttime&&$search_endtime==$lmonth_endtime){ ?>mui-active<? } ?>"><a href="?c=admin&a=statistic&search_starttime=<?=$lmonth_starttime?>&search_endtime=<?=$lmonth_endtime?>&phone=<?=$phone?>">上月</a></li>
+                <li class="<? if($search_starttime==$year_begin&&$search_endtime==$year_end){ ?>mui-active<? } ?>"><a href="?c=admin&a=statistic&search_starttime=<?=$year_begin?>&search_endtime=<?=$year_end?>&phone=<?=$phone?>">本年</a></li>
+                <li class="<? if($search_starttime==$yesteryear_begin&&$search_endtime==$yesteryear_end){ ?>mui-active<? } ?>"><a href="?c=admin&a=statistic&search_starttime=<?=$yesteryear_begin?>&search_endtime=<?=$yesteryear_end?>&phone=<?=$phone?>">去年</a></li>
+            </ul>
+        </div>
+        <div class="am-g am-margin-top">
+            <div class="am-u-sm-12">
+                <div class="echarts" id="container" style="width: 100%; height:400px; border: 1px solid rgb(204, 204, 204); -webkit-tap-highlight-color: transparent; -webkit-user-select: none; position: relative; background: transparent;" _echarts_instance_="ec_1490599050289"><div style="position: relative; overflow: hidden; width: 374px; height: 398px;"><canvas width="748" height="796" data-zr-dom-id="zr_0" style="position: absolute; left: 0px; top: 0px; width: 374px; height: 398px; -webkit-user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></canvas></div><div></div></div>
+            </div>
+        </div>
+        <div class="am-g am-margin-top">
+            <div class="am-u-sm-12">
+                <div class="echarts" id="container1" style="width: 100%; height:400px; border: 1px solid rgb(204, 204, 204); -webkit-tap-highlight-color: transparent; -webkit-user-select: none; position: relative; background: transparent;" _echarts_instance_="ec_1490599050289"><div style="position: relative; overflow: hidden; width: 374px; height: 398px;"><canvas width="748" height="796" data-zr-dom-id="zr_0" style="position: absolute; left: 0px; top: 0px; width: 374px; height: 398px; -webkit-user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></canvas></div><div></div></div>
+            </div>
+        </div>
+        <div class="am-g am-margin-top"></div>
+    </div>
+</div>
+  <script>
+
+    $(function () {
+        var currYear = (new Date()).getFullYear();
+        //初始化日期控件
+        var opt = {};
+        opt.date = { preset: 'date' };
+        opt.datetime = { preset: 'datetime' };
+        opt.time = { preset: 'time' };
+        opt.default = {
+            theme: 'android-ics light', //皮肤样式
+            display: 'modal', //显示方式
+            mode: 'scroller', //日期选择模式
+            dateFormat: 'yyyy-mm-dd',
+            lang: 'zh',
+            showNow: true,
+            nowText: "今天",
+            startYear: currYear, //开始年份
+            endYear: currYear + 10 //结束年份
+        };
+        $("#search_starttime").mobiscroll($.extend(opt['date'], opt['default']));
+        $("#search_endtime").mobiscroll($.extend(opt['date'], opt['default']));
+
+    });
+
+   
+        var myChart = echarts.init(document.getElementById('container'));
+option = {
+    tooltip: {
+        trigger: 'axis'
+    },
+    title: {
+        text: '支付收入',
+        x: 'left'
+    },
+    legend: {
+        data:<?=json_encode(array("支付收入"))?>
+        },
+    grid: {
+        y2: 140
+    },
+    toolbox: {
+        feature: {
+            saveAsImage: {}
+        }
+    },
+    xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: <?=json_encode($x_axis)?>,
+        axisLabel:{  
+            interval:0,//横轴信息全部显示  
+            rotate:60,//-30度角倾斜显示  
+        }  
+
+    },
+    yAxis: {
+        type: 'value'
+    },
+    series: [
+        {
+            name:'支付收入',
+            type:'line',
+            data:<?=json_encode($data3)?>
+            }
+
+    ]
+};
+    myChart.setOption(option);
+  
+        var myChart2 = echarts.init(document.getElementById('container1'));
+option = {
+    tooltip: {
+        trigger: 'axis'
+    },
+    title: {
+        text: '下单量',
+        x: 'left'
+    },
+    legend: {
+        data:<?=json_encode(array("支付收入"))?>
+        },
+    grid: {
+        y2: 140
+    },
+    toolbox: {
+        feature: {
+            saveAsImage: {}
+        }
+    },
+    xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: <?=json_encode($x_axis)?>,
+        axisLabel:{  
+            interval:0,//横轴信息全部显示  
+            rotate:60,//-30度角倾斜显示  
+        }  
+
+    },
+    yAxis: {
+        type: 'value'
+    },
+    series: [
+        {
+            name:'下单数量',
+            type:'line',
+            data:<?=json_encode($data4)?>
+            }
+
+    ]
+};
+    myChart2.setOption(option);
+  </script>
+<?php include('footer.html'); ?>

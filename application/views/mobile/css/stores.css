@@ -1,0 +1,179 @@
+
+.store-box {
+    padding: 0 14px;
+}
+.store-list {
+
+}
+.store-list li {
+    border-radius:3px;
+    height: 54px;
+    position: relative;
+    margin-bottom: 15px;
+}
+.store-list .status .can-book,
+.store-list .status .icon-success-fill,
+.store-list .status .icon-full,
+.store-list .remind{
+    display: none;
+}
+.store-list li:last-child {
+    margin-bottom: 0;
+}
+.store-list li a {
+    display: block;
+    color: #1e82d0;
+    width: 100%;
+    height: 100%;
+    padding-right: 21px;
+    padding-left: 27px;
+    padding-top: 9px;
+    border-radius:3px;
+    border:1px solid #b2c7ea;
+    background:#ffffff;
+}
+.store-list .status {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 27px;
+    height: 100%;
+    line-height: 54px;
+    color: #1e82d0;
+    text-align: center;
+}
+.store-list .status .can-book {
+    content: '';
+    display: inline-block;
+    background:#7cdfa8;
+    width:9px;
+    height:9px;
+    border-radius:100%
+}
+.store-list .arrow {
+    position: absolute;
+    width: 12px;
+    height: 100%;
+    top: 0;
+    right: 9px;
+    line-height: 54px;
+    color: #1e82d0;
+}
+.store-list .store-name {
+    font-size:14px;
+    color:#1e82d0;
+    line-height:20px;
+    margin-bottom: 3px;
+    height: 21px;
+    overflow: hidden;
+    position: relative;
+}
+.store-list .store-name span {
+    display: inline-block;
+    height: 21px;
+    overflow: hidden;
+}
+.store-list .store-name i {
+    color: #8446ac;
+}
+.store-list .store-address {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: normal;
+    font-size:10px;
+    color:#cccccc;
+    line-height:20px;
+    text-align:justify;
+    display: block;
+}
+
+.store-list li.activied,
+.store-list li a:active{
+    border:1px solid #1e82d0;
+}
+.store-list li.activied a,
+.store-list li a:active {
+    background:#1e82d0;
+    color: #FFFFFF;
+}
+.store-list li.activied .store-name,
+.store-list li a:active .store-name {
+    color: #FFFFFF;
+}
+.store-list li.activied .store-address
+.store-list li a:active .store-address {
+    color: #cccccc;
+}
+.store-list li.activied .can-book,
+.store-list li a:active .can-book {
+    display: none;
+}
+.store-list li.activied .icon-success-fill,
+.store-list li a:active .icon-success-fill {
+    display: inline-block;
+    color: #ffffff;
+    font-size: 16px;
+}
+.store-list li.activied .arrow,
+.store-list li a:active .arrow {
+    color: #ffffff;
+}
+
+.store-list li.disable {
+    border:1px solid #e4e4e4;
+}
+.store-list li.disable a {
+    background:#ffffff;
+    border-color: #FFFFFF;
+}
+.store-list li.disable .icon-success-fill,
+.store-list li.disable .can-book,
+.store-list li.disable:active .icon-success-fill,
+.store-list li.disable:active .can-book{
+    display: none;
+}
+.store-list li.disable .icon-full {
+    display: block;
+    font-size: 37px;
+    color: #e4e4e4;
+}
+
+.store-list li.disable .arrow {
+    display: none;
+}
+.store-list li.disable .store-name,
+.store-list li.disable:active .store-name{
+    color: #888;
+}
+.store-list li.disable .store-address {
+    color: #cccccc;
+}
+.store-list li.disable .remind {
+    background: #ffffff;
+    border: 1px solid #b9e1f2;
+    border-radius: 3px;
+    padding: 0 6px;
+    height: 30px;
+    display: inline-block;
+    font-size: 12px;
+    color: #6ec4e8;
+    line-height: 30px;
+    width: 82px;
+    position: absolute;
+    right: 9px;
+    top: 10px;
+}
+.store-list li.disable .remind .icon-remind {
+    margin-right: 3px;
+}
+@media screen and (min-width: 768px) {
+    .store-list li a:hover {
+        background-color: #E2ECFC;
+        border: 1px solid #E2ECFC;
+    }
+    .store-list li.disable a:hover {
+        background-color: #FFFFFF;
+        border: 1px solid #FFFFFF;
+    }
+}

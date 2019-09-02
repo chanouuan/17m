@@ -1,0 +1,87 @@
+.mui-pagination
+{
+    display: inline-block;
+
+    margin: 0 auto;
+    padding-left: 0;
+
+    border-radius: 6px;
+}
+.mui-pagination > li
+{
+    display: inline;
+}
+.mui-pagination > li > a,
+.mui-pagination > li > span
+{
+    line-height: 1.428571429;
+
+    position: relative;
+
+    float: left;
+
+    margin-left: -1px;
+    padding: 6px 12px;
+
+    text-decoration: none;
+
+    color: #007aff;
+    border: 1px solid #ddd;
+    background-color: #fff;
+}
+.mui-pagination > li:first-child > a,
+.mui-pagination > li:first-child > span
+{
+    margin-left: 0;
+
+
+    background-clip: padding-box;
+}
+.mui-pagination > li:last-child > a,
+.mui-pagination > li:last-child > span
+{
+
+    background-clip: padding-box;
+}
+.mui-pagination > li:active > a, .mui-pagination > li:active > a:active,
+.mui-pagination > li:active > span,
+.mui-pagination > li:active > span:active,
+.mui-pagination > li.mui-active > a,
+.mui-pagination > li.mui-active > a:active,
+.mui-pagination > li.mui-active > span,
+.mui-pagination > li.mui-active > span:active
+{
+    z-index: 2;
+
+    cursor: default;
+
+    color: #fff;
+    border-color: #007aff;
+    background-color: #007aff;
+}
+.mui-pagination > li.mui-disabled > span,
+.mui-pagination > li.mui-disabled > span:active,
+.mui-pagination > li.mui-disabled > a,
+.mui-pagination > li.mui-disabled > a:active
+{
+    opacity: .6;
+    color: #777;
+    border: 1px solid #ddd;
+    background-color: #fff;
+}
+
+.mui-pagination-lg > li > a,
+.mui-pagination-lg > li > span
+{
+    font-size: 18px;
+
+    padding: 10px 16px;
+}
+
+.mui-pagination-sm > li > a,
+.mui-pagination-sm > li > span
+{
+    font-size: 12px;
+
+    padding: 5px 10px;
+}

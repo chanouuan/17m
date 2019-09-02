@@ -1,0 +1,30 @@
+<?php include('header.html'); ?>
+
+  <div class="admin-content">
+    <div class="admin-content-body">
+	  <ul data-am-widget="gallery" class="am-gallery am-avg-sm-4 am-avg-md-3 am-avg-lg-4 am-gallery-bordered am-text-center">
+      <?php if(Auth::check('order',$user_info['id'])){ ?>
+          <li>
+	        <div class="am-gallery-item">
+	            <a href="?c=admin&a=order">
+	              <span class="am-icon-btn am-success am-icon-check-square-o"></span>
+	                <h3 class="am-gallery-title">订单管理</h3>
+	            </a>
+	        </div>
+	      </li>
+      <?php } ?>
+      <?php if(Auth::check('statistic',$user_info['id'])){ ?>
+          <li>
+            <div class="am-gallery-item">
+                <a href="?c=admin&a=statistic">
+                  <span class="am-icon-btn am-success am-icon-check-square-o"></span>
+                    <h3 class="am-gallery-title">统计分析</h3>
+                </a>
+            </div>
+          </li>
+      <?php } ?>
+      </ul>
+    </div>
+  </div>
+  
+<?php include('footer.html'); ?>

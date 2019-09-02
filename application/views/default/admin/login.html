@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>登录</title>
+    <link rel="stylesheet" href="<?=APPLICATION_URL?>/public/weui/style/weui.min.css"/>
+    <link rel="stylesheet" href="<?=APPLICATION_URL?>/public/weui/style/weui-extend.css"/>
+</head>
+<body ontouchstart>
+
+<div class="hd">
+    <h1 class="page_title">登录</h1>
+</div>
+<div class="bd">
+    <div class="weui_cells weui_cells_form" id="form">
+        <div class="weui_cell">
+            <div class="weui_cell_hd"><label class="weui_label">账　号</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <input name="name" class="weui_input" type="tel" required pattern="[0-9]{11}" maxlength="11" placeholder="请输入手机号" emptyTips="手机号不能为空" notMatchTips="请输入正确的手机号">
+            </div>
+            <div class="weui_cell_ft">
+                <i class="weui_icon_warn"></i>
+            </div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_hd"><label class="weui_label">密　码</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <input name="password" class="weui_input" type="password" maxlength="30" required placeholder="请输入密码" emptyTips="密码不能为空">
+            </div>
+            <div class="weui_cell_ft">
+                <i class="weui_icon_warn"></i>
+            </div>
+        </div>
+        <div class="weui_cell weui_vcode">
+            <div class="weui_cell_hd"><label class="weui_label">验证码</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <input name="code" class="weui_input" type="tel" maxlength="4" placeholder="请输入验证码" required emptyTips="验证码不能为空"/>
+            </div>
+            <div class="weui_cell_ft">
+            	<i class="weui_icon_warn"></i>
+                <img onclick="this.src='<?=APPLICATION_URL?>?c=admin&a=checkcode&t='+(new Date().getTime())" id="imgVerify" src="<?=APPLICATION_URL?>?c=admin&a=checkcode&t="/>
+            </div>
+        </div>
+    </div>
+    <div class="weui_btn_area">
+        <a class="weui_btn weui_btn_primary" href="javascript:" id="formSubmitBtn">确定</a>
+    </div>
+</div>
+
+<script src="<?=APPLICATION_URL?>/public/js/zepto.min.js"></script>
+<script src="<?=APPLICATION_URL?>/public/weui/js/weui.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	var $form = $("#form");
+	$form.form();
+    $("#formSubmitBtn").on("click", function () {
+        $form.validate(function (error) {
+            if (!error) {
+                $.ajax({
+            	  type: 'POST',
+            	  url: '?<?=burl('ajax=1')?>',
+            	  data: {formhash:"<?=encode_formhash()?>",name:$("input[name=name]").val(),password:$("input[name=password]").val(),code:$("input[name=code]").val()},
+            	  dataType: 'json',
+            	  timeout: 5000,
+            	  success: function(data){
+					  $.weui.hideLoading();
+                	  if(data && data.errorcode === 0){
+                		  $.weui.toast('登录成功',{duration:500,callback:function(){
+						      location.replace('<?=$_GET['referer']?strip_tags(htmlspecialchars_decode($_GET['referer'])):APPLICATION_URL?>');
+                    	  }});
+                      }else{
+                    	  $.weui.alert(data ? data.data : '登录失败');
+                      }
+            	  },
+            	  beforeSend: function(xhr){
+            		  $.weui.loading('提交中...');
+            	  },
+            	  error: function(xhr, type){
+            		  $.weui.hideLoading();
+            		  $.weui.alert('网络错误，请重试!');
+            	  }
+            	});
+            }
+        });
+    });
+	if (/Android/gi.test(navigator.userAgent)) {
+        window.addEventListener('resize', function () {
+            if (document.activeElement.tagName == 'INPUT' || document.activeElement.tagName == 'TEXTAREA') {
+                window.setTimeout(function () {
+                    document.activeElement.scrollIntoViewIfNeeded();
+                }, 0);
+            }
+        })
+    }
+});
+</script>
+</body>
+</html>

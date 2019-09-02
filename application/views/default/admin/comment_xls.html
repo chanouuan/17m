@@ -1,0 +1,232 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<style type="text/css">
+html, body {
+	width: 100%
+}
+
+table {
+	border-collapse: collapse;
+	table-layout: fixed;
+	width: 100%
+}
+
+td {
+	text-align: left;
+}
+
+br {
+	mso-data-placement: same-cell;
+}
+
+.x123 {
+	text-align: center;
+	height: 50pt;
+}
+
+.xl65 {
+	white-space: normal;
+	vertical-align: middle;
+	white-space: nowrap;
+	mso-rotate: 0;
+	mso-background-source: auto;
+	mso-pattern: auto;
+}
+</style>
+</head>
+<body>
+	<table border=1>
+		<tr>
+			<td colspan="6" class="x123">服务评价统计表 <?php if($_GET['search_starttime'] && $_GET['search_endtime']){ ?>（<?=$_GET['search_starttime']?>
+				- <?=$_GET['search_endtime']?>）<?php } ?></td>
+		</tr>
+		<tr>
+			<td>门店</td>
+			<td>日期</td>
+			<td>前台</td>
+			<td>化妆师</td>
+			<td>摄影师</td>
+			<td>修图师</td>
+		</tr>
+		<?php foreach($score_list['score'] as $k=>$v){ ?>
+		<tr>
+			<td>
+				<?=$v['store']?>
+			</td>
+			<td>
+				<?=$v['date']?>
+			</td>
+			<td>
+				<table border=1>
+					<tr>
+						<?php foreach($v['score1'] as $kk=>$vv){ ?>
+						<td style="background-color: #FFEC8B;">
+							<?=$kk?>星
+						</td>
+						<?php } ?>
+					</tr>
+					<tr>
+						<?php foreach($v['score1'] as $kk=>$vv){ ?>
+						<td>
+							<?=$vv?>
+						</td>
+						<?php } ?>
+					</tr>
+				</table>
+			</td>
+			<td>
+				<table border=1>
+					<tr>
+						<?php foreach($v['score2'] as $kk=>$vv){ ?>
+						<td style="background-color: #FFC0CB;">
+							<?=$kk?>星
+						</td>
+						<?php } ?>
+					</tr>
+					<tr>
+						<?php foreach($v['score2'] as $kk=>$vv){ ?>
+						<td>
+							<?=$vv?>
+						</td>
+						<?php } ?>
+					</tr>
+				</table>
+			</td>
+			<td>
+				<table border=1>
+					<tr>
+						<?php foreach($v['score3'] as $kk=>$vv){ ?>
+						<td style="background-color: #CAE1FF;">
+							<?=$kk?>星
+						</td>
+						<?php } ?>
+					</tr>
+					<tr>
+						<?php foreach($v['score3'] as $kk=>$vv){ ?>
+						<td>
+							<?=$vv?>
+						</td>
+						<?php } ?>
+					</tr>
+				</table>
+			</td>
+			<td>
+				<table border=1>
+					<tr>
+						<?php foreach($v['score4'] as $kk=>$vv){ ?>
+						<td style="background-color: #DDA0DD;">
+							<?=$kk?>星
+						</td>
+						<?php } ?>
+					</tr>
+					<tr>
+						<?php foreach($v['score4'] as $kk=>$vv){ ?>
+						<td>
+							<?=$vv?>
+						</td>
+						<?php } ?>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<?php } ?>
+	</table>
+	<table border=1>
+		<tr>
+			<td colspan="6" class="x123">汇总统计表</td>
+		</tr>
+		<tr>
+			<td>门店</td>
+			<td>日期</td>
+			<td>前台</td>
+			<td>化妆师</td>
+			<td>摄影师</td>
+			<td>修图师</td>
+		</tr>
+		<?php foreach($score_list['total'] as $k=>$v){ ?>
+		<tr>
+			<td>
+				<?=$k?>
+			</td>
+			<td>
+				<?=$v['date']?>
+			</td>
+			<td>
+				<table border=1>
+					<tr>
+						<?php foreach($v['score1'] as $kk=>$vv){ ?>
+						<td style="background-color: #FFEC8B;">
+							<?=$kk?>星
+						</td>
+						<?php } ?>
+					</tr>
+					<tr>
+						<?php foreach($v['score1'] as $kk=>$vv){ ?>
+						<td>
+							<?=$vv?>
+						</td>
+						<?php } ?>
+					</tr>
+				</table>
+			</td>
+			<td>
+				<table border=1>
+					<tr>
+						<?php foreach($v['score2'] as $kk=>$vv){ ?>
+						<td style="background-color: #FFC0CB;">
+							<?=$kk?>星
+						</td>
+						<?php } ?>
+					</tr>
+					<tr>
+						<?php foreach($v['score2'] as $kk=>$vv){ ?>
+						<td>
+							<?=$vv?>
+						</td>
+						<?php } ?>
+					</tr>
+				</table>
+			</td>
+			<td>
+				<table border=1>
+					<tr>
+						<?php foreach($v['score3'] as $kk=>$vv){ ?>
+						<td style="background-color: #CAE1FF;">
+							<?=$kk?>星
+						</td>
+						<?php } ?>
+					</tr>
+					<tr>
+						<?php foreach($v['score3'] as $kk=>$vv){ ?>
+						<td>
+							<?=$vv?>
+						</td>
+						<?php } ?>
+					</tr>
+				</table>
+			</td>
+			<td>
+				<table border=1>
+					<tr>
+						<?php foreach($v['score4'] as $kk=>$vv){ ?>
+						<td style="background-color: #DDA0DD;">
+							<?=$kk?>星
+						</td>
+						<?php } ?>
+					</tr>
+					<tr>
+						<?php foreach($v['score4'] as $kk=>$vv){ ?>
+						<td>
+							<?=$vv?>
+						</td>
+						<?php } ?>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<?php } ?>
+	</table>
+</body>
+</html>

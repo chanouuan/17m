@@ -1,0 +1,160 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>十七平创意摄影工作室</title>
+    <link href="<?=$tpl_dir?>/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="<?=$tpl_dir?>/css/common2.css?v=1" rel="stylesheet" type="text/css">
+    <link href="<?=$tpl_dir?>/css/notice.css?v=1" rel="stylesheet" type="text/css">
+    <link href="<?=$tpl_dir?>/css/user-order.css?v=1" rel="stylesheet" type="text/css">
+</head>
+<body ontouchstart>
+    <div class="app">
+        <div class="toolbar">
+            <div class="toolbar-logo"><img src="<?=$tpl_dir?>/imgs/logo.png"></div>
+            <div class="toolbar-menu" id="toolbar-menu"><a href="javascript:void(0)" data-role="icon-ment" class="icon-menu"></a></div>
+            <div class="toolbar-back" id="toolbar-back"><a href="javascript:void(0);"><i class="icon-arrow-left"></i>上一步</a></div>
+        </div>
+        <div class="app-body" id="container">
+            <div class="wrap">
+                <h2 class="icon-vip2">个人底片</h2>
+            </div>
+            <ul class="imglist" style="float:left;margin:0;padding:0;list-style:none;box-sizing:border-box;width:100%;height:100%;">
+              <?php foreach($piclist as $k=>$v){  ?>
+                  <li class="browse" data-src="<?=$v['url']?>" style="display:inline;border:1px solid #f0f0f0;box-sizing:border-box;float:left;position:relative;width:45.55%;height:130px;margin:0 0 10px 10px;background-image:url(<?=$v['thumb']?>);background-size:cover;background-position:center center;background-repeat:no-repeat;">
+                      <div style="display: block;background-color: rgba(0, 0, 0, .5);padding:5px;position: absolute;bottom:0;color:#fff;width:100%;font-size:12px;">
+                        <div style="white-space:nowrap;"><?=$v['name']?></div>
+                        <div style="color:#ff0000;"><?=$v['size']?></div>
+                        <div style="color:#ccc;"><?=$v['createtime']?></div>
+                      </div>
+                  </li>
+              <?php } ?>
+            </ul>
+            <div style="clear: both;" id="page-mask" class="page-mask"></div>
+        </div>
+    </div>
+    <!-- 菜单 start -->
+    <div id="toolbar-submenu" class="toolbar-submenu">
+        <ul class="ts-menu" id="ts-menu">
+            <li><a href="?c=order&a=createorder"><i class="icon-order"></i>开始预约</a></li>
+            <li><a href="?c=order&a=myorder"><i class="icon-orderlist"></i>我的订单</a></li>
+            <li><a href="?c=order&a=Personal"><i class="icon-profile"></i>个人资料</a></li>
+            <li><a href="?c=order&a=negative"><i class="icon-vip2"></i>个人底片</a></li>
+            <li><a href="?c=order&a=address"><i class="icon-store-info1"></i>门店地址</a></li>
+            <li><a href="?c=order&a=help"><i class="icon-notice"></i>拍摄须知</a></li>
+        </ul>
+        <div class="mask"></div>
+    </div>
+    <!-- 菜单 end -->
+    <script src="<?=APPLICATION_URL?>/public/js/jquery.min.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script type="text/javascript">
+        var toolbarLocationElm = $('#toolbar-location');
+        toolbarLocationElm.show();
+        toolbarLocationElm.on('click', function() {
+            $(this).find('[data-role="arrow"]').toggleClass('icon-arrow-down');
+            $(this).find('[data-role="arrow"]').toggleClass('icon-arrow-up');
+            $('#toolbar-citys').toggleClass('toolbar-citys-show');
+        });
+        $('#toolbar-submenu').on('click', '.mask', function() {
+            
+            $('#toolbar-submenu').hide();
+            var mentEl = $('#toolbar-menu').find('[data-role="icon-ment"]');
+            if (mentEl.hasClass('icon-menu')) {
+                mentEl.removeClass('icon-menu');
+                mentEl.addClass('icon-arrow-right');
+            } else {
+                mentEl.addClass('icon-menu');
+                mentEl.removeClass('icon-arrow-right');
+            }
+            $('#ts-menu').removeClass('ts-menu-active');
+        });
+        $('#toolbar-back').click(function(){
+            if($('#schedules-calender-open').length)
+            {
+                if(!$('#schedules-calender-open').hasClass('schedules-calender-open-show'))
+                {
+                    $('#schedules-calender-open').addClass('schedules-calender-open-show');
+                    return ;
+                }
+            }
+
+            history.back();
+        });
+        $('#toolbar-menu').click(function(){
+            var mentEl = $(this).find('[data-role="icon-ment"]');
+            $('#toolbar-submenu').toggle();
+            if (mentEl.hasClass('icon-menu')) {
+                mentEl.removeClass('icon-menu');
+                mentEl.addClass('icon-arrow-right');
+            } else {
+                mentEl.addClass('icon-menu');
+                mentEl.removeClass('icon-arrow-right');
+            }
+            setTimeout(function() {
+                $('#ts-menu').toggleClass('ts-menu-active');
+            }, 0);
+        });
+
+var JSAPI = {
+    previewImage: function(current, urls){
+        wx.previewImage({
+          current: current,
+          urls: urls || [current]
+        });
+    },
+    share: function(){
+        var _share = {
+            title: document.title,
+            desc: '十七平，一群热爱生活、热爱摄影的年轻人，把摄影当作一种情怀，追求创意、自然、美丽、简洁、大方的拍摄理念，致力于高端形象创意摄影。',
+            link: '<?=APPLICATION_URL?>/?c=order&a=createorder',
+            imgUrl: '<?=$tpl_dir?>/imgs/01.jpg'
+        };
+        wx.onMenuShareTimeline(_share);
+        wx.onMenuShareAppMessage(_share);
+    }
+};        
+        
+<?php if(isset($jssdk) && $jssdk){ ?>
+wx.config({
+    debug: false,
+    appId: '<?=$jssdk['appId']?>',
+    timestamp: <?=$jssdk['timestamp']?>,
+    nonceStr: '<?=$jssdk['nonceStr']?>',
+    signature: '<?=$jssdk['signature']?>',
+    jsApiList: [
+      'hideMenuItems',
+      'onMenuShareTimeline',
+      'onMenuShareAppMessage',
+      'previewImage'
+    ]
+});
+wx.error(function(res){
+    //window.location.href = window.location.href;
+});
+wx.ready(function () {
+    wx.hideMenuItems({
+        menuList: [
+            'menuItem:share:qq',
+            'menuItem:share:weiboApp',
+            'menuItem:share:facebook',
+            'menuItem:share:QZone'
+        ]
+    });
+    JSAPI.share();
+});
+<?php } ?>   
+
+$(function(){
+	$('#container').on('click', '.browse' ,function(){
+        var urls = [];
+        $('#container').find('.browse').each(function(){
+            urls.push($(this).data('src'));
+        });
+        JSAPI.previewImage($(this).data('src'), urls);
+    });
+})
+    </script>
+</body>
+</html>

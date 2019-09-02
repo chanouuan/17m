@@ -1,0 +1,153 @@
+<?php include('header.html'); ?>
+<link href="<?=$tpl_dir?>/css/pagination.css" rel="stylesheet" type="text/css">
+<div class="admin-content">
+    <div class="admin-content-body">
+        <div class="am-cf am-padding am-padding-bottom-0">
+            <div class="am-fl am-cf"> 套餐管理</div>
+        </div>
+        <hr>
+        <?if($action=="from"){?>
+        <div class="am-g">
+            <form method="post" action="?c=admin&a=store&action=save" onsubmit="return onFormSubmit(this);">
+                <div class="admin-content-body">
+                    <input type="hidden" name="id" value="<?=$storeinfo['id']?>" />
+                    <div class="am-form">
+                        <fieldset>
+                            <div class="am-form-group">
+                                <label for="doc-ipt-email-1">城市编码</label>
+                                <select name="citycode" id="citycode">
+                                    <option value="0">请选择</option>
+                                    <?foreach($citylist as $k=>$v){?>
+                                    <option value="<?=$v['code']?>"  <?if($storeinfo['citycode']==$v['code']){?>   selected <?}?>><?=$v['name']?></option>
+                                    <?}?>
+                                </select>
+                            </div>
+                            <div class="am-form-group">
+                                <label for="doc-ipt-email-1">店名</label>
+                                <input type="text" class="" id="name" name="name" value="<?=$storeinfo['name']?>">
+                            </div>
+                            <div class="am-form-group">
+                                <label for="doc-ipt-email-1">排序</label>
+                                <input type="number" class="" id="sort" name="sort" value="<?=$storeinfo['sort']?>">
+                            </div>
+                            <div class="am-form-group">
+                                <label for="doc-ipt-email-1">电话</label>
+                                <input type="text" class="" id="tel" name="tel" value="<?=$storeinfo['tel']?>">
+                            </div>
+                            <div class="am-form-group">
+                                <label for="doc-ipt-email-1">地址</label>
+                                <input type="text" class="" id="address" name="address" value="<?=$storeinfo['address']?>">
+                            </div>
+                            <div class="am-form-group">
+                                <label for="doc-ipt-email-1">邮箱</label>
+                                <input type="text" class="" id="email" name="email" value="<?=$storeinfo['email']?>">
+                            </div>
+                            <div class="am-form-group">
+                                <label for="doc-ipt-email-1">乘车路线</label>
+                                <input type="text" class="" id="transit" name="transit" value="<?=$storeinfo['transit']?>">
+                            </div>
+                            <p><button type="submit" class="am-btn am-btn-success">提交</button></p>
+                        </fieldset>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <?}else{?>
+        <div class="am-g">
+            <form class="am-form-inline" role="form" action="?c=admin&a=store" method="post">
+                <div class="am-form-group am-input-group-sm am-u-sm-6">
+                    <input type="text" class="am-form-field" name="name" value="<?=$name?>" placeholder="名称">
+                </div>
+                <div class="am-form-group am-input-group-sm am-u-sm-3">
+                    <button class="am-btn am-btn-default am-btn-sm" type="submit">搜索</button>
+                </div>
+            </form>
+        </div>
+        <div class="am-g">
+            <div class="am-g" style="margin:10px">
+                <div class="am-btn-toolbar">
+                    <div class="am-btn-group am-btn-group-xs" style="margin-bottom:5px">
+                        <a type="button" class="am-btn am-btn-success" href="?c=admin&a=store&action=from"><span class="am-icon-plus"></span> 选择</a>
+                    </div>
+                </div>
+                <div class="am-form  am-scrollable-horizontal">
+                    <table class="am-table am-table-bordered am-table-striped am-text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>套餐图片</th>
+                                <th>套餐名称</th>
+                                <th>价格</th>
+                                <th>耗时(小时)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?foreach ($categorylist as $v){?>
+                            <tr>
+                                <td><?=$v['id']?></td>
+                                <td><img src="<?=$v['icon']?>" width="50" /></td>
+                                <td><?=$v['name']?></td>
+                                <td><?=$v['price']/100?></td>
+                                <td><?=$v['delay']/3600?></td>
+                            </tr>
+                            <?}?>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="am-cf" style="text-align: center; margin:1rem; font-size:1rem">
+                    每页<?=$page_count?> 共<?=$totalcount?> 条记录
+                    <div class="am-fr">
+                        <? if(count($pagestr)>1){ ?>
+                        <ul class="mui-pagination  mui-pagination-sm">
+                            <li class="mui-previous"><a href="?c=admin&a=store&page=1&name=<?=$name?>">首页</a></li>
+                            <? foreach($pagestr as $k=>$v){ ?>
+                            <? if($v==$page){ ?>
+                            <li class="mui-active"><a href="#"><?=$v?></a></li>
+                            <? }else{ ?>
+                            <li><a href="?c=admin&a=store&page=<?=$v?>&name=<?=$name?>"><?=$v?></a></li>
+                            <? } ?>
+                            <? } ?>
+                            <li class="mui-next"> <a href="?c=admin&a=store&page=<?=$totalpage?>&name=<?=$name?>">尾页</a></li>
+                        </ul>
+                        <? } ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?}?>
+    </div>
+</div>
+<script type="text/javascript">
+    function onFormSubmit(from) {
+          var citycode = $("#citycode").val();
+          var name = $("#name").val();
+          if (citycode=="0") {
+              layer.msg("请选择城市");
+              return false;
+          }
+          if (!name) {
+              layer.msg("请输入店名");
+              return false;
+          }
+      }
+      function deletesetCity(id) {
+          layer.confirm('是否确认删除？', {
+              btn: ['确认', '取消']
+          }, function () {
+              $.ajax({
+                  type: "POST",
+                  async: true,
+                  data: { action: "delete", id: id },
+                  url: "?c=admin&a=store",
+                  success: function (ret) {
+                      window.location.href = window.location.href;
+                  },
+                  error: function (data) {
+                      alert("请求失败");
+                  }
+              });
+          });
+      }
+
+</script>
+<?php include('footer.html'); ?>

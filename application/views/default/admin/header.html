@@ -1,0 +1,73 @@
+﻿<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>十七平后台管理</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="icon" type="image/png" href="<?=$tpl_dir?>/style/img/spirits.png">
+  <link rel="apple-touch-icon-precomposed" href="<?=$tpl_dir?>/style/img/spirits.png">
+  <link rel="stylesheet" href="<?=APPLICATION_URL?>/public/assets/css/amazeui.min.css"/>
+  <link rel="stylesheet" href="<?=APPLICATION_URL?>/public/assets/css/admin.css">
+  <link rel="stylesheet" type="text/css" href="<?=APPLICATION_URL?>/public/mobiscroll/css/mobiscroll.min.css"/>
+  <style type="text/css">
+  .am-margin-top > .am-u-sm-12{
+    position: inherit;/*修复手机不能上下滑动的BUG*/
+    float: none;
+    clear: both;
+  }
+  </style>
+</head>
+<body>
+<header class="am-topbar am-topbar-inverse admin-header" <?php if($_GET['hideframe']){ ?>style="display:none"<?php } ?>>
+  <div class="am-topbar-brand">
+    <strong>后台管理</strong><small style="color:#7CDFA8">｜<?=$user_info['nickname']?>: <?=$user_access?></small>
+  </div>
+</header>
+<div class="am-cf admin-main" <?php if($_GET['hideframe']){ ?>style="padding-top:0"<?php } ?>>
+<!-- sidebar start -->
+  <?php if(!$_GET['hideframe']){ ?>
+  <div class="admin-sidebar am-offcanvas" id="admin-offcanvas">
+    <div class="am-offcanvas-bar admin-offcanvas-bar" style="height: 100%">
+      <ul class="am-list admin-sidebar-list">
+      	<?php if(Auth::check('index',$user_info['id'])){ ?>
+        	<li><a href="?c=admin&a=index"><span class="am-icon-home"></span> 首页</a></li>
+       	<?php } ?>
+       	<?php if(Auth::check('order',$user_info['id'])){ ?>
+            <li><a href="?c=admin&a=order"><span class="am-icon-rmb"></span> 订单管理<span style="color:#ff0000">(底片上传)</span></a></li>
+        <?php } ?>
+        <?php if(Auth::check('city',$user_info['id'])){ ?>
+            <li><a href="?c=admin&a=city"><span class="am-icon-list"></span> 开通城市</a></li>
+        <?php } ?>
+        <?php if(Auth::check('store',$user_info['id'])){ ?>
+            <li><a href="?c=admin&a=store"><span class="am-icon-bookmark"></span> 门店管理</a></li>
+        <?php } ?>
+          <?php if(Auth::check('category',$user_info['id'])){ ?>
+          <li><a href="?c=admin&a=category"><span class="am-icon-newspaper-o"></span> 套餐管理</a></li>
+          <?php } ?>
+        <?php if(Auth::check('pool',$user_info['id'])){ ?>
+            <li><a href="?c=admin&a=pool"><span class="am-icon-desktop"></span> 档期管理</a></li>
+        <?php } ?>
+        <?php if(Auth::check('statistic',$user_info['id'])){ ?>
+            <li><a href="?c=admin&a=statistic"><span class="am-icon-area-chart"></span> 统计分析</a></li>
+        <?php } ?>
+        <?php if(Auth::check('user',$user_info['id'])){ ?>
+            <li><a href="?c=admin&a=user"><span class="am-icon-user"></span> 用户管理</a></li>
+        <?php } ?>
+        <?php if(Auth::check('coupon',$user_info['id'])){ ?>
+          <li><a href="?c=admin&a=coupon"><span class="am-icon-vimeo"></span> 优惠劵管理</a></li>
+        <?php } ?>
+        <?php if(Auth::check('comment',$user_info['id'])){ ?>
+          <li><a href="?c=admin&a=comment"><span class="am-icon-comment"></span> 评价管理</a></li>
+        <?php } ?>
+        <?php if(Auth::check('config',$user_info['id'])){ ?>
+            <li><a href="?c=admin&a=config"><span class="am-icon-cog"></span> 系统设置</a></li>
+        <?php } ?>
+        <li><a onclick="if(confirm('确定注销当前账号吗？'))logout();" href="javascript:;"><span class="am-icon-sign-out"></span> 注销</a></li>
+      </ul>
+    </div>
+  </div>
+  <? } ?>
+<!-- content start -->

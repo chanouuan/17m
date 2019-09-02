@@ -1,0 +1,368 @@
+.toolbar-back {
+    display: block;
+}
+.selected-info {
+    color: #888888;
+    height: 36px;
+    background-color: #f3f3f3;
+    padding: 8px 52px 8px 14px;
+    line-height: 18px;
+    position: relative;
+    font-weight: 900;
+}
+.selected-info .item {
+    float: left;
+    margin-right: 5px;
+    display: block;
+}
+.selected-info .store-info-name {
+    max-width: 90px;
+    overflow: hidden;
+    height: 18px;
+    white-space: nowrap;
+    word-wrap: normal;
+    text-overflow: ellipsis;
+}
+.vip-icon {
+    color:#8446ac;
+    font-size: 36px;
+    position: absolute;
+    right: 14px;
+    top: -3px;
+    width: 36px;
+    height: 36px;
+}
+.vip-icon .icon-vip-tag {
+    position: absolute;
+    font-size: 43px;
+}
+.section {
+    padding:18px 0 15px 15px;
+    border-bottom: 1px solid #e4e4e4;
+    color:#666666;
+}
+.section dt {
+    font-weight:100;
+    line-height:29px;
+    float: left;
+}
+.select-number i {
+    margin-right: 3px;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.select-number .number {
+    display: inline-block;
+    width:68px;
+    height:26px;
+    margin-left: 20px;
+    line-height: 26px;
+    text-align: center;
+    border-radius:100px;
+    font-size:18px;
+    color:#0033CC;
+    background:#ffffff;
+    border:1px solid #b2c7ea;
+    font-weight: 900;
+}
+.select-number .number:before {
+    border-radius: 100%;
+    content: " ";
+    display: inline-block;
+    vertical-align: middle;
+    border:1px solid #b2c7ea;
+    width:13px;
+    height:13px;
+    margin-right: 8px;
+    margin-top: -3px;
+}
+.select-number .number:after {
+    content: '人';
+    display: inline-block;
+    font-size:12px;
+    color:#0033CC;
+    line-height:26px;
+    vertical-align: middle;
+    margin-left: 3px;
+}
+
+.select-number .number.activied,
+.select-number .number:active {
+    color: #ffffff;
+    background:#0033CC;
+    border:1px solid #0033CC;
+}
+.select-number .number.activied:after ,
+.select-number .number:active:after {
+    color: #ffffff;
+}
+.select-number .number.activied:before,
+.select-number .number:active:before {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'NaiveBlueSymbols' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    content: "\e936";
+
+    border-radius: 0;
+    border:none;
+    font-size: 13px;
+    background: none;
+}
+
+.selected-product {
+    color:#4F83D7;
+}
+
+.person-count-box {
+    width: 96px;
+    height: 32px;
+    overflow: hidden;
+    position: absolute;
+    top: 9px;
+    right: 8px;
+    background-color: #FFFFFF;
+    border-radius: 3px;
+    display: none;
+    z-index: 1;
+}
+
+.person-count-box div {
+    flex: 1;
+    -ms-box-flex: 1;
+    -ms-flex: 1;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    width: 0;
+    text-align: center;
+    line-height: 34px;
+    height: 32px;
+}
+.person-count-box .persons-count-minus,
+.person-count-box .person-count-add {
+    background:#f3f3f3;
+    font-size: 12px;
+    color: #cccccc;
+    text-align: center;
+}
+.person-count-box .person-count-action-disable {
+    color: #e4e4e4;
+}
+.person-count-box .persons-count-minus {
+    border-radius:3px 0px 0px 3px;
+}
+.person-count-box .person-count-add {
+    border-radius:0px 3px 3px 0px;
+}
+.person-count-box .person-count {
+    color: #0033CC;
+}
+.person-count-box .person-count strong {
+    font-size: 16px;
+}
+
+.combos-product {
+    padding: 14px;
+}
+.combos-product dt {
+    margin-bottom: 12px;
+    font-size:12px;
+    color:#666666;
+    text-align:left;
+    font-weight: 400;
+}
+.combos-product dd {
+    padding-top:5px;
+}
+.combos-product .list {
+    padding: 0 20px;
+}
+.combos-product li {
+    background:#FFFFFF;
+    border:2px solid #0033CC;
+    border-radius:4px;
+    height:52px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    position: relative;
+    display: none;
+    opacity: 0.6;
+    color:#0033CC;
+}
+.combos-product .list-active {
+    background-color: #0033CC;
+    opacity: 1;
+    color: #FFFFFF;
+}
+.combos-product .list-active .person-count-box {
+    display: flex;
+    display: -ms-flexbox;
+    display: -webkit-box;
+    display: -moz-box;
+}
+.combo-number-2.list-active .original-discount {
+    display: none;
+}
+.combos-product li.activied {
+    background:rgba(66,142,251,0.20);
+}
+.combos-product .img {
+    width: 48px; height: 48px;
+    position: relative;
+    float: left;
+    overflow:hidden;
+}
+.combos-product .img img {
+    position: relative;
+    z-index: 2;
+}
+.combos-product .content {
+    font-size:12px;
+    margin-left: 52px;
+    line-height: 20px;
+}
+.combos-product del {
+    color: #888888;
+}
+.combos-product .title-price,
+.combos-product .original-discount {
+    float: left;
+}
+.combos-product .title-price {
+    width: 37%;
+    margin-right: 8px;
+}
+.combos-product .title {
+    white-space: nowrap;
+    word-wrap: normal;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: 20px;
+    font-weight: 900;
+}
+.combos-product .price {
+    color:#ff8571;
+    text-align:left;
+}
+.combos-product .discount {
+    font-size:10px;
+    color:#ff8571;
+    text-align:left;
+    padding: 3px;
+    border: 2px solid #ff8571;
+    border-radius: 3px;
+    line-height: 9px;
+}
+.combos-product .list-active del {
+    color: #FFFFFF;
+}
+.combos-product .combo-count {
+    color: #B8B8B8;
+    font-size:12px;
+}
+.combos-product .combo-count span {
+    border:1px solid #B8B8B8;
+    border-radius:2px;
+    text-align: center;
+    line-height: 20px;
+    display: inline-block;
+    width: 40px;
+    margin-left: 10px;
+}
+.combos-product .list-active .combo-count span {
+    border:1px solid #4F83D7;
+    color: #4F83D7;
+}
+.combos-product .list-active .combo-count span.activied {
+    background:#4F83D7;
+    border:1px solid rgba(85,85,85,0.20);
+    color: #ffffff;
+}
+.combos-product .list-active .combo-count span.disable {
+    border:1px solid #B8B8B8;
+    color: #B8B8B8;
+}
+.combos-product .action {
+    width:30px;
+    height:30px;
+    position: absolute;
+    right: 8px; top: 9px;
+    color: #888888;
+    font-size: 30px;
+    opacity: 0.6;
+    border-top: none;
+    padding-top: 0;
+}
+.combos-product .list-active .action {
+    color: #FFFFFF;
+    opacity: 1;
+    background-color: #0033CC;
+}
+.combos-product li.disable,
+.combos-product li.disable .discount{
+    border-color: #B8B8B8;
+}
+.combos-product li.disable .content,
+.combos-product li.disable .price,
+.combos-product li.disable .discount{
+    color: #B8B8B8;
+}
+
+.combos-product li.disable .action {
+    display: none;
+}
+.action {
+    border-top: 1px solid #e4e4e4;
+    padding: 20px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #ffffff;
+}
+.action a {
+    text-decoration:none;
+    display: inline-block;
+    width: 137px;
+    margin: 0 4px;
+}
+.cost-box {
+    border-bottom: 1px solid #D8D8D8;
+    margin-bottom: 20px;
+    display: none;
+}
+.cost-box div {
+    float: left;
+    border-right: 1px solid #D8D8D8;
+    width: 50%;
+    text-align: center;
+    line-height: 58px;
+    height: 58px;
+}
+.cost-box div:last-child {border-right: none;}
+.cost-box div span {
+    color: #4F83D7;
+    font-size: 20px;
+}
+@media screen and (min-width: 768px) {
+    .select-number .number:hover {
+        background:#b2c7ea;
+    }
+    .select-number .number.activied:hover:before {
+        background:none;
+    }
+    .select-number .number:hover:before {
+        border:1px solid #0033CC;
+        background:#ffffff;
+        border-radius: 100%;
+        content: " ";
+    }
+}
