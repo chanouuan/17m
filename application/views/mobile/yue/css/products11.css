@@ -1,0 +1,81 @@
+.store-name {
+    font-size:12px;
+    color:#0033CC;
+    line-height:12px;
+    text-align:center;
+    cursor: pointer;
+}
+.check-address {
+    float: right;
+    font-size:12px;
+    color:#888888;
+    cursor: pointer;
+}
+.check-address i {
+    margin-right: 3px;
+    color:#888888;
+}
+
+.app-body {
+    max-width: 100%;
+}
+.product-list {
+
+}
+.product-list ul {
+    text-align: center;
+}
+.product-list li {
+    display: inline-block;
+    width:70px;
+    height:96px;
+    margin: 0 5px 10px;
+    word-wrap:break-word;
+    overflow: visible;
+    vertical-align:text-top
+}
+.product-list a {
+    display:block;
+    width:100%;
+    height:100%;
+    text-align:center;
+    font-weight: 900;
+    word-wrap:break-word;
+}
+.product-list a:active {
+    opacity: 0.6;
+    background-color: #ffffff;
+}
+.product-list .photo {
+    display:block;
+    position:relative;
+    z-index:0;
+    width:70px;
+    height:70px;
+    overflow:hidden;
+    border-radius:6px;
+}
+.product-list .photo:before {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0; left: 0;
+    border:2px solid #0033CC;
+    content: "";
+    border-radius:6px;
+}
+
+.product-list .title {
+    display:block;
+    width:100%;
+    margin-top:6px;
+    height:24px;
+    font-size:12px;
+    text-align:center;
+    line-height: 14px;
+    color:#0033CC;
+}
+.tel-tip {
+    border-top: 1px solid #e4e4e4; line-height: 24px; text-align: center; margin-bottom: 15px; color: #cccccc
+}

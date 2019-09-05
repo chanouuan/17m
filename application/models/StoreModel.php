@@ -10,7 +10,7 @@ class StoreModel {
     {
         $this->db = & Db::getInstance();
     }
-    
+
     public function getStore ($id = null, $where = '', $limit = '', $field = '*', $order = 'id desc')
     {
         if (isset($id)) {
@@ -59,7 +59,7 @@ class StoreModel {
     public function getcategorylist($id=null){
         if (isset($id)) {
             $id = intval($id);
-            $rs=  $this->db->select("select * from pro_category where id in(SELECT categroy_id from pro_story_category where store_id= '{$store_id}' )");
+            $rs=  $this->db->select("select * from pro_category where id in(SELECT categroy_id from pro_story_category where store_id= '{$id}' )");
         }
         else{
             $rs=$this->db->table('~category~')->field('*')->select();

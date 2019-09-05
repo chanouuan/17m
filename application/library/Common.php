@@ -61,7 +61,7 @@ function round_dollar ($fen)
     return sprintf("%01.2f", abs($fen) / 100);
 }
 
-function getConfig ()
+function getConfig ($name = null, $default = null)
 {
     if (false === F('config')) {
         $ret = DB::getInstance()->table('~config~')->field('name,value,type')->select();
@@ -76,7 +76,11 @@ function getConfig ()
         }
         F('config', $config);
     }
-    return F('config');
+    $config = F('config');
+    if (isset($name)) {
+        $config = isset($config[$name]) ? $config[$name] : null;
+    }
+    return isset($config) ? $config : $default;
 }
 
 function msubstr ($str, $start = 0, $length = 250, $charset = 'utf-8', $suffix = false)
@@ -106,7 +110,7 @@ function set_cookie ($name, $value, $expire = 0)
 function trim_space ($string)
 {
     return $string ? str_replace(array(
-            '　', 
+            '　',
             ' '
     ), '', trim($string)) : $string;
 }
@@ -165,7 +169,7 @@ function submitcheck ($formhash = null, $disposable = true)
     if (false === $disposable) return true;
     DB::getInstance()->delete('~hashcheck~', 'dateline < ' . (TIMESTAMP - 3600));
     return DB::getInstance()->insert('~hashcheck~', array(
-            'hash' => md5_mini($formhash), 
+            'hash' => md5_mini($formhash),
             'dateline' => TIMESTAMP
     ));
 }
@@ -417,7 +421,7 @@ function success ($data)
 {
     if (null === $data || false === $data) $data = '';
     return array(
-            'errorcode' => 0, 
+            'errorcode' => 0,
             'data' => $data
     );
 }
@@ -425,7 +429,7 @@ function success ($data)
 function error ($data)
 {
     return array(
-            'errorcode' => -1, 
+            'errorcode' => -1,
             'data' => $data
     );
 }
@@ -544,9 +548,9 @@ function getImageInfo ($img)
     if ($imageInfo !== false) {
         $imageType = strtolower(substr(image_type_to_extension($imageInfo[2]), 1));
         $info = array(
-                'width' => $imageInfo[0], 
-                'height' => $imageInfo[1], 
-                'type' => $imageType, 
+                'width' => $imageInfo[0],
+                'height' => $imageInfo[1],
+                'type' => $imageType,
                 'mime' => $imageInfo['mime']
         );
         return $info;

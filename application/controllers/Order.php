@@ -4,7 +4,7 @@ class Order_Action extends ActionPDO {
     public function __init ()
     {
         $_notAuth = array(
-                'help', 
+                'help',
                 'address'
         );
         if (!in_array($this->_action, $_notAuth)) {
@@ -55,7 +55,7 @@ class Order_Action extends ActionPDO {
         $this->success($citycode);
         return null;
     }
-    
+
     // 预约接口
     public function createorder ()
     {
@@ -72,10 +72,10 @@ class Order_Action extends ActionPDO {
             case "city":
                 $citylist = $citymodel->getcitylist(" status=1");
                 $citylist1 = $citymodel->getcitylist(" status=0");
-                
+
                 $result = array(
-                        'citylist' => $citylist, 
-                        'citylist1' => $citylist1, 
+                        'citylist' => $citylist,
+                        'citylist1' => $citylist1,
                         'step' => $step
                 );
                 break;
@@ -90,13 +90,13 @@ class Order_Action extends ActionPDO {
                 $productlistA = $categorymodel->getCategory(null, 'type=0');
                 $productlist = $categorymodel->getCategory(null, 'type=1');
                 $result = array(
-                        'productlist' => $productlist, 
-                        'productlistA' => $productlistA, 
-                        
-                        'step' => $step, 
-                        'citylist' => $citylist, 
-                        'citylist1' => $citylist1, 
-                        'cityname' => $cityname, 
+                        'productlist' => $productlist,
+                        'productlistA' => $productlistA,
+
+                        'step' => $step,
+                        'citylist' => $citylist,
+                        'citylist1' => $citylist1,
+                        'cityname' => $cityname,
                         "citycode" => $citycode
                 );
                 break;
@@ -107,8 +107,8 @@ class Order_Action extends ActionPDO {
                 }
                 $store_list = $categorymodel->getStoreByCategoryId($categoryid);
                 $result = array(
-                        'step' => 'openproduct', 
-                        'category' => $category_info, 
+                        'step' => 'openproduct',
+                        'category' => $category_info,
                         'store' => $store_list
                 );
                 break;
@@ -126,13 +126,13 @@ class Order_Action extends ActionPDO {
                 }
                 $category = $categorymodel->getCategorywhereinfo('id = ' . $categoryid);
                 $result = array(
-                        'category' => $category, 
-                        'categoryid' => $categoryid, 
-                        'step' => $step, 
-                        'store' => $store, 
-                        'type' => $type, 
-                        "citycode" => $citycode, 
-                        "cityinfo" => $cityinfo, 
+                        'category' => $category,
+                        'categoryid' => $categoryid,
+                        'step' => $step,
+                        'store' => $store,
+                        'type' => $type,
+                        "citycode" => $citycode,
+                        "cityinfo" => $cityinfo,
                         'atLeastOneStoreOpen' => $atLeastOneStoreOpen
                 );
                 break;
@@ -143,11 +143,11 @@ class Order_Action extends ActionPDO {
                 $scheduleslist = $this->scheduleslist($citycode);
                 $category = $categorymodel->getCategory($categoryid);
                 $result = array(
-                        'category' => $category, 
-                        'step' => $step, 
-                        'store' => $store, 
-                        'type' => $type, 
-                        'cityinfo' => $cityinfo, 
+                        'category' => $category,
+                        'step' => $step,
+                        'store' => $store,
+                        'type' => $type,
+                        'cityinfo' => $cityinfo,
                         'scheduleslist' => $scheduleslist
                 );
                 break;
@@ -172,17 +172,17 @@ class Order_Action extends ActionPDO {
                 }
                 $category = $categorymodel->getCategory($categoryid);
                 $result = array(
-                        'category' => $category, 
-                        'categorylist' => $categorylist, 
-                        'step' => $step, 
-                        'store' => $store, 
-                        'type' => $type, 
-                        'cityinfo' => $cityinfo, 
-                        "datelist" => $datelist, 
-                        'time' => $time, 
-                        'week' => $week, 
-                        'date' => $date, 
-                        "categoryid" => $categoryid, 
+                        'category' => $category,
+                        'categorylist' => $categorylist,
+                        'step' => $step,
+                        'store' => $store,
+                        'type' => $type,
+                        'cityinfo' => $cityinfo,
+                        "datelist" => $datelist,
+                        'time' => $time,
+                        'week' => $week,
+                        'date' => $date,
+                        "categoryid" => $categoryid,
                         'poolid' => $poolid
                 );
                 break;
@@ -191,6 +191,7 @@ class Order_Action extends ActionPDO {
                 $poolid = $_GET['poolid'];
                 $combos = $_GET["combos"];
                 $combos = explode(",", $combos);
+                $typelist = '';
                 foreach ($combos as $k => $v) {
                     $v = explode("|", $v);
                     $typelist = $typelist . $v[0] . ',';
@@ -212,14 +213,14 @@ class Order_Action extends ActionPDO {
                 $categoryname = $category['name'] . ":1";
                 if ($typelist) {
                     $categorylist = $categorymodel->getCategorylist("select * from pro_category where id in ({$typelist})");
-                    
+
                     foreach ($categorylist as $v) {
                         $categoryname = $categoryname . ';' . $v['name'] . ":1";
                         $delay = $delay + $v['delay'];
-                    
+
                     }
                 }
-                
+
                 $categoryname = trim($categoryname, ';');
                 if ($this->_jssdk) {
                     $jssdk = $this->_jssdk->GetSignPackage();
@@ -230,22 +231,22 @@ class Order_Action extends ActionPDO {
                     }
                 }
                 $result = array(
-                        'refund_rule' => json_decode(getConfig()['refund_rule'], true), 
-                        'jssdk' => $jssdk, 
-                        'category' => $category, 
-                        'categorylist' => $categorylist, 
-                        'step' => $step, 
-                        'store' => $store, 
-                        'type' => $type, 
-                        'cityinfo' => $cityinfo, 
-                        'time' => $time, 
-                        'user' => $this->_G['user'], 
-                        'week' => $week, 
-                        'date' => $date, 
-                        'datelist' => $datelist, 
-                        'poolid' => $poolid, 
-                        'categoryname' => $categoryname, 
-                        'delay' => $delay, 
+                        'refund_rule' => json_decode(getConfig()['refund_rule'], true),
+                        'jssdk' => $jssdk,
+                        'category' => $category,
+                        'categorylist' => $categorylist,
+                        'step' => $step,
+                        'store' => $store,
+                        'type' => $type,
+                        'cityinfo' => $cityinfo,
+                        'time' => $time,
+                        'user' => $this->_G['user'],
+                        'week' => $week,
+                        'date' => $date,
+                        'datelist' => $datelist,
+                        'poolid' => $poolid,
+                        'categoryname' => $categoryname,
+                        'delay' => $delay,
                         'configinfo' => $configinfo
                 );
                 break;
@@ -260,9 +261,9 @@ class Order_Action extends ActionPDO {
                     }
                 }
                 $result = array(
-                        'refund_rule' => json_decode(getConfig()['refund_rule'], true), 
-                        'jssdk' => $jssdk, 
-                        'step' => $step, 
+                        'refund_rule' => json_decode(getConfig()['refund_rule'], true),
+                        'jssdk' => $jssdk,
+                        'step' => $step,
                         'userinfo' => $userinfo
                 );
                 break;
@@ -308,7 +309,7 @@ class Order_Action extends ActionPDO {
     {
         $poolmodel = new PoolModel();
         $ordermodel = new OrderModel();
-        
+
         $schedulessql = "select DAYNAME(today)name,today,if(SUM(maxcount)<SUM(ordercount),0,SUM(maxcount)-SUM(ordercount)) ordercount from pro_pool   where storeid in (SELECT id from pro_store where citycode='{$citycode}') and starttime>='" . date("Y-m-d H:i:s", time()) . "'  group by today  LIMIT 0,15";
         $scheduleslist = $poolmodel->getPoollist($schedulessql);
         foreach ($scheduleslist as $k => $v) {
@@ -401,8 +402,8 @@ class Order_Action extends ActionPDO {
             $success = 0;
         }
         echo json_encode(array(
-                "success" => $success, 
-                "msg" => $store, 
+                "success" => $success,
+                "msg" => $store,
                 "poollist" => $poollist
         ));
         exit();
@@ -450,19 +451,19 @@ class Order_Action extends ActionPDO {
     public function getroundStr ($len)
     {
         $chars_array = array(
-                "0", 
-                "1", 
-                "2", 
-                "3", 
-                "4", 
-                "5", 
-                "6", 
-                "7", 
-                "8", 
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
                 "9"
         );
         $charsLen = count($chars_array) - 1;
-        
+
         $outputstr = "";
         for ($i = 0; $i < $len; $i++) {
             $outputstr .= $chars_array[mt_rand(0, $charsLen)];
@@ -489,8 +490,8 @@ class Order_Action extends ActionPDO {
             $success = 0;
         }
         echo json_encode(array(
-                "success" => $success, 
-                "storelist" => $storelist, 
+                "success" => $success,
+                "storelist" => $storelist,
                 "atLeastOneStoreOpen" => $atLeastOneStoreOpen
         ));
         exit();
@@ -502,15 +503,15 @@ class Order_Action extends ActionPDO {
         $userinfo = $this->_G['user'];
         $step = $_GET["step"];
         $weekarray = array(
-                "日", 
-                "一", 
-                "二", 
-                "三", 
-                "四", 
-                "五", 
+                "日",
+                "一",
+                "二",
+                "三",
+                "四",
+                "五",
                 "六"
         );
-        
+
         switch ($step) {
             case 'comment':
                 die(json_unicode_encode($ordermodel->postComment($userinfo, $_POST)));
@@ -540,15 +541,15 @@ class Order_Action extends ActionPDO {
                 // 评价是否获得优惠劵
                 $comment_reward = intval(getConfig()['comment_reward']);
                 $result = array(
-                        'jssdk' => $jssdk, 
-                        'userinfo' => $userinfo, 
-                        'step' => $step, 
-                        'order' => $order, 
-                        'refund_money' => getRefundMoney($order['ordertime']), 
-                        'refund_rule' => json_decode(getConfig()['refund_rule'], true), 
-                        'id' => $id, 
-                        'itemlist' => $itemlist, 
-                        'comment' => $comment, 
+                        'jssdk' => $jssdk,
+                        'userinfo' => $userinfo,
+                        'step' => $step,
+                        'order' => $order,
+                        'refund_money' => getRefundMoney($order['ordertime']),
+                        'refund_rule' => json_decode(getConfig()['refund_rule'], true),
+                        'id' => $id,
+                        'itemlist' => $itemlist,
+                        'comment' => $comment,
                         'comment_reward' => $comment_reward
                 );
                 break;
@@ -565,9 +566,9 @@ class Order_Action extends ActionPDO {
                 // 评价是否获得优惠劵
                 $comment_reward = intval(getConfig()['comment_reward']);
                 $result = array(
-                        'userinfo' => $userinfo, 
-                        'step' => $step, 
-                        'order' => $order, 
+                        'userinfo' => $userinfo,
+                        'step' => $step,
+                        'order' => $order,
                         'comment_reward' => $comment_reward
                 );
                 break;
@@ -577,7 +578,7 @@ class Order_Action extends ActionPDO {
     // 我的底片信息
     public function negative ()
     {
-        
+
         $ordermodel = new OrderModel();
         $piclist = $ordermodel->getPhotoList($this->_G['user']['id']);
         return array(
@@ -616,16 +617,16 @@ class Order_Action extends ActionPDO {
         $store = $storemodel->getStore(null, 'citycode=' . $citycode);
         $productlist1 = $categorymodel->getCategory(null, 'type=0');
         return array(
-                'userinfo' => $user, 
-                'step' => $step, 
-                'citylist' => $citylist, 
-                'citylist1' => $citylist1, 
-                'cityname' => $cityname, 
-                'category' => $category, 
-                'productlist' => $productlist, 
-                'productlist1' => $productlist1, 
-                'citycode' => $citycode, 
-                'store' => $store, 
+                'userinfo' => $user,
+                'step' => $step,
+                'citylist' => $citylist,
+                'citylist1' => $citylist1,
+                'cityname' => $cityname,
+                'category' => $category,
+                'productlist' => $productlist,
+                'productlist1' => $productlist1,
+                'citycode' => $citycode,
+                'store' => $store,
                 "type" => $type
         );
     }
@@ -650,12 +651,12 @@ class Order_Action extends ActionPDO {
         $msg = $user->sendSmsCode($phone);
         if ($msg['errorcode'] == 0) {
             $result = json_encode(array(
-                    "success" => 1, 
+                    "success" => 1,
                     "msg" => $msg['data']
             ));
         } else {
             $result = json_encode(array(
-                    "success" => 0, 
+                    "success" => 0,
                     "msg" => $msg['data']
             ));
         }
@@ -685,12 +686,12 @@ class Order_Action extends ActionPDO {
         $result_sms = $coupon->getcouponinfofromcode($code, $storeid);
         if ($result_sms) {
             $result = json_encode(array(
-                    "success" => 1, 
+                    "success" => 1,
                     "msg" => $result_sms
             ));
         } else {
             $result = json_encode(array(
-                    "success" => 0, 
+                    "success" => 0,
                     "msg" => $result_sms
             ));
         }
