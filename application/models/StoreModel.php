@@ -15,9 +15,9 @@ class StoreModel {
     {
         if (isset($id)) {
             $id = intval($id);
-            $rs= $this->db->table('~store~')->field('*')->where('id='.$id)->find();
+            $rs= $this->db->table('~store~')->field($field)->where('id='.$id)->find();
         } else {
-            $rs = $this->db->table('~store~')->field($field)->where($where)->select();
+            $rs = $this->db->table('~store~')->field($field)->where($where)->order($order)->limit($limit)->select();
         }
         return $rs;
     }

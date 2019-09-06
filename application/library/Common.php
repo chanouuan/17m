@@ -56,9 +56,10 @@ function sizecount ($byte)
     }
 }
 
-function round_dollar ($fen)
+function round_dollar ($fen, $suffix = false)
 {
-    return sprintf("%01.2f", abs($fen) / 100);
+    $fen /= 100;
+    return $suffix ? sprintf("%01.2f", $fen) : round($fen, 2);
 }
 
 function getConfig ($name = null, $default = null)

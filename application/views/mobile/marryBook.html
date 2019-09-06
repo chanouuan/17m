@@ -28,21 +28,23 @@
     <div class="app-body">
 
         <div class="notice-wrap">
-            <h2>欢迎来到天真蓝</h2>
+            <h2>欢迎来到十七平</h2>
             <div class="content">
                 <dl class="notice-dl">
                     <dt>预约项目说明</dt>
                     <dd>
                         <ul class="intro">
-                            <li>预约成功后订单不可更改，如需取消将产生订金损失，退款规则如下：
+                            <li>
+                                预约成功后订单不可更改，如需取消将产生订金损失，退款规则如下：
                                 <p style="margin-top:6px;margin-bottom:8px;line-height: 1.4">
-                                    距拍摄时间24小时以上取消订单，可退全额订金<br>
-                                    距拍摄时间不足24小时取消订单，可退50%订金
+                                    <? foreach($refund_rule as $k=>$v){ ?>
+                                    <?=$v['mark']?><br />
+                                    <? } ?>
                                 </p>
                             </li>
-                            <li>如未按预定日期到店，订单则视为放弃，全额订金的损失由预约方自行承担。</li>
-                            <li>我们会提供精修后的.jpg格式底片，不提供原始拍摄文件。</li>
-                            <li>除登记照和亲密照外，暂时仅支持单人预约，如需多人请分别预约。</li>
+                            <li>如未按预定日期到店，订单则视为放弃，定金将不予退还。</li>
+                            <li>我们会提供精修后的数码底片，不提供未经处理的原始拍摄文件。</li>
+                            <li>除登记照外，暂时仅支持单人预约，如需多人请分别预约。</li>
                         </ul>
                     </dd>
                 </dl>
@@ -58,10 +60,8 @@
                 </p>
 
 
-                <a href="javascript:void(0);" id="goBooking" class="nb-btn nb-btn-disable">开始预约</a>
-                <a href="/user/orders" class="nb-btn nb-btn-default">我的订单</a>
-
-                <h6 style="line-height: 1; color:#f6f6f6;">435030</h6>
+                <a href="javascript:void(0);" id="goBooking" class="<?php if(!$userinfo['telephone']){ ?>validateTel<?php } ?> nb-btn nb-btn-disable">开始预约</a>
+                <a href="?c=order&a=myorder" class="nb-btn nb-btn-default">我的订单</a>
 
             </div>
         </div>
@@ -73,7 +73,7 @@
 
 <div id="toolbar-submenu" class="toolbar-submenu">
     <ul class="ts-menu" id="ts-menu">
-        <li><a href="?c=marry&a=create"><i class="icon-order"></i>开始预约</a></li>
+        <li><a href="?c=marry&a=book"><i class="icon-order"></i>开始预约</a></li>
         <li><a href="?c=order&a=myorder"><i class="icon-orderlist"></i>我的订单</a></li>
         <li><a href="?c=order&a=Personal"><i class="icon-profile"></i>个人资料</a></li>
         <li><a href="?c=order&a=help"><i class="icon-notice"></i>拍摄须知</a></li>
@@ -149,43 +149,84 @@
 <script src="//res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script>
 
-    wx.config({
-        appId: 'wx389960591722c05f',
-        timestamp: '1567679775',
-        nonceStr: 'b58skjs4hmtuisdc3jc73jcc3izv9lwk',
-        signature: '44c68a0a51a1734a6b3244d7111c6856104f5253',
-        jsApiList: ['getLocation']
-    });
+    /*<?php if(isset($jssdk) && $jssdk){ ?>*/
+        wx.config({
+            debug: false,
+            appId: "<?=$jssdk['appId']?>",
+            timestamp: "<?=$jssdk['timestamp']?>",
+            nonceStr: "<?=$jssdk['nonceStr']?>",
+            signature: "<?=$jssdk['signature']?>",
+            jsApiList: [
+                'hideMenuItems',
+                'onMenuShareTimeline',
+                'onMenuShareAppMessage',
+                'previewImage',
+                'getLocation',
+                'chooseWXPay'
+            ]
+        });
+        wx.ready(function () {
+            wx.hideMenuItems({
+                menuList: [
+                    'menuItem:share:qq',
+                    'menuItem:share:weiboApp',
+                    'menuItem:share:facebook',
+                    'menuItem:share:QZone'
+                ]
+            });
+            JSAPI.getLocation(function(location){
+                location_city = location || '';
+                gpsCheckTimeUp = true;
+            },function(err){
+                gpsCheckTimeUp = true;
+            });
+        });
+    /*<?php } ?>*/
 
+    var JSAPI = {
+        getLocation: function(success, fail){
+            var local_location = localStorage.getItem('data-location') || [];
+            if(local_location.length){
+                local_location = JSON.parse(local_location);
+                if(local_location['lastCacheTime'] > (new Date().getTime())){
+                    success(local_location['citycode']);
+                    return;
+                }
+            }
+            wx.getLocation({
+                type: 'gcj02',
+                success: function(res){
+                    if(res.errMsg == 'getLocation:ok'){
+                        $.getJSON('?ajax=1&c=order&a=getLocation&lon='+res.longitude+'&lat='+res.latitude,function(data){
+                            if(data && data.errorcode === 0){
+                                if(data.data){
+                                    localStorage.setItem('data-location', JSON.stringify({citycode:data.data,lastCacheTime:(new Date().getTime()+86400000)}));
+                                }
+                                success(data.data);
+                            }else{
+                                fail && fail(data.data);
+                            }
+                        });
+                    }else{
+                        fail && fail(res.errMsg);
+                    }
+                },
+                cancel: function(res){
+                    fail && fail('获取位置不可用');
+                },
+                fail: function(res){
+                    fail && fail('未获取到位置')
+                }
+            });
+        }
+    };
 
     //wait maximum 5 seconds for gps
+    var location_city='';
     var gpsCheckTimeUp=false;
     setTimeout(function () {
         gpsCheckTimeUp=true;
     }, 6000);
-
-    wx.ready(function(){
-        console.log('getLocation: ');
-        wx.getLocation({
-            type: 'wgs84',
-            success: function (res) {
-                $.ajax({
-                    url: '/api/book/store/gps?lat='+ res.latitude +'&lng='+ res.longitude,
-                    type: 'GET',
-                    timeout: 8000,
-                    success: function(data) {
-                        hasStore = data.hasStore;
-                        city = data.city;
-                        gpsCheckTimeUp=true;
-                    },
-                    error: function() {
-                        gpsCheckTimeUp=true;
-                    }
-                });
-            }
-        });
-    });
-
 
     function decideBtn()
     {
@@ -208,23 +249,15 @@
             return ;
 
         $firstClick=true;
-        // if(!$('#agreeCheckbox').is(':checked'))
-        //     $('#agreeCheckbox').prop('checked',false).triggerHandler('click');
-        //else
+
         $('#agreeCheckbox').prop('checked',true).triggerHandler('click');
 
         decideBtn();
     });
 
-
-
     $('#agreeCheckbox').on('click',function(){
         decideBtn();
     });
-
-
-
-
 
     var $simpleTextLoadingTimer;
     function simpleTextLoading($id, $prefix, $rear)
@@ -248,45 +281,29 @@
         if($(this).hasClass('nb-btn-disable'))
             return;
 
-
         if($(this).hasClass('validateTel'))
         {
-            window.location.href = '/user/profile?action=validateTel';
+            window.location.href = '?c=order&a=personal&referer='+encodeURIComponent(window.location.href);;
             return ;
         }
 
-
         if(gpsCheckTimeUp!=true)
             simpleTextLoading('#goBooking','门店定位中','');
-        //$(this).html('自动定位中...');
 
-        //var times=1;
         var IntID = setInterval(function() {
-            //times++;
-            //console.log(times);
+
             if(gpsCheckTimeUp==true)
             {
-                if(city != '')
-                {
-                    if (hasStore)
-                        window.location.href = '/book/products?city=' + city;
-                    else
-                        window.location.href = '/book/city?city='+city;
-                }
-                else
-                {
-                    window.location.href = '/book/city?city=not-found';
+                if (location_city) {
+                    window.location.href = "?<?=burl('a=storeSelect&citycode=')?>"+location_city;
+                } else {
+                    window.location.href = "?<?=burl('a=citySelect')?>";
                 }
 
                 clearInterval(IntID);
             }
 
         }, 300);
-
-        // if (isAgreeClick) {
-        //     return;
-        // }
-        //isAgreeClick = true;
 
     });
 

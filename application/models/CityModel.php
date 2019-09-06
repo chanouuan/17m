@@ -21,14 +21,14 @@ class CityModel {
     {
         if ($code == "") {
             $rs = $this->db->table('~city~')->field('*')->order(" sort asc")->select();
-        
+
         } else {
             $rs = $this->db->table('~city~')->field('*')->where('code=' . $code . ($where ? ' and ' . $where : ''))->find();
         }
         return $rs;
     }
 
-    public function getcitylist ($where, $limit = "")
+    public function getcitylist ($where = '', $limit = '')
     {
         if ($limit == "") {
             $rs = $this->db->table('~city~')->field('*')->where($where)->order(" sort asc")->select();

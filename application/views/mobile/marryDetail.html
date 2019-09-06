@@ -1,0 +1,527 @@
+<!DOCTYPE html><html><head>
+    <meta content="text/html; charset=UTF-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta content="width=320, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title></title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link href="<?=$tpl_dir?>/yue/css/bootstrap.min.css?v=3.1" rel="stylesheet" type="text/css">
+    <link href="<?=$tpl_dir?>/yue/css/common6.css" rel="stylesheet" type="text/css">    <link href="https://nb-web-www.imdr.cn/yue/css/product-detail.css" rel="stylesheet" type="text/css">
+    <style id="__WXWORK_INNER_SCROLLBAR_CSS">::-webkit-scrollbar { width: 12px !important; height: 12px !important; }::-webkit-scrollbar-track:vertical {  }::-webkit-scrollbar-thumb:vertical { background-color: rgba(136, 141, 152, 0.5) !important; border-radius: 10px !important; background-clip: content-box !important; border:2px solid transparent !important; } ::-webkit-scrollbar-track:horizontal {  }::-webkit-scrollbar-thumb:horizontal { background-color: rgba(136, 141, 152, 0.5) !important; border-radius: 10px !important; background-clip: content-box !important; border:2px solid transparent !important; } ::-webkit-resizer { display: none !important; }</style></head>
+<body id="id1">
+
+<style>
+    @media (min-device-width:414px) and (max-device-width:736px) and (-webkit-min-device-pixel-ratio:3){
+        /*iphone6plus*/
+    }
+</style>
+<div class="app">
+    <div class="toolbar">
+        <div class="toolbar-logo"><img src="<?=$tpl_dir?>/imgs/logo.png"></div>
+        <div class="toolbar-menu" id="toolbar-menu"><a href="javascript:void(0)" data-role="icon-ment" class="icon-menu"></a></div>
+        <div class="toolbar-back" id="toolbar-back"><a href="javascript:void(0);"><i class="icon-arrow-left"></i>上一步</a></div>
+        <div class="toolbar-location" id="toolbar-location"><a href="javascript:void(0);"><i class="icon-location-white"></i><strong data-role="location"></strong><i data-role="arrow" class="icon-arrow-down"></i></a></div>
+
+    </div>
+
+    <div class="app-body">
+        <section class="product-section clearfix">
+            <div class="image-title">
+                <div class="product-image"><img src="<?=$categoryInfo['icon']?>"></div>
+                <div class="product-title"><?=$categoryInfo['name']?></div>
+            </div>
+            <div class="price-stores">
+                <div class="price-box">
+                    <div class="product-cost"><sub>￥</sub><?=$relationCategory['price']?></div>
+                </div>
+                <div class="provide-stores">
+                    <span><i class="icon-success-fill"></i><?=$storeInfo['name']?></span>
+                </div>
+            </div>
+        </section>
+
+        <section class="product-section specifics">
+            <span style="color:#fb8471">特别提醒：本产品不适用于身份证、护照、学生特惠、通行证照片。</span>
+            <br>若需拍摄身份证照，请返回并选择“身份证照”产品。
+            <br>若需拍摄学生特惠证件照，请返回并选择“学生特惠”产品。
+            <hr><dl>
+            <dt><strong>包含项目</strong></dt>
+            <dd>
+                <ul class="service clearfix">
+                    <li class="service-1">
+                        <i></i>
+                        <span>化妆</span>
+                        <p>1个妆面造型</p>
+                    </li>
+                    <li class="service-2">
+                        <i></i>
+                        <span>拍摄</span>
+                        <p>1种背景颜色</p>
+                    </li>
+                    <li class="service-3">
+                        <i></i>
+                        <span>修图</span>
+                        <p>1张精修底片</p>
+                    </li>
+                    <li class="service-4">
+                        <i></i>
+                        <span>输出</span>
+                        <p>1种尺寸输出</p>
+                    </li>
+                </ul>
+                <div style="color: #888;"><strong>服装</strong>：建议自带服装，店内仅提供部分正装和衬衫。</div>
+            </dd>
+            <dd class="clearfix">
+                <dl>
+                    <dt><strong>预计耗时</strong></dt>
+                    <dd>约<strong>3</strong>小时</dd>
+                </dl>
+                <dl>
+                    <dt><strong>看样时间</strong></dt>
+                    <dd><i class="active-i"></i>当场看样</dd>
+                </dl>
+                <dl>
+                    <dt><strong>取件方式</strong></dt>
+                    <dd><i class="active-i"></i>当场可取、顺丰到付</dd>
+                </dl>
+            </dd><dt><strong>用途</strong><br>
+            求职简历、各国签证、居住证、其他证件等。</dt>
+
+            <dt><strong>关于拍摄身份证/护照等照片的说明：</strong><br>
+                北京店可拍摄：北京护照、港澳、台湾通行证照片等；昆明店可拍摄：云南省护照照片等。其他地区能否自带身份证/护照等照片请咨询当地公安机关。<br>
+                特别提醒：公安机关规定，身份证与护照照片不可做修图处理。
+            </dt>
+
+
+
+        </dl>
+            <a id="more" class="more" style="display: none;"><span>查看更多详情</span></a>
+        </section>
+
+        <div class="product-desc" style="">
+            <style>* { margin: 0; padding: 0; outline: 0; -webkit-text-size-adjust: none;
+                -webkit-tap-highlight-color: rgba(0, 0, 0, 0); } html { -webkit-text-size-adjust:
+                    100%; -ms-text-size-adjust: 100%; } body { font: 12px/1.5 &#039;PingFang
+            SC&#039;, Arial, sans-serif; color: #888; background: #fff; min-width:
+                    320px; padding: 12px 0; } img { border: 0;  max-width:
+                    100%; } table { border-collapse: collapse; border-spacing: 0; } ol, ul
+                                                                                    { list-style: none; } h1, h2, h3, h4, h5, h6 { font-size: 100%; font-weight:
+                    normal; } b, i { font-style: normal; font-weight: normal; } a { text-decoration:
+                    none; color: #000; } .clearfix:after { content: &#039;&#039;; display:
+                    block; clear: both } .top { margin: 16px 16px 0 ; background: #0033cc; color:
+                    #B2C7EA; font-size: 12px; font-weight:700;text-align: center; padding: 16px 0; border-radius:
+                    6px; } .head { padding: 15px 16px; font-size: 12px; color: #c8c8c8; border-bottom:
+                    #E6E6E6 1px solid; } h2 { padding: 0 16px; font-weight: 700; } h4
+                                                                                   { padding: 0 16px; font-size: 11px; } .box { padding: 15px 16px 10px;
+                                                                                                                         } .box .pic { float: left; width: 45%; } .box .pic img{width: 100%; vertical-align: top;} .box
+                                                                                                                                                                                                                   dl { float: left; width: 55%; } .box dt { padding: 0 0 0 6px; line-height:
+                    1; font-weight: 700; } .box dd { padding: 10px 0 0 6px; font-size: 11px;
+                                               line-height: 13px; text-align: justify; } .box-right dt { padding: 0 6px
+            0 0; text-align: right; } .box-right dd { padding: 10px 6px 0 0; } .piclist
+                                                                               { padding: 0 0 0px;} .piclist ul { padding: 0 12px; } .piclist li {text-align: center; font-size:11px;float:left; width: 33.33%; box-sizing: border-box; -webkit-box-sizing: border-box;
+                                                                                                                                         padding: 0 4px;} .piclist li img{ width: 100%; vertical-align: top;} .piclist li i { display:
+                    block; font-size: 11px; text-align: center; padding: 6px 0 0; line-height:
+                    1; } .colorlist { padding: 0 16px 12px; } .colorlist ul { margin: 0 -10px;
+                                                              } .colorlist li { float: left; width: 20%; font-size:11px;text-align: center; box-sizing:
+                    border-box; -webkit-box-sizing: border-box; padding: 12px 10px 0; } .colorlist
+                                                                                        li span { display: block; padding: 100% 0 0; } .colorlist li span.color-1
+                                                                                                                                       { background: #A4B8E4; } .colorlist li span.color-2 { background: #F7E2E5;
+                                                                                                                                                                } .colorlist li span.color-3 { background: #5E6D72; } .colorlist li span.color-4
+                                                                                                                                                                                                                      { background: #A8AA9D; } .colorlist li span.color-5 { background: #9A5151;
+                                                                                                                                                                                                                                               } .colorlist li span.color-6 { background: #D99B60; } .colorlist li span.color-7
+                                                                                                                                                                                                                                                                                                     { background: #D486A0; } .colorlist li span.color-8 { background: #8E67AA;
+                                                                                                                                                                                                                                                                                                                              } .colorlist li span.color-9 { background: #037482; } .colorlist li span.color-10
+                                                                                                                                                                                                                                                                                                                                                                                    { background: #284556; } .colorlist li i { display: block; font-size: 11px;
+                                                                                                                                                                                                                                                                                                                                                                                                                 padding: 1px 0 0; } .data { font-size: 11px; padding: 0 16px 16px; } .data
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      table { width: 100%; text-align: center; } .data th { border: #E5E5E5 1px
+            solid; padding: 6px 0; font-weight: 700; } .data td { border: #E5E5E5 1px
+            solid; padding: 6px 0; } .works{width: 100%; padding:0 16px;
+                                         text-align: center;} .works img{ max-width:960px;vertical-align: top;}p { padding: 24px 16px 0px 16px; }</style>
+            <div class="top">证件照是你的名片，
+                <br>它必须展现你美好的一面。
+                <br>贴有照片的简历会更受青睐。
+                <br>它被放置在你的身份证、驾照、签证、员工卡...
+                <br>我们提供规范的仪态标准和自然的妆容。
+            </div>
+            <h2>拍摄案例</h2>
+            <div class="works">
+                <img src="https://nb-web-www.imdr.cn/20190726-works-zhegnjianzhao.jpg">
+            </div>
+            <div class="head">本页所用图片均为天真蓝客户授权使用，侵权必究。</div>
+            <h2>服务展示</h2>
+            <div class="box clearfix">
+                <div class="pic">
+                    <img src="https://nb-web-www.imdr.cn/yue/upload/20160401/1459502883872.jpg">
+
+                </div>
+                <dl>
+                    <dt>前台接待</dt>
+                    <dd>前台客服会询问你的证件照用途，帮你选择合适的底色和尺寸。</dd>
+                </dl>
+            </div>
+            <div class="box box-right clearfix">
+                <dl>
+                    <dt>化妆造型</dt>
+                    <dd>专业化妆师会根据你的气质和职业属性量身定做妆容和发型，让形容得到提升。</dd>
+                </dl>
+                <div class="pic">
+                    <img src="https://nb-web-www.imdr.cn/yue/upload/20160401/14595028964763.jpg">
+
+                </div>
+            </div>
+            <div class="piclist">
+                <ul class="clearfix">
+                    <li>
+                        <img src="https://nb-web-www.imdr.cn/yue/upload/20160401/14595029207983.jpg"> 专属化妆套件
+                    </li>
+                    <li>
+                        <img src="https://nb-web-www.imdr.cn/yue/upload/20160401/14595029299249.jpg"> 专业彩妆用品
+                    </li>
+                    <li>
+                        <img src="https://nb-web-www.imdr.cn/yue/upload/20160401/14595029368232.jpg"> 衣物贴心保护
+                    </li>
+                </ul>
+            </div>
+            <div class="box clearfix">
+                <div class="pic">
+                    <img src="https://nb-web-www.imdr.cn/yue/upload/20160401/14595029466294.jpg">
+
+                </div>
+                <dl>
+                    <dt>服饰搭配</dt>
+                    <dd>可提供部分正装，建议你自带服装和配饰(更合身效果更好)，店内也有部分配饰可供选择。</dd>
+                </dl>
+            </div>
+            <div class="piclist">
+                <ul class="clearfix">
+                    <li>
+                        <img src="https://nb-web-www.imdr.cn/yue/upload/20160401/14595029553270.jpg"> 领带
+                    </li>
+                    <li>
+                        <img src="https://nb-web-www.imdr.cn/yue/upload/20160401/14595029622663.jpg"> 领结
+                    </li>
+                    <li>
+                        <img src="https://nb-web-www.imdr.cn/yue/upload/20160401/14595029695946.jpg"> 眼镜框
+                    </li>
+                </ul>
+            </div>
+            <h2>自带服装推荐颜色</h2>
+            <h4>建议选用纯色的衣服，推荐以下颜色(拍摄身份证请选深色服装)：</h4>
+            <div class="colorlist">
+                <ul class="clearfix">
+                    <li>
+                        <span class="color-1"></span> 浅蓝
+                    </li>
+                    <li>
+                        <span class="color-2"></span> 浅粉
+                    </li>
+                    <li>
+                        <span class="color-3"></span> 雅灰
+                    </li>
+                    <li>
+                        <span class="color-4"></span> 卡其
+                    </li>
+                    <li>
+                        <span class="color-5"></span> 酒红
+                    </li>
+                    <li>
+                        <span class="color-6"></span> 橡木黄
+                    </li>
+                    <li>
+                        <span class="color-7"></span> 玫瑰粉
+                    </li>
+                    <li>
+                        <span class="color-8"></span> 淡紫
+                    </li>
+                    <li>
+                        <span class="color-9"></span> 蓝绿
+                    </li>
+                    <li>
+                        <span class="color-10"></span> 蓝灰
+                    </li>
+                </ul>
+            </div>
+            <div class="box box-right clearfix">
+                <dl>
+                    <dt>专业拍摄</dt>
+                    <dd>专业摄影师会协助调整面部神态和姿势，提升精神面貌和专业形象。请在拍摄过程中与摄影师保持交流。</dd>
+                </dl>
+                <div class="pic">
+                    <img src="https://nb-web-www.imdr.cn/yue/upload/20160402/1459574199826.jpg">
+
+                </div>
+            </div>
+            <div class="box clearfix">
+                <div class="pic">
+                    <img src="https://nb-web-www.imdr.cn/yue/upload/20160401/1459502996870.jpg">
+
+                </div>
+                <dl>
+                    <dt>后期修片</dt>
+                    <dd>资深修图师会对照片进行较色和精修，皮肤上的小瑕疵、色斑、暗疮都会去除。你也可以提前提出自己的个性化要求。</dd>
+                </dl>
+            </div>
+            <div class="box box-right clearfix">
+                <dl>
+                    <dt>输出裁切</dt>
+                    <dd>600dpi高精度输出，进口专业相纸，一丝不苟的裁切，确保照片细节的完美呈现。</dd>
+                </dl>
+                <div class="pic">
+                    <img src="https://nb-web-www.imdr.cn/yue/upload/20160401/1459503004202.jpg">
+
+                </div>
+            </div>
+            <div class="data">
+                <table>
+                    <tbody>
+                    <tr>
+                        <th colspan="9" style="text-align:center">不同尺寸输出一版可裁切的照片数量</th>
+                    </tr>
+                    <tr>
+                        <td>一寸</td>
+                        <td>二寸</td>
+                        <td>登记</td>
+                        <td>美签</td>
+                        <td>日签</td>
+                        <td>欧签</td>
+                        <td>身份证</td>
+                        <td>护照</td>
+                        <td>驾照</td>
+                    </tr>
+                    <tr>
+                        <td>10张</td>
+                        <td>6张</td>
+                        <td>4张</td>
+                        <td>2张</td>
+                        <td>4张</td>
+                        <td>6张</td>
+                        <td>10张</td>
+                        <td>6张</td>
+                        <td>10张</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="box clearfix">
+                <div class="pic">
+                    <img src="https://nb-web-www.imdr.cn/yue/upload/20160401/14595030167322.jpg">
+
+                </div>
+                <dl>
+                    <dt>送达你手中</dt>
+                    <dd>确认照片后约一刻钟，照片会装袋并送呈到你手中。赶快拍照发朋友圈和微博吧。</dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="action">
+            <a href="javascript:history.back();" class="nb-btn nb-btn-default">重选婚纱型号</a>
+
+            <a href="?<?=burl('a=schedules&category_id='.$categoryInfo['id'])?>" class="nb-btn nb-btn-primary">下一步</a>
+
+        </div>
+
+
+        <div id="page-mask" class="page-mask"></div>
+    </div>
+</div>
+
+<div id="toolbar-submenu" class="toolbar-submenu">
+    <ul class="ts-menu" id="ts-menu">
+        <li><a href="?c=marry&a=book"><i class="icon-order"></i>开始预约</a></li>
+        <li><a href="?c=order&a=myorder"><i class="icon-orderlist"></i>我的订单</a></li>
+        <li><a href="?c=order&a=Personal"><i class="icon-profile"></i>个人资料</a></li>
+        <li><a href="?c=order&a=help"><i class="icon-notice"></i>拍摄须知</a></li>
+    </ul>
+    <div class="mask"></div>
+</div>
+
+
+
+<div id="alert-dialog" class="alert-dialog" style="display: none;">
+    <div class="alert-box">
+        <a href="javascript:$('#alert-dialog').hide();" class="close icon-close"></a>
+        <div class="alert-header">
+            <i class="icon-warning"></i>
+        </div>
+        <div class="alert-content">
+        </div>
+        <div class="alert-footer">
+            <a href="javascript:void(0)" class="action-btn">好</a>
+        </div>
+    </div>
+    <div class="mask"></div>
+</div>
+
+<script src="//hm.baidu.com/hm.js?062b790712f25dd7dbc38c7bc21c91c7"></script><script src="https://nb-web-www.imdr.cn/yue/js/jQuery-2.1.4.min.js"></script>
+<script src="https://nb-web-www.imdr.cn/yue/js/fastclick.js"></script>
+<script src="https://nb-web-www.imdr.cn/yue/js/mobile-detect.js"></script>
+
+<script>
+    var md = new MobileDetect(window.navigator.userAgent);
+    $('#toolbar-menu').click(function(){
+        var mentEl = $(this).find('[data-role="icon-ment"]');
+        $('#toolbar-submenu').toggle();
+        if (mentEl.hasClass('icon-menu')) {
+            mentEl.removeClass('icon-menu');
+            mentEl.addClass('icon-arrow-right');
+        } else {
+            mentEl.addClass('icon-menu');
+            mentEl.removeClass('icon-arrow-right');
+        }
+
+        setTimeout(function() {
+            $('#ts-menu').toggleClass('ts-menu-active');
+        }, 0);
+    });
+
+
+    $('#toolbar-back').click(function(){
+
+        // if($('#store-multi-name').length && $('#store-box-open').length )
+        // {
+        //     if(!$('#store-box-open').hasClass('store-box-open-show'))
+        //     {
+        //         storeMultiNameClicked();
+        //         return ;
+        //     }
+        //     else
+        //     {
+        //         $('#store-box-open').removeClass('store-box-open-show');
+        //         history.back();
+        //     }
+        // }
+
+
+        if($('#schedules-calender-open').length)
+        {
+            if(!$('#schedules-calender-open').hasClass('schedules-calender-open-show'))
+            {
+                $('#schedules-calender-open').addClass('schedules-calender-open-show');
+                return ;
+            }
+        }
+
+
+
+        history.back();
+    });
+
+
+
+
+    if (window.devicePixelRatio && window.devicePixelRatio == 3 && md.is('iPhone')) {
+//            $('meta[name="viewport"]').attr('content', 'width=320, initial-scale=1.3, maximum-scale=1.3, user-scalable=no');
+    }
+
+    $('#toolbar-submenu').on('click', '.mask', function() {
+        $('#toolbar-submenu').hide();
+        var mentEl = $('#toolbar-menu').find('[data-role="icon-ment"]');
+        if (mentEl.hasClass('icon-menu')) {
+            mentEl.removeClass('icon-menu');
+            mentEl.addClass('icon-arrow-right');
+        } else {
+            mentEl.addClass('icon-menu');
+            mentEl.removeClass('icon-arrow-right');
+        }
+        $('#ts-menu').removeClass('ts-menu-active');
+    });
+
+
+    // if (window['runParams'] && runParams.toolbarLocationShow) {
+    //     var toolbarLocationElm = $('#toolbar-location');
+    //     toolbarLocationElm.show();
+    //     toolbarLocationElm.on('click', function() {
+    //         $(this).find('[data-role="arrow"]').toggleClass('icon-arrow-down');
+    //         $(this).find('[data-role="arrow"]').toggleClass('icon-arrow-up');
+    //         $('#toolbar-citys').toggleClass('toolbar-citys-show');
+    //     });
+    // }
+
+    if (window['runParams'] && runParams.toolbarLocationShow) {
+
+        if(runParams.toolbarBackTo=='citylists')
+        {
+            $('#toolbar-location').show().on('click', function() {
+                window.location.href='/book/city';
+            });
+        }
+        else if(runParams.toolbarBackTo=='city-addrs')
+        {
+            $('#toolbar-location').show().on('click', function() {
+                window.location.href='/city-addrs';
+            });
+        }
+        else
+        {
+            $('#toolbar-location').hide();
+            $('#toolbar-back').show();
+        }
+
+
+    }
+
+    function customAlert(status, message, actionText, callback) {
+        var statusClass = '';
+        if(status == 'error') {
+            statusClass = 'error';
+            $('#alert-dialog').addClass(statusClass);
+        }
+
+        $('#alert-dialog .alert-content').html(message);
+        $('#alert-dialog .action-btn').html(actionText);
+        $('#alert-dialog .action-btn').on('click', function() {
+            if (callback != null) {
+                callback($('#alert-dialog'));
+            }
+            $('#alert-dialog').hide();
+        });
+        $('#alert-dialog').show();
+        var h = $('#alert-dialog .alert-box').height();
+        $('#alert-dialog .alert-box').height(h);
+        $('#alert-dialog .alert-box').css('margin-top', -h/2)
+    }
+
+    $('.mask').on('click', function() {
+        $(this).parent().hide();
+    });
+
+
+
+
+
+</script>
+
+<script>
+    var winH = $(window).height() - 60;
+
+    if ($('#more')[0].getBoundingClientRect().top < winH) {
+        $('#more').hide();
+        $('.product-desc').show();
+    }
+
+    $(window).on('scroll', function() {
+        var moreTop = $('#more')[0].getBoundingClientRect().top;
+        if(moreTop < winH) {
+            $('#more').hide();
+            $('.product-desc').show();
+        }
+    });
+
+    $('#vip-cost').on('click', function() {
+        $('.nb-dialog').show();
+        $('#vip-cost').addClass('active');
+        var h = $('.vip-dialog .dialog-box').height();
+        $('.vip-dialog .dialog-box').css({
+            'height': h+'px',
+            'margin-top': -h/2 + 'px'
+        });
+    });
+    $('.nb-dialog').on('click', '.close', function() {
+        $('#vip-cost').removeClass('active');
+    });
+
+</script>
+
+</body></html>
