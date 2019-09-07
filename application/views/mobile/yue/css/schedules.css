@@ -1,0 +1,187 @@
+.toolbar-back {
+    display: block;
+}
+.store-name {
+    font-size:12px;
+    color:#0033CC;
+    line-height:12px;
+    text-align:center;
+    cursor: pointer;
+}
+.check-address {
+    float: right;
+    font-size:12px;
+    color:#888888;
+    cursor: pointer;
+}
+.check-address i {
+    margin-right: 3px;
+    color:#888888;
+}
+.schedule-selected {
+    padding-top: 14px;
+}
+.schedule-selected .all-schedules {
+    top: 14px;
+}
+.schedules-box {
+    padding: 0 14px;
+}
+ 
+.schedules-box .schedules-content {
+    overflow: hidden;
+    width: 100%;
+}
+.schedules-box .vip-schedules,
+.schedules-box .standard-schedules {
+    border-left: 1px solid #e4e4e4;
+    border-bottom: 1px solid #e4e4e4;
+}
+.schedules-box .vip-schedules {
+    display: none;
+}
+.schedules-box .schedule-item {
+    width: 25%;
+    border-top: 1px solid #e4e4e4;
+    border-right: 1px solid #e4e4e4;
+    background-color: #ffffff;
+    display: inline-block;
+    font-size: 14px;
+    text-align: center;
+    line-height: 39px;
+    height:40px;
+    float: left;
+    color:#0033CC;
+    font-weight: 700;
+}
+
+.schedules-box .schedule-item.active,
+.schedules-box .schedule-item:active {
+    background-color: #0033CC;
+    color: #FFFFFF;
+}
+.schedules-box .schedule-item:before {
+    background:#7cdfa8;
+    width:9px;
+    height:9px;
+    border-radius:100%;
+    content: " ";
+    display: inline-block;
+    vertical-align: middle;
+}
+.schedules-box .schedule-item.padding:before {
+    display: none;
+}
+.schedules-box .vip-schedules .schedule-item {
+    color: #8446ac;
+}
+.schedules-box .vip-schedules .schedule-item.active,
+.schedules-box .vip-schedules .schedule-item:active {
+    background-color: #8446ac;
+    color: #FFFFFF;
+}
+.schedules-box .schedule-item:active:before {
+    background: #FFFFFF;
+}
+.schedules-box .schedule-item.disable,
+.schedules-box .schedule-item.disable.active,
+.schedules-box .schedule-item.disable:active {
+    color: #e4e4e4 !important;
+    background: #FFFFFF !important;
+}
+.schedules-box .schedule-item.disable:before,
+.schedules-box .schedule-item.disable.active:before,
+.schedules-box .schedule-item.disable:active:before{
+    background: #e4e4e4 !important;
+}
+
+
+
+.schedule-confirm {
+    position: fixed;
+    left: 0;
+    bottom: -100%;
+    width: 100%;
+    z-index: 4;
+    background-color: #FFFFFF;
+    text-align: center;
+    color: #888888;
+    padding: 16px 0;
+    transition:all 0.2s ease-in-out;
+}
+.schedule-confirm .icon {font-size: 36px;}
+.schedule-confirm .date-time,
+.schedule-confirm .store {
+    font-size:14px;
+    color:#0033CC;
+    font-weight: 900;
+}
+.schedule-confirm .vip-icon {
+    background:#8446ac;
+    border-radius:3px;
+    padding: 3px 5px;
+    line-height: 13px;
+    color: #FFFFFF;
+    font-size: 9px;
+    margin-left: 4px;
+    font-style: normal;
+}
+.schedule-confirm .confirm-footer {
+    border-top: 1px solid #cccccc;
+    padding-top: 16px;
+}
+.schedule-confirm .nb-btn {
+    width: 135px;
+    display: inline-block;
+    margin: 0 8px;
+}
+.schedule-confirm-show {
+    bottom: 0;
+}
+.schedules-box .schedule-item.padding:active {
+    cursor: default;
+    background: #ffffff;
+}
+
+@media screen and (min-width: 768px) {
+     
+    .schedules-box .schedule-item:hover {
+        background:#f3f3f3;
+    }
+    .schedules-box .schedule-item.padding:hover {
+        cursor: default;
+        background: #ffffff;
+    }
+}
+
+
+
+.dialog-add-addr {display:none;} 
+        .dialog-add-addr .dialog-box {padding-top:27px;height:auto;}
+        .dialog-add-addr .dialog-box .close {position:absolute;top:15px;right:15px;}
+
+
+        .dialog-add-addr .drorder-info {position:relative;margin:0;padding:10px 0 0;border:1px solid #F6323E;border-radius:3px;overflow:hidden;}
+            .drorder-info p {margin:0 0 0 15px;line-height:15px;font-weight:600;color:#0033CC;}
+            .drorder-info .order-status {position:absolute;top:10px;right:10px;}
+            .drorder-info div {margin:0 0 5px 15px;padding:4px 0 0;}
+                .drorder-info .icon-vip-tag {margin-top:0;}
+            .dialog-add-addr .drorder-countdown {margin:0;padding:0 10px 0 0;height:31px;line-height:31px;border-top:1px solid #CCCCCC;text-align:right;color:#888;background:#F3F3F3;}
+                .drorder-countdown-tips {display:inline-block;line-height:24px;vertical-align:middle;}
+                .drorder-countdown div {display:inline-block;margin:0 0 0 5px;padding:0;height:24px;vertical-align:middle;overflow:hidden;}
+                    .drorder-countdown div span:before, .drorder-countdown div b:before {line-height:26px;font-size:24px;color:#888;}
+            .drorder-countdown div b:before {line-height:24px;text-align:center;text-indent:1px;}
+
+        .drorder-tips {padding-top:10px;}
+            .drorder-tips h4 {line-height:1.5;text-align:center;font-size:11px;color:#FA4B4E;font-weight:600;}
+            .drorder-tips .order-tips-n {text-align:center;}
+                .drorder-tips .order-tips-n a {color:#FCB9AE;}
+                    .drorder-tips .order-tips-n a:before {margin-right:4px;}
+
+
+        .dialog-add-addr .action {border-top:0;}
+
+
+ 
+.dialog-add-addr input { padding:4px 8px;height:30px;width:100%;border:1px solid #B2C7EA;border-radius: 3px;font-size:14px;color:#0033CC;outline:none;}
+.dialog-add-addr textarea { padding:4px 8px; margin:0; width:100%;border:1px solid #B2C7EA;border-radius: 3px;font-size:14px;color:#0033CC;outline:none;}

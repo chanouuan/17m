@@ -16,42 +16,12 @@ class Marry_Action extends ActionPDO {
     }
 
     /**
-     * 婚纱预约
-     */
-    public function book ()
-    {
-        if ($this->_jssdk) {
-            $jssdk = $this->_jssdk->GetSignPackage();
-            if ($jssdk['errorcode'] !== 0) {
-                $jssdk = null;
-            } else {
-                $jssdk = $jssdk['data'];
-            }
-        }
-        $this->show([
-            'refund_rule' => json_decode(getConfig('refund_rule'), true),
-            'jssdk' => $jssdk,
-            'userinfo' => $this->_G['user']
-        ]);
-    }
-
-    /**
-     * 城市选择
-     */
-    public function citySelect ()
-    {
-        $this->show([
-            'list' => (new CityModel())->getcitylist()
-        ]);
-    }
-
-    /**
      * 门店选择
      */
-    public function storeSelect ()
+    public function stores ()
     {
         if (!$cityInfo = (new CityModel())->getCity(intval(getgpc('citycode')), 'status = 1')) {
-            $this->error('城市未开通', '?' . burl('a=citySelect'), 0);
+            $this->error('城市未开通', '?c=project&a=city', 0);
         }
         $stores = (new StoreModel())->getStore(null, 'status = 1 and project_id = ' . $this->projectId . ' and citycode = ' . $cityInfo['code'], null, 'id,name,address', 'sort asc');
         $this->show([
@@ -100,6 +70,32 @@ class Marry_Action extends ActionPDO {
             'categoryInfo' => $categoryInfo,
             'relationCategory' => $relationCategory,
             'storeInfo' => $storeInfo,
+        ]);
+    }
+
+    /**
+     * 排班日期
+     */
+    public function schedules ()
+    {
+        $categoryModel = new CategoryModel();
+        if (!$categoryInfo = $categoryModel->getCategory(intval(getgpc('category_id')), 'project_id = ' . $this->projectId)) {
+            $this->error('该产品不存在');
+        }
+        if (!$relationCategory = $categoryModel->getRelationCategory($categoryInfo['id'])) {
+            $this->error('该产品无效');
+        }
+        if (!$storeInfo = (new StoreModel())->getStore($relationCategory['store_id'], 'status = 1 and project_id = ' . $this->projectId)) {
+            $this->error('门店不存在');
+        }
+        if (!$cityInfo = (new CityModel())->getCity($storeInfo['citycode'])) {
+            $this->error('城市未开通');
+        }
+        $schedules = (new PoolModel())->getScheduleDays($relationCategory['store_id']);
+        $this->show([
+            'city_name' => $cityInfo['name'],
+            'storeInfo' => $storeInfo,
+            'schedules' => $schedules
         ]);
     }
 

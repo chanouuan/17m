@@ -1,0 +1,257 @@
+
+.toolbar-back {
+    display: block;
+}
+.product-section {
+    padding: 15px 14px 17px 14px;
+    border-bottom: 1px solid #cccccc;
+}
+
+.image-title {
+    float: left;
+    width: 78px;
+    text-align: center;
+    color:#1e82d0;
+}
+.product-image {
+    width: 78px;
+    height: 78px;
+    display: block;
+    margin-bottom: 6px;
+    position: relative;
+    overflow:hidden;
+    border-radius:6px;
+}
+.product-image:before {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0; left: 0;
+    border:2px solid #1e82d0;
+    content: "";
+    border-radius:6px;
+}
+.product-title {
+    font-weight: 900;
+}
+.price-stores {
+    margin-left: 90px;
+    min-height: 101px;
+    position: relative;
+}
+.price-stores .price-box {
+    position: relative;
+}
+.price-stores .product-cost {
+    font-size:28px;
+    color:#fb8471;
+    line-height:33px;
+    font-weight: 900;
+}
+.price-stores .product-cost sub {
+    font-size: 18px;
+    bottom: 0;
+}
+.price-stores .product-cost del {
+    color: #888888;
+    font-size: 12px;
+    font-weight: 400;
+}
+.price-stores .product-cost del sub {
+    font-size: 11px;
+}
+.price-stores .vip-cost {
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 11px;
+    line-height: 18px;
+}
+.price-stores .vip-cost sub {
+    bottom: 0;
+}
+.price-stores .vip-cost span {
+    line-height: 24px;
+    padding: 0 4px;
+    float: left;
+}
+.price-stores .vip-cost span:first-child {
+    background:#ffffff;
+    border-radius:3px 0px 0px 3px;
+    border: 1px solid #651d93;
+    color: #651d93;
+}
+.price-stores .vip-cost span:last-child {
+    background:#651d93;
+    border-radius:0px 3px 3px 0px;
+    border: 1px solid #651d93;
+    font-weight: 900;
+    color: #ffffff;
+}
+.price-stores .vip-cost.active span:first-child {
+    color: #651d93;
+    background-color: #DFCBED;
+}
+.price-stores .vip-cost.active span:last-child {
+    color: #DFCBED;
+}
+.provide-stores {
+    position: absolute;
+    bottom: 0;
+}
+.provide-stores span {
+    font-size:11px;
+    color:#888888;
+    text-align:left;
+    margin-right: 10px;
+    word-wrap: normal;
+    display: inline-block;
+    margin-bottom: 5px;
+}
+.provide-stores i {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 12px;
+    margin-right: 4px;
+    color:#7cdfa8;
+}
+.specifics {
+    padding-bottom: 0;
+}
+.specifics dl dt {
+    color: #888;
+    margin-bottom: 12px;
+    font-weight: 400;
+}
+.specifics dl dd {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e4e4e4;
+    margin-bottom: 7px;
+}
+
+.specifics .service {
+    margin-bottom: 0;
+}
+.specifics .service li {
+    float: left;
+    width: 25%;
+}
+.specifics .service i {
+    display: block;
+    width: 44px;
+    height: 44px;
+    margin-bottom: 3px;
+}
+.specifics .service .service-1 i {
+    background: url(../images/service_sp.png) no-repeat 0 0;
+    background-size: 269px 44px;
+}
+.specifics .service .service-2 i {
+    background: url(../images/service_sp.png) no-repeat -75px 0;
+    background-size: 269px 44px;
+}
+.specifics .service .service-3 i {
+    background: url(../images/service_sp.png) no-repeat -150px 0;
+    background-size: 269px 44px;
+}
+.specifics .service .service-4 i {
+    background: url(../images/service_sp.png) no-repeat -225px 0;
+    background-size: 269px 44px;
+}
+.specifics .service span {
+    color: #888;
+    line-height: 12px;
+}
+.specifics .service p {
+    color: #cccccc;
+    font-size: 11px;
+    line-height: 24px;
+    margin: 0;
+    padding: 0;
+}
+
+.specifics dl dd>dl {
+    float: left;
+    color: #888;
+    margin-right: 16px;
+}
+.specifics dl dd>dl dt {
+    margin-bottom: 5px;
+}
+.specifics dl dd>dl dd {
+    border-bottom: none;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+    line-height: 16px;
+}
+.specifics dl dd>dl dd strong {
+    font-size:14px;
+    color:#7cdfa8;
+    padding: 0 3px;
+}
+.active-i:before {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'NaiveBlueSymbols' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    content: '\e936';
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 12px;
+    margin-right: 4px;
+    color:#7cdfa8;
+
+}
+.more {
+    text-align: center;
+    font-size:12px;
+    color:#aaaaac;
+    line-height:36px;
+    margin-bottom: 0;
+    display: block;
+}
+.more:active {
+    background-color: #f3f3f3;
+}
+.more span:after {
+    background: url(../images/arrow_gray_down_10_6.png) no-repeat;
+    background-size: 100%;
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    width: 10px;
+    height: 6px;
+    margin-left: 5px;
+}
+.product-desc {
+
+}
+.app-body {
+    padding-bottom: 63px;
+    height: auto;
+    max-width: 960px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.action {position: fixed; bottom: 0; left: 0; width: 100%; padding:10px 0; border-top: 1px solid #D8D8D8; background-color: #ffffff;}
+.action .nb-btn {
+    display: inline-block;
+    margin: 0 8px;
+    width: 137px;
+}
+
+.sibling-products .nb-btn {
+    display: inline-block;
+    margin: 0 8px 0 0;
+    width: 137px;
+}

@@ -1,0 +1,204 @@
+<div id="toolbar-submenu" class="toolbar-submenu">
+    <ul class="ts-menu" id="ts-menu">
+        <li><a href="?c=project&a=book"><i class="icon-order"></i>开始预约</a></li>
+        <li><a href="?c=order&a=myorder"><i class="icon-orderlist"></i>我的订单</a></li>
+        <li><a href="?c=order&a=Personal"><i class="icon-profile"></i>个人资料</a></li>
+        <li><a href="?c=order&a=help"><i class="icon-notice"></i>拍摄须知</a></li>
+    </ul>
+    <div class="mask"></div>
+</div>
+
+<div id="alert-dialog" class="alert-dialog" style="display: none;">
+    <div class="alert-box">
+        <a href="javascript:$('#alert-dialog').hide();" class="close icon-close"></a>
+        <div class="alert-header">
+            <i class="icon-warning"></i>
+        </div>
+        <div class="alert-content">
+        </div>
+        <div class="alert-footer">
+            <a href="javascript:void(0)" class="action-btn">好</a>
+        </div>
+    </div>
+    <div class="mask"></div>
+</div>
+
+<?php if($storeInfo){ ?>
+<style>
+    .store-address-dialog {
+        color: #888888;
+        position: fixed;
+    }
+    .store-address-dialog .icon-store-info2 {
+        font-size: 48px;
+    }
+    .store-address-dialog .dialog-box-header {
+        border-bottom-color: #f3f3f3;
+        margin: 0 15px 10px;
+    }
+    .store-address-dialog .dialog-box {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-top: -120px;
+        margin-left: -145px;
+        padding: 0;
+        overflow: hidden;
+    }
+    .store-address-dialog .dialog-box-content {
+        border-bottom: none;
+        padding: 0 15px;
+    }
+    .store-address-dialog .dialog-box-content p {
+        position: relative;
+        padding-left: 22px;
+        margin-bottom: 19px;
+    }
+    .store-address-dialog p i {
+        position: absolute;
+        top: 3px;
+        left: 0;
+        width: 12px;
+        height: 12px;
+    }
+    .store-address-dialog .desc p {
+        padding: 0;
+        margin: 0;
+    }
+    .store-address-dialog a.tela {
+        padding: 7px 14px;
+        border: 1px solid #e4e4e4;
+        border-radius: 3px;
+        color: #888888;
+    }
+    .store-address-dialog a.tela:hover {
+        background:#e4e4e4;
+    }
+    .store-address-dialog a.tela:active {
+        background-color: #cccccc;
+        border-color: #cccccc;
+        color: #FFFFFF;
+    }
+</style>
+<div class="nb-dialog store-address-dialog" style="display: none;">
+    <div class="dialog-box">
+        <div class="dialog-box-header">
+            <p><span class="icon-store-info2"></span></p>
+            <p style="height: 31px;"><?=$storeInfo['name']?></p>
+            <a href="javascript:$('.store-address-dialog').hide();" class="icon-close close"></a>
+        </div>
+        <div class="dialog-box-content list" style="font-size: 12px;">
+            <p><i class="icon-location-gray"></i><?=$storeInfo['address']?></p>
+            <p><i class="icon-phone2"></i><a href="tel:<?=$storeInfo['tel']?>" class="tela" style=""><?=$storeInfo['tel']?></a></p>
+            <p><i class="icon-email"></i><?=$storeInfo['email']?></p>
+            <p><i class="icon-bus"></i><?=$storeInfo['transit']?></p>
+        </div>
+        <div class="desc"></div>
+    </div>
+    <div class="mask"></div>
+</div>
+<?php } ?>
+
+<script src="<?=$tpl_dir?>/yue/js/jQuery-2.1.4.min.js"></script>
+<script type="text/javascript">
+
+    $('#toolbar-menu').click(function(){
+        var mentEl = $(this).find('[data-role="icon-ment"]');
+        $('#toolbar-submenu').toggle();
+        if (mentEl.hasClass('icon-menu')) {
+            mentEl.removeClass('icon-menu');
+            mentEl.addClass('icon-arrow-right');
+        } else {
+            mentEl.addClass('icon-menu');
+            mentEl.removeClass('icon-arrow-right');
+        }
+
+        setTimeout(function() {
+            $('#ts-menu').toggleClass('ts-menu-active');
+        }, 0);
+    });
+
+
+    $('#toolbar-back').click(function(){
+
+        if($('#schedules-calender-open').length)
+        {
+            if(!$('#schedules-calender-open').hasClass('schedules-calender-open-show'))
+            {
+                $('#schedules-calender-open').addClass('schedules-calender-open-show');
+                return ;
+            }
+        }
+
+        history.back();
+    });
+
+    $('#toolbar-submenu').on('click', '.mask', function() {
+        $('#toolbar-submenu').hide();
+        var mentEl = $('#toolbar-menu').find('[data-role="icon-ment"]');
+        if (mentEl.hasClass('icon-menu')) {
+            mentEl.removeClass('icon-menu');
+            mentEl.addClass('icon-arrow-right');
+        } else {
+            mentEl.addClass('icon-menu');
+            mentEl.removeClass('icon-arrow-right');
+        }
+        $('#ts-menu').removeClass('ts-menu-active');
+    });
+
+    if (window['runParams'] && runParams.toolbarLocationShow) {
+
+        if(runParams.toolbarBackTo=='citylists')
+        {
+            $('#toolbar-location').show().on('click', function() {
+                window.location.href="?c=project&a=city";
+            });
+        }
+        else if(runParams.toolbarBackTo=='city-addrs')
+        {
+            $('#toolbar-location').show().on('click', function() {
+                window.location.href="?c=project&a=city";
+            });
+        }
+        else
+        {
+            $('#toolbar-location').hide();
+            $('#toolbar-back').show();
+        }
+
+    }
+
+    function customAlert(status, message, actionText, callback) {
+        var statusClass = '';
+        if(status == 'error') {
+            statusClass = 'error';
+            $('#alert-dialog').addClass(statusClass);
+        }
+
+        $('#alert-dialog .alert-content').html(message);
+        $('#alert-dialog .action-btn').html(actionText);
+        $('#alert-dialog .action-btn').on('click', function() {
+            if (callback != null) {
+                callback($('#alert-dialog'));
+            }
+            $('#alert-dialog').hide();
+        });
+        $('#alert-dialog').show();
+        var h = $('#alert-dialog .alert-box').height();
+        $('#alert-dialog .alert-box').height(h);
+        $('#alert-dialog .alert-box').css('margin-top', -h/2)
+    }
+
+    /*<?php if($storeInfo){ ?>*/
+    $('.check-address').on('click', function() {
+        $('.store-address-dialog').toggle();
+        var h = $('.store-address-dialog .dialog-box').height();
+        $('.store-address-dialog .dialog-box').css({
+            'height': h + 'px',
+            'margin-top': -h/2+'px'
+        });
+
+    });
+    /*<?php } ?>*/
+
+</script>

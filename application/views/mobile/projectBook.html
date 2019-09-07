@@ -1,0 +1,228 @@
+﻿<?php include('header.html') ?>
+
+<link href="<?=$tpl_dir?>/yue/css/notice.css" rel="stylesheet" type="text/css">
+
+<div class="app">
+    <div class="toolbar">
+        <div class="toolbar-logo"><img src="<?=$tpl_dir?>/imgs/logo.png"></div>
+        <div class="toolbar-menu" id="toolbar-menu"><a href="javascript:void(0)" data-role="icon-ment" class="icon-menu"></a></div>
+
+    </div>
+
+    <div class="app-body">
+
+        <div class="notice-wrap">
+            <h2>欢迎来到十七平</h2>
+            <div class="content">
+                <dl class="notice-dl">
+                    <dt>预约项目说明</dt>
+                    <dd>
+                        <ul class="intro">
+                            <li>
+                                预约成功后订单不可更改，如需取消将产生订金损失，退款规则如下：
+                                <p style="margin-top:6px;margin-bottom:8px;line-height: 1.4">
+                                    <? foreach($refund_rule as $k=>$v){ ?>
+                                    <?=$v['mark']?><br />
+                                    <? } ?>
+                                </p>
+                            </li>
+                            <li>如未按预定日期到店，订单则视为放弃，定金将不予退还。</li>
+                            <li>我们会提供精修后的数码底片，不提供未经处理的原始拍摄文件。</li>
+                            <li>除登记照外，暂时仅支持单人预约，如需多人请分别预约。</li>
+                        </ul>
+                    </dd>
+                </dl>
+
+            </div>
+
+            <div class="action" id="actionBox">
+
+
+                <p style="font-size:1.2em;margin-top: 0;padding-top:0;padding-bottom:15px;color:#7CDFA8;" id="agreeWrapper">
+                    <input type="checkbox" value="1" id="agreeCheckbox">
+                    <b style="font-weight:bold;display: inline-block; background:white;">我同意上述条款</b>
+                </p>
+
+
+                <a href="javascript:void(0);" id="goBooking" class="<?php if(!$userinfo['telephone']){ ?>validateTel<?php } ?> nb-btn nb-btn-disable">开始预约</a>
+                <a href="?c=order&a=myorder" class="nb-btn nb-btn-default">我的订单</a>
+
+            </div>
+        </div>
+
+
+        <div id="page-mask" class="page-mask"></div>
+    </div>
+</div>
+
+<?php include('rightMenu.html') ?>
+
+<script src="//res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+
+    /*<?php if(isset($jssdk) && $jssdk){ ?>*/
+        wx.config({
+            debug: false,
+            appId: "<?=$jssdk['appId']?>",
+            timestamp: "<?=$jssdk['timestamp']?>",
+            nonceStr: "<?=$jssdk['nonceStr']?>",
+            signature: "<?=$jssdk['signature']?>",
+            jsApiList: [
+                'hideMenuItems',
+                'onMenuShareTimeline',
+                'onMenuShareAppMessage',
+                'previewImage',
+                'getLocation',
+                'chooseWXPay'
+            ]
+        });
+        wx.ready(function () {
+            wx.hideMenuItems({
+                menuList: [
+                    'menuItem:share:qq',
+                    'menuItem:share:weiboApp',
+                    'menuItem:share:facebook',
+                    'menuItem:share:QZone'
+                ]
+            });
+            JSAPI.getLocation(function(location){
+                location_city = location || '';
+                gpsCheckTimeUp = true;
+            },function(err){
+                gpsCheckTimeUp = true;
+            });
+        });
+    /*<?php } ?>*/
+
+    var JSAPI = {
+        getLocation: function(success, fail){
+            var local_location = localStorage.getItem('data-location') || [];
+            if(local_location.length){
+                local_location = JSON.parse(local_location);
+                if(local_location['lastCacheTime'] > (new Date().getTime())){
+                    success(local_location['citycode']);
+                    return;
+                }
+            }
+            wx.getLocation({
+                type: 'gcj02',
+                success: function(res){
+                    if(res.errMsg == 'getLocation:ok'){
+                        $.getJSON('?ajax=1&c=order&a=getLocation&lon='+res.longitude+'&lat='+res.latitude,function(data){
+                            if(data && data.errorcode === 0){
+                                if(data.data){
+                                    localStorage.setItem('data-location', JSON.stringify({citycode:data.data,lastCacheTime:(new Date().getTime()+86400000)}));
+                                }
+                                success(data.data);
+                            }else{
+                                fail && fail(data.data);
+                            }
+                        });
+                    }else{
+                        fail && fail(res.errMsg);
+                    }
+                },
+                cancel: function(res){
+                    fail && fail('获取位置不可用');
+                },
+                fail: function(res){
+                    fail && fail('未获取到位置')
+                }
+            });
+        }
+    };
+
+    //wait maximum 5 seconds for gps
+    var location_city='';
+    var gpsCheckTimeUp=false;
+    setTimeout(function () {
+        gpsCheckTimeUp=true;
+    }, 6000);
+
+    function decideBtn()
+    {
+        setTimeout(function () {
+
+            if($('#agreeCheckbox').is(':checked'))
+                $('#goBooking').removeClass('nb-btn-disable').addClass('nb-btn-primary');
+            else
+                $('#goBooking').removeClass('nb-btn-primary').addClass('nb-btn-disable');
+
+        }, 100);
+
+
+    }
+
+    $firstClick=false;
+    $('#agreeWrapper').on('click', function() {
+
+        if($firstClick)
+            return ;
+
+        $firstClick=true;
+
+        $('#agreeCheckbox').prop('checked',true).triggerHandler('click');
+
+        decideBtn();
+    });
+
+    $('#agreeCheckbox').on('click',function(){
+        decideBtn();
+    });
+
+    var $simpleTextLoadingTimer;
+    function simpleTextLoading($id, $prefix, $rear)
+    {
+        // List of words to loop on
+        var words = ['...','','.', '..'];
+
+        // Index of the words array
+        var index = 0;
+
+        $simpleTextLoadingTimer=window.setInterval(function(){
+            $($id).html($prefix+words[index]+$rear);
+            // Increment the index modulo the length of words: 0, 1, 2, 0, 1, 2, etc
+            index = (index+1) % words.length;
+        }, 500);
+    }
+
+
+    $('#goBooking').on('click', function() {
+
+        if($(this).hasClass('nb-btn-disable'))
+            return;
+
+        if($(this).hasClass('validateTel'))
+        {
+            window.location.href = '?c=order&a=personal&referer='+encodeURIComponent(window.location.href);;
+            return ;
+        }
+
+        if(gpsCheckTimeUp!=true)
+            simpleTextLoading('#goBooking','门店定位中','');
+
+        var IntID = setInterval(function() {
+
+            if(gpsCheckTimeUp==true)
+            {
+                if (location_city) {
+                    window.location.href = "?c=project&a=select&citycode="+location_city;
+                } else {
+                    window.location.href = "?c=project&a=city";
+                }
+
+                clearInterval(IntID);
+            }
+
+        }, 300);
+
+    });
+
+    $(function () {
+        $('#actionBox').removeClass('softhide');
+    });
+
+
+</script>
+
+<?php include('footer.html') ?>

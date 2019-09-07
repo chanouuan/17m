@@ -87,8 +87,8 @@ class Order_Action extends ActionPDO {
                 if (!$cityname) {
                     $this->error('城市未开通', '/?c=order&a=createorder&step=city', 0);
                 }
-                $productlistA = $categorymodel->getCategory(null, 'type=0');
-                $productlist = $categorymodel->getCategory(null, 'type=1');
+                $productlistA = $categorymodel->getCategory(null, 'project_id = 1 and type=0');
+                $productlist = $categorymodel->getCategory(null, 'project_id = 1 and type=1');
                 $result = array(
                         'productlist' => $productlist,
                         'productlistA' => $productlistA,

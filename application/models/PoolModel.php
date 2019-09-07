@@ -11,11 +11,69 @@ class PoolModel {
         $this->db = & Db::getInstance();
     }
 
+    /**
+     * 获取预约排班
+     */
+    public function getScheduleDays ($store_id, $schedule_days = 15)
+    {
+        $date = [];
+        for ($i = 0; $i < $schedule_days; $i++) {
+            $date[] = date('Y-m-d', TIMESTAMP + 86400 * $i);
+        }
+
+        $condition = [
+            'storeid = ' . $store_id,
+            'today in (' . ('"' . implode('","', $date) . '"') . ')',
+            'starttime > "' . date('Y-m-d H:i:s', TIMESTAMP) . '"'
+        ];
+
+        $condition = implode(' and ', $condition);
+        // 获取排班剩号数
+        $poolList = $this->db->table('pro_pool')->field('today,sum(maxcount) as maxcount')->where($condition)->group('today')->select();
+
+        if ($poolList) {
+            $poolList = array_column($poolList, 'maxcount', 'today');
+            // 获取未过期占号
+            $condition = [
+                'storeid = ' . $store_id,
+                'status = 0',
+                'createtime > "' . date('Y-m-d H:i:s', TIMESTAMP - 1200) . '"'
+            ];
+            $condition = implode(' and ', $condition);
+            $orderPool = $this->db->table('pro_order')->field('left(ordertime,10) as today,count(*) as count')->where($condition)->group('today')->select();
+            if ($orderPool) {
+                $orderPool = array_column($orderPool, 'count', 'today');
+                foreach ($poolList as $k => $v) {
+                    // 减去占号数
+                    if (isset($orderPool[$k])) {
+                        $poolList[$k] = min(0, $v - $orderPool[$k]);
+                    }
+                }
+            }
+        }
+
+        $week = [
+            0 => '周日', 1 => '周一', 2 => '周二', 3 => '周三', 4 => '周四', 5 => '周五', 6 => '周六'
+        ];
+        // 格式化
+        foreach ($date as $k => $v) {
+            $time = strtotime($v);
+            $date[$k] = [
+                'week'   => $week[date('w', $time)],
+                'month'  => date('n', $time),
+                'day'    => date('j', $time),
+                'amount' => intval($poolList[$v])
+            ];
+        }
+
+        return $date;
+    }
+
     public function getPool ($code = '')
     {
         if ($code == "") {
             $rs = $this->db->table('~city~')->field('*')->select();
-        
+
         } else {
             $rs = $this->db->table('~city~')->field('*')->where('code=' . $code)->find();
         }
@@ -33,7 +91,7 @@ class PoolModel {
         $rs = $this->db->find($sql);
         return $rs;
     }
-    
+
     public function getPoolCount($where)
     {
         return $this->db->table('~pool~')->field('count(*)')->where($where)->find(null, true);
@@ -69,7 +127,7 @@ class PoolModel {
         }
         return true;
     }
-    
+
     public function getTodayPool($today, $storeid)
     {
         $storeid = intval($storeid);

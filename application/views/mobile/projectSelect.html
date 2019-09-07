@@ -1,27 +1,17 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta content="text/html; charset=UTF-8">
-    <meta name="format-detection" content="telephone=no">
-    <meta content="width=320, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title></title>
-    <meta name="keywords" content="">
-    <meta name="description" content="">
+<?php include('header.html') ?>
 
-    <link href="<?=$tpl_dir?>/yue/css/bootstrap.min.css?v=3.1" rel="stylesheet" type="text/css">
-    <link href="<?=$tpl_dir?>/yue/css/common6.css" rel="stylesheet" type="text/css">
-    <link href="<?=$tpl_dir?>/yue/css/products11.css?v=3.1" rel="stylesheet" type="text/css">
+<link href="<?=$tpl_dir?>/yue/css/products11.css" rel="stylesheet" type="text/css">
 
-</head>
-<body>
 <div class="app">
     <div class="toolbar">
-        <div class="toolbar-logo"><img src="<?=$tpl_dir?>/imgs/logo.png"></div>
+        <div class="toolbar-logo"><img src="<?=$tpl_dir?>/imgs/logo.png" /></div>
         <div class="toolbar-menu" id="toolbar-menu"><a href="javascript:void(0)" data-role="icon-ment" class="icon-menu"></a></div>
+        <div class="toolbar-location" id="toolbar-location"><a href="javascript:void(0);"><i class="icon-location-white"></i><strong data-role="location"><?=$city_name?></strong><i data-role="arrow" class="icon-arrow-down"></i></a></div>
+
     </div>
 
     <div class="app-body">
-		<div class="captain wrap clearfix">
+		<div class="captain wrap clearfix" style="margin-bottom: 0">
 			<span class="store-name noclick">项目选择</span>
 		</div>
 
@@ -30,7 +20,7 @@
                 <ul class="clearfix">
                         <?php foreach($projects as $v){ ?>
                         <li>
-                            <a href="<?=$v['url']?>">
+                            <a href="?<?=burl(trim($v['url'],'?'))?>">
                                 <span class="photo"><img src="<?=$v['icon']?>"></span>
                                 <span class="title"><?=$v['name']?></span>
                             </a>
@@ -42,47 +32,12 @@
     </div>
 </div>
 
-<div id="toolbar-submenu" class="toolbar-submenu">
-    <ul class="ts-menu" id="ts-menu">
-        <li><a href="?c=project"><i class="icon-order"></i>开始预约</a></li>
-        <li><a href="?c=order&a=myorder"><i class="icon-orderlist"></i>我的订单</a></li>
-        <li><a href="?c=order&a=Personal"><i class="icon-profile"></i>个人资料</a></li>
-        <li><a href="?c=order&a=help"><i class="icon-notice"></i>拍摄须知</a></li>
-    </ul>
-    <div class="mask"></div>
-</div>
+<script>
+    var runParams = {
+        'toolbarLocationShow': true,
+        'toolbarBackTo': "citylists"
+    };
+</script>
 
-    <script src="<?=$tpl_dir?>/yue/js/jQuery-2.1.4.min.js"></script>
-    <script>
-        $('#toolbar-menu').click(function(){
-            var mentEl = $(this).find('[data-role="icon-ment"]');
-            $('#toolbar-submenu').toggle();
-            if (mentEl.hasClass('icon-menu')) {
-                mentEl.removeClass('icon-menu');
-                mentEl.addClass('icon-arrow-right');
-            } else {
-                mentEl.addClass('icon-menu');
-                mentEl.removeClass('icon-arrow-right');
-            }
-
-            setTimeout(function() {
-                $('#ts-menu').toggleClass('ts-menu-active');
-            }, 0);
-        });
-
-        $('#toolbar-submenu').on('click', '.mask', function() {
-            $('#toolbar-submenu').hide();
-            var mentEl = $('#toolbar-menu').find('[data-role="icon-ment"]');
-            if (mentEl.hasClass('icon-menu')) {
-                mentEl.removeClass('icon-menu');
-                mentEl.addClass('icon-arrow-right');
-            } else {
-                mentEl.addClass('icon-menu');
-                mentEl.removeClass('icon-arrow-right');
-            }
-            $('#ts-menu').removeClass('ts-menu-active');
-        });
-
-    </script>
-</body>
-</html>
+<?php include('rightMenu.html') ?>
+<?php include('footer.html') ?>

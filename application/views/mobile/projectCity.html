@@ -1,0 +1,47 @@
+<?php include('header.html') ?>
+
+<link href="<?=$tpl_dir?>/yue/css/city.css" rel="stylesheet" type="text/css">
+
+<div class="app">
+    <div class="toolbar">
+        <div class="toolbar-logo"><img src="<?=$tpl_dir?>/imgs/logo.png"></div>
+        <div class="toolbar-menu" id="toolbar-menu"><a href="javascript:void(0)" data-role="icon-ment" class="icon-menu"></a></div>
+        <div class="toolbar-back" id="toolbar-back"><a href="javascript:void(0);"><i class="icon-arrow-left"></i>上一步</a></div>
+        <div class="toolbar-location" id="toolbar-location"><a href="javascript:void(0);"><i class="icon-location-white"></i><strong data-role="location">not-found</strong><i data-role="arrow" class="icon-arrow-down"></i></a></div>
+
+    </div>
+
+
+    <div class="app-body">
+        <div class="captain wrap" style="margin-bottom: 0">
+            <span class="no-store-tips">城市选择</span> </div>
+        <div class="wrap" style="overflow: hidden; margin-top:1em">
+
+            <p style="font-size:12px;color:#888888;line-height:12px;text-align:justify;margin-bottom: 11px;">请选择下列有十七平创意摄影工作室门店的城市</p>
+
+            <div class="clearfix city-btns" style="margin-bottom:10px;">
+                <?php foreach($list as $v){if(!$v['status'])continue; ?>
+                <div class="city-btn-cell">
+                    <a href="?c=project&a=select&citycode=<?=$v['code']?>"><?=$v['name']?></a>
+                </div>
+                <?php } ?>
+            </div>
+
+            <p style="font-size:12px;color:#888888;line-height:12px;text-align:justify;margin-bottom: 11px;">更多城市敬请期待</p>
+
+            <div class="clearfix city-btns" style="margin-bottom:10px;">
+                <?php foreach($list as $v){if($v['status'])continue; ?>
+                <div class="city-btn-cell"><span><?=$v['name']?></span></div>
+                <?php } ?>
+                <div class="city-btn-cell" style="text-align: center;color:#e4e4e4;font-size: 20px;"><i class="icon-dot"></i><i class="icon-dot"></i><i class="icon-dot"></i></div>
+            </div>
+
+            <div class="tips" style="margin-top:0;">
+                我们正在努力开设更多门店以方便顾客。敬请期待！<br>如果你有店铺及其他资源，欢迎提供给我们，不胜感激！
+            </div></div>
+        <div id="page-mask" class="page-mask"></div>
+    </div>
+</div>
+
+<?php include('rightMenu.html') ?>
+<?php include('footer.html') ?>

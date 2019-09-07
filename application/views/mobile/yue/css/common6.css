@@ -95,7 +95,7 @@ a:active {
     overflow:hidden;
     vertical-align:middle;
     font-size:12px;
-    color:#0033CC;
+    color:#1e82d0;
 }
 .geo-city.arrow {
 
@@ -140,8 +140,8 @@ a:active {
     border:1px solid #b2c7ea;
 }
 .nb-btn.nb-btn-primary {
-    background:#0033CC;
-    border:1px solid #0033CC;;
+    background:#1e82d0;
+    border:1px solid #1e82d0;;
     color: #ffffff;
     font-weight: 900;
 }
@@ -212,11 +212,11 @@ a:active {
     height:50px;
     line-height:50px;
     text-indent:22px;
-    color:#0033CC;
+    color:#1e82d0;
     font-size:14px;
 }
 .toolbar-submenu li a:active {
-    background-color: #0033CC;
+    background-color: #1e82d0;
     color: #ffffff;
 }
 .toolbar-submenu li a:active:after {
@@ -419,13 +419,13 @@ a:active {
     line-height:36px;
     text-align:center;
     display: block;
-    color:#0033CC;
+    color:#1e82d0;
     font-weight: 900;
 }
 
 .city-btns a:active, .city-btns a.active {
-    background:#0033CC;
-    border:1px solid #0033CC;
+    background:#1e82d0;
+    border:1px solid #1e82d0;
     color:#ffffff;
 }
 
@@ -472,13 +472,13 @@ a:active {
     line-height:36px;
     text-align:center;
     display: block;
-    color:#0033CC;
+    color:#1e82d0;
     font-weight: 900;
 }
 
 .city-list li a:active, .city-list li a.active {
-    background:#0033CC;
-    border:1px solid #0033CC;
+    background:#1e82d0;
+    border:1px solid #1e82d0;
     color:#ffffff;
 }
 .city-list li span {

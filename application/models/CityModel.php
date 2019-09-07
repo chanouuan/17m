@@ -17,9 +17,9 @@ class CityModel {
         return $this->db->table('~city~')->field('code')->where('status = 1 and name like "' . $cityname . '%"')->find(null, true);
     }
 
-    public function getCity ($code = '', $where = '')
+    public function getCity ($code = null, $where = '')
     {
-        if ($code == "") {
+        if (!isset($code)) {
             $rs = $this->db->table('~city~')->field('*')->order(" sort asc")->select();
 
         } else {
