@@ -17,7 +17,7 @@
 
         <div class="captain wrap clearfix" style="margin-bottom: 0">
 
-            <span class="store-name noclick">上海五角场店</span>
+            <span class="store-name noclick"><?=$storeInfo['name']?></span>
 
             <span class="check-address"><i class="icon-store-info1"></i>门店信息</span>
         </div>
@@ -71,206 +71,23 @@
             </div>
         </div>
 
-        <div id="schedules-calender-open" class="schedules-calender-open  schedules-calender-open-show">
+        <div id="schedules-calender-open" class="schedules-calender-open  schedules-calender-open-show" style="height: auto">
 
         <div class="flow" style="background-color:#fff;text-align:center;margin-bottom:0;">
             <span class="can-book">可预约</span> <span class="fully">已约满</span>
         </div>
 
         <ul class="clearfix">
-
-            <li data-date="2019-09-07" class="schedule-item disable" style="width: 159.2px;">
+            <?php foreach($schedules as $v){ ?>
+            <li <?php if($v['amount']){ ?> data-role="schedule-date" data-city="<?=$city_name?>" data-productid="<?=$categoryInfo['id']?>" <?php } ?> data-date="<?=$v['date']?>" class="schedule-item <?php if(!$v['amount']){ ?>disable<?php } ?>" style="width: 66px;">
                 <div class="schedule-date">
-                    <span class="month">9月</span>
-                    <strong class="day">7</strong>
+                    <span class="month"><?=$v['month']?>月</span>
+                    <strong class="day"><?=$v['day']?></strong>
                 </div>
-                <div class="schedule-weekly">
-                    周六
-                </div>
+                <div class="schedule-weekly"><?=$v['week']?></div>
                 <div class="schedule-status"></div>
             </li>
-            <li data-role="schedule-date" data-city="上海" data-productid="1" data-date="2019-09-08" class="schedule-item " style="width: 159.2px;">
-                <div class="schedule-date">
-                    <span class="month">9月</span>
-                    <strong class="day">8</strong>
-                </div>
-                <div class="schedule-weekly">
-                    周日
-                </div>
-                <div class="schedule-status"></div>
-            </li>
-
-
-
-            <li data-role="schedule-date" data-city="上海" data-productid="1" data-date="2019-09-09" class="schedule-item " style="width: 159.2px;">
-                <div class="schedule-date">
-                    <span class="month">9月</span>
-                    <strong class="day">9</strong>
-                </div>
-                <div class="schedule-weekly">
-                    周一
-                </div>
-                <div class="schedule-status"></div>
-            </li>
-
-
-
-            <li data-role="schedule-date" data-city="上海" data-productid="1" data-date="2019-09-10" class="schedule-item " style="width: 159.2px;">
-                <div class="schedule-date">
-                    <span class="month">9月</span>
-                    <strong class="day">10</strong>
-                </div>
-                <div class="schedule-weekly">
-                    周二
-                </div>
-                <div class="schedule-status"></div>
-            </li>
-
-
-
-            <li data-role="schedule-date" data-city="上海" data-productid="1" data-date="2019-09-11" class="schedule-item " style="width: 159.2px;">
-                <div class="schedule-date">
-                    <span class="month">9月</span>
-                    <strong class="day">11</strong>
-                </div>
-                <div class="schedule-weekly">
-                    周三
-                </div>
-                <div class="schedule-status"></div>
-            </li>
-
-
-
-            <li data-role="schedule-date" data-city="上海" data-productid="1" data-date="2019-09-12" class="schedule-item " style="width: 159.2px;">
-                <div class="schedule-date">
-                    <span class="month">9月</span>
-                    <strong class="day">12</strong>
-                </div>
-                <div class="schedule-weekly">
-                    周四
-                </div>
-                <div class="schedule-status"></div>
-            </li>
-
-
-
-            <li data-role="schedule-date" data-city="上海" data-productid="1" data-date="2019-09-13" class="schedule-item " style="width: 159.2px;">
-                <div class="schedule-date">
-                    <span class="month">9月</span>
-                    <strong class="day">13</strong>
-                </div>
-                <div class="schedule-weekly">
-                    周五
-                </div>
-                <div class="schedule-status"></div>
-            </li>
-
-
-
-            <li data-role="schedule-date" data-city="上海" data-productid="1" data-date="2019-09-14" class="schedule-item " style="width: 159.2px;">
-                <div class="schedule-date">
-                    <span class="month">9月</span>
-                    <strong class="day">14</strong>
-                </div>
-                <div class="schedule-weekly">
-                    周六
-                </div>
-                <div class="schedule-status"></div>
-            </li>
-
-
-
-            <li data-role="schedule-date" data-city="上海" data-productid="1" data-date="2019-09-15" class="schedule-item " style="width: 159.2px;">
-                <div class="schedule-date">
-                    <span class="month">9月</span>
-                    <strong class="day">15</strong>
-                </div>
-                <div class="schedule-weekly">
-                    周日
-                </div>
-                <div class="schedule-status"></div>
-            </li>
-
-
-
-            <li data-role="schedule-date" data-city="上海" data-productid="1" data-date="2019-09-16" class="schedule-item " style="width: 159.2px;">
-                <div class="schedule-date">
-                    <span class="month">9月</span>
-                    <strong class="day">16</strong>
-                </div>
-                <div class="schedule-weekly">
-                    周一
-                </div>
-                <div class="schedule-status"></div>
-            </li>
-
-
-
-            <li data-role="schedule-date" data-city="上海" data-productid="1" data-date="2019-09-17" class="schedule-item " style="width: 159.2px;">
-                <div class="schedule-date">
-                    <span class="month">9月</span>
-                    <strong class="day">17</strong>
-                </div>
-                <div class="schedule-weekly">
-                    周二
-                </div>
-                <div class="schedule-status"></div>
-            </li>
-
-
-
-            <li data-role="schedule-date" data-city="上海" data-productid="1" data-date="2019-09-18" class="schedule-item " style="width: 159.2px;">
-                <div class="schedule-date">
-                    <span class="month">9月</span>
-                    <strong class="day">18</strong>
-                </div>
-                <div class="schedule-weekly">
-                    周三
-                </div>
-                <div class="schedule-status"></div>
-            </li>
-
-
-
-            <li data-role="schedule-date" data-city="上海" data-productid="1" data-date="2019-09-19" class="schedule-item " style="width: 159.2px;">
-                <div class="schedule-date">
-                    <span class="month">9月</span>
-                    <strong class="day">19</strong>
-                </div>
-                <div class="schedule-weekly">
-                    周四
-                </div>
-                <div class="schedule-status"></div>
-            </li>
-
-
-
-            <li data-role="schedule-date" data-city="上海" data-productid="1" data-date="2019-09-20" class="schedule-item " style="width: 159.2px;">
-                <div class="schedule-date">
-                    <span class="month">9月</span>
-                    <strong class="day">20</strong>
-                </div>
-                <div class="schedule-weekly">
-                    周五
-                </div>
-                <div class="schedule-status"></div>
-            </li>
-
-
-
-            <li data-role="schedule-date" data-city="上海" data-productid="1" data-date="2019-09-21" class="schedule-item " style="width: 159.2px;">
-                <div class="schedule-date">
-                    <span class="month">9月</span>
-                    <strong class="day">21</strong>
-                </div>
-                <div class="schedule-weekly">
-                    周六
-                </div>
-                <div class="schedule-status"></div>
-            </li>
-
-
-
+            <?php } ?>
         </ul>
 
         <div class="schedules-calender-open-action">
@@ -295,10 +112,10 @@
     var weekAry = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
     var city = '上海';
     var tag = 'default';
-    var productId = '1';
+    var productId = "<?=$categoryInfo['id']?>";
     var productScreenCount = '1';
 
-    var storeId = '1';
+    var storeId = "<?=$storeInfo['id']?>";
 
     (function(){
         var opw = $('#schedules-calender-open').width();
@@ -324,7 +141,7 @@
         }, 500);
     }
 
-    startLoading();
+    // startLoading();
 
 
     function buildScheduleItems(allSches) {
@@ -344,9 +161,9 @@
         for (var i = 0; i < scheNums + padNum; i++) {
             var isPadding = allSches[i];
             if (isPadding) {
-                scheHtmlArr.push(buildScheculeItem( allSches[i].time, (allSches[i].leFT-productScreenCount<0), false));
+                scheHtmlArr.push(buildScheculeItem( allSches[i].id, allSches[i].time, (allSches[i].leFT-productScreenCount<0), false));
             } else {
-                scheHtmlArr.push(buildScheculeItem( null, null, true));
+                scheHtmlArr.push(buildScheculeItem(0, null, null, true));
             }
         }
         scheHtmlArr.push('</div>');
@@ -357,7 +174,7 @@
         $('.schedules-box').html(htmlAry.join(''));
     }
 
-    function buildScheculeItem( time, isDisable, isPadding) {
+    function buildScheculeItem(poolid, time, isDisable, isPadding) {
         if (isPadding) {
             return '<a class="schedule-item padding">&nbsp;</a>';
         } else {
@@ -365,7 +182,7 @@
             if (isDisable) {
                 disableClass = 'disable';
             }
-            return '<a data-role="schedule-item" data-time="'+time+'" class="schedule-item '+disableClass+'" href="javascript:;">'+time+'</a>';
+            return '<a data-role="schedule-item" data-poolid="'+poolid+'" data-time="'+time+'" class="schedule-item '+disableClass+'" href="javascript:;">'+time+'</a>';
         }
     }
 
@@ -373,7 +190,7 @@
         $('#loadingBox').show();
         $('#schedules-box').hide();
         $.ajax({
-            'url': '/api/book/store/cal-schedule-for-store-on-date',
+            'url': "?<?=burl('a=times')?>",
             'data': {
                 'tag': tag,
                 'storeId': storeId,
@@ -432,9 +249,9 @@
 
 
 
-    function showConfirm( time) {
+    function showConfirm( time, poolid) {
         var dateTime = $('#schedule-selected').html() + " " + time;
-        var store = '上海五角场店';
+        var store = "<?=$storeInfo['name']?>";
 
         $('#schedule-confirm').find('[data-role="date-time"]').html(dateTime);
         $('#schedule-confirm').find('[data-role="store"]').html(store);
@@ -450,7 +267,7 @@
         var dd = new Date(selectDate);
         var week = weekAry[dd.getDay()];
 
-        $('#schedule-confirm').find('[data-role="ok"]').attr('href', '/book/select-combos?storeId='+storeId+'&date='+selectDate+'&time='+time+'&productId='+productId+'&tag='+tag+'&week='+week+'&combos=');
+        $('#schedule-confirm').find('[data-role="ok"]').attr('href', "?<?=burl('a=create')?>&poolid="+poolid);
 
 
 
@@ -468,10 +285,11 @@
         }
 
         var time = $(this).attr('data-time');
+        var poolid = $(this).attr('data-poolid');
         $('[data-role="schedule-item"]').removeClass('active');
         $(this).addClass('active');
 
-        showConfirm( time);
+        showConfirm( time, poolid);
     });
 
     // 镜花填写地址

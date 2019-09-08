@@ -12,6 +12,59 @@ class PoolModel {
     }
 
     /**
+     * 获取排班时间
+     * @param $store_id 门店
+     * @param $date 日期 xxxx-xx-xx
+     * @return array
+     */
+    public function getScheduleTimes ($store_id, $date)
+    {
+        $time = strtotime($date);
+        if ($time < TIMESTAMP - 86400) {
+            return [];
+        }
+
+        $condition = [
+            'storeid = ' . $store_id,
+            'today = "' . date('Y-m-d', $time) . '"',
+            'starttime > "' . date('Y-m-d H:i:s', TIMESTAMP) . '"'
+        ];
+
+        $condition = implode(' and ', $condition);
+        // 获取排班
+        if (!$poolList = $this->db->table('pro_pool')->field('id,right(starttime,8) as time,maxcount')->where($condition)->order('starttime asc')->select()) {
+            return [];
+        }
+
+        // 获取未过期占号
+        $condition = [
+            'storeid = ' . $store_id,
+            'poolid in (' . implode(',', array_column($poolList, 'id')) . ')',
+            'status = 0',
+            'createtime > "' . date('Y-m-d H:i:s', TIMESTAMP - 1200) . '"'
+        ];
+        $condition = implode(' and ', $condition);
+        $orderPool = $this->db->table('pro_order')->field('poolid,count(*) as count')->where($condition)->group('poolid')->select();
+        if ($orderPool) {
+            $orderPool = array_column($orderPool, 'count', 'poolid');
+            foreach ($poolList as $k => $v) {
+                // 减去占号数
+                if (isset($orderPool[$v['id']])) {
+                    $poolList[$k]['maxcount'] = min(0, $v['maxcount'] - $orderPool[$v['id']]);
+                }
+            }
+        }
+
+        // 格式化输出
+        foreach ($poolList as $k => $v) {
+            $poolList[$k]['time'] = substr($v['time'], 0, 5);
+            $poolList[$k]['leFT'] = $v['maxcount'];
+        }
+
+        return $poolList;
+    }
+
+    /**
      * 获取预约排班
      */
     public function getScheduleDays ($store_id, $schedule_days = 15)
@@ -59,6 +112,7 @@ class PoolModel {
         foreach ($date as $k => $v) {
             $time = strtotime($v);
             $date[$k] = [
+                'date'   => $v,
                 'week'   => $week[date('w', $time)],
                 'month'  => date('n', $time),
                 'day'    => date('j', $time),
