@@ -1,0 +1,407 @@
+<?php include('header.html') ?>
+
+<link href="<?=$tpl_dir?>/yue/css/order.css?v=3.1" rel="stylesheet" type="text/css">
+
+<div class="app">
+    <div class="toolbar">
+        <div class="toolbar-logo"><img src="<?=$tpl_dir?>/imgs/logo.png"></div>
+        <div class="toolbar-menu" id="toolbar-menu"><a href="javascript:void(0)" data-role="icon-ment" class="icon-menu"></a></div>
+        <div class="toolbar-back" id="toolbar-back"><a href="javascript:void(0);"><i class="icon-arrow-left"></i>上一步</a></div>
+
+    </div>
+
+
+    <div class="app-body">
+        <form id="order-form" method="post" action="?<?=burl('a=createCard')?>" onsubmit="$('input').blur();return false;">
+            <input type="hidden" name="poolid" value="<?=$poolInfo['id']?>">
+            <input type="hidden" name="category_id" value="<?=$categoryInfo['id']?>">
+
+            <div class="wrap">
+                <div class="order-info">
+                    <h4>确认订单</h4>
+
+
+                    <!-- <h5>拍摄信息</h5> -->
+                    <ul style="border-bottom:1px solid #E4E4E4;">
+                        <li class="oi-vip">
+                            <label>预约日期：</label>
+                            <div><?=$poolInfo['ordertime']?></div>
+                        </li>
+
+                        <li class="oi-address">
+                            <label>预约门店：</label>
+                            <div><p><?=$storeInfo['name']?></p></div>
+                        </li>
+
+                        <li>
+                            <label>预约姓名：</label>
+                            <div class="ui-input" style="padding: 0;width: 110px">
+                                <input autocomplete="off" maxlength="20" placeholder="请输入预约姓名" type="text" value="<?=$userInfo['nickname']?>" id="buyer" name="buyer"/>
+                            </div>
+                        </li>
+                        <li><label>手机号码：</label><div><?=$userInfo['telephone']?></div></li>
+                        <li><label>为了确保顺利拍摄，请填写真实姓名和电话。</label></li>
+                    </ul>
+
+                    <input type="hidden" name="contains_jinghua" value="no">
+
+
+                    <ul class="oi-products">
+                        <li>
+                            <label><b>套餐信息</b></label>
+                            <div id="order-products">
+                                <table>
+                                    <tbody><tr data-price="<?=$price?>" data-screencount="1">
+                                        <th><?=$categoryInfo['name']?></th>
+                                        <!--<td>x1 份</td>-->
+                                    </tr>
+                                    </tbody></table>
+                                <!-- <em>套餐可至门店更改，以最终拍摄为准</em> -->
+                            </div>
+                        </li>
+                    </ul>
+
+                    <?php if($categoryInfo['delay']){ ?>
+                    <ul class="oi-time" style="padding-top:0">
+                        <li>
+                            <label><b>预计耗时</b></label>
+                            <div>
+                                <p>约<?=$categoryInfo['delay']?>小时</p>
+                                <!-- <em>时长仅供参考，请预留充足的时间</em> -->
+                            </div>
+                        </li>
+                    </ul>
+                    <?php } ?>
+
+                    <ul class="oi-coupon none" id="order-coupon-wrapper" style="border-top:1px solid #E4E4E4;">
+                        <li>
+                            <label><b>优惠码</b></label>
+                            <div>
+                                <span class="ui-input" id="span-coupon">
+                                    <input autocomplete="off" maxlength="8" name="coupon" placeholder="" type="text" id="coupon-code-input">
+                                    <a href="javascript:;" class="ui-input-clear icon-fail-fill"></a>
+                                </span>
+                                <p>可不填</p>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <ul class="order-info-price" style="border-top:1px solid #E4E4E4;overflow: show;">
+                        <li style="width:60%;height:auto;min-height:40px;">
+                            <b>订单金额</b>
+                            <span style="display: inline-block;margin-right:10px">￥<b id="price-total"><?=$price?></b></span>
+                            <a href="javascript:;" style="display:inline-block;color:#888; text-decoration:underline!important;" onclick="$('#order-coupon-wrapper').slideToggle();$(this).slideUp();$('#coupon-code-input').focus();">我有优惠码</a>
+                        </li>
+
+                        <li style="width:40%;">
+                            <b>支付金额</b>
+                            <span>￥<b id="deposit" data-deposit="<?=$downpay_percent?>"><?=$price?></b></span>
+                        </li>
+                    </ul>
+
+                    <ul class="oi-products" style="border-top:1px solid #E4E4E4;">
+                        <li>
+                            <label for="fullpay"><b>付全款</b></label>
+                            <div><input onclick="this.checked?$('#deposit').text('<?=$price?>'):$('#deposit').text('<?=$downpay_percent?>')" name="fullpay" id="fullpay" type="checkbox" value="1" checked/></div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="order-tips order-tips-active" id="order-tips" style="margin-bottom:6em">
+                    <div class="order-tips-n">
+                        <!-- <p>请核对订单内容,付款后若取消订单,订金将受损失</p> -->
+                        <a href="javascript:;" class="icon-arrow-down open"><span class="icon-warning">查看退款规则</span></a>
+                    </div>
+                    <div class="order-tips-a" style="padding-bottom:1em">
+                        <!-- <span class="icon-close closed"></span> -->
+                        <h6 class="icon-warning">退款规则</h6>
+                        <? foreach($refund_rule as $k=>$v){ ?>
+                        <p>·<?=$v['mark']?></p>
+                        <? } ?>
+                        <!-- <a href="javascript:;" class="icon-arrow-up closed"></a> -->
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="action order-btn">
+                <a href="?c=marry&a=products&store_id=<?=$storeInfo['id']?>" class="order-back">重选套餐</a>
+                <a href="javascript:void(0);" id="confirm-order" class="order-confirm">确认并支付</a>
+            </div>
+        </form>
+
+
+
+
+
+
+
+        <div id="page-mask" class="page-mask"></div>
+    </div>
+</div>
+
+<?php include('rightMenu.html') ?>
+
+<script>
+    var totalPrice = 180;
+    var isVip = 0;
+
+    var couponCost = 0;
+    var finalDeposit=60;
+
+    var $loadingTimer;
+    function startLoading($buttonID, $text)
+    {
+        // List of words to loop on
+        var words = [$text+'...',$text,$text+'.', $text+'..'];
+
+        var index = 0;
+        $($buttonID).html(words[index]);
+        // Index of the words array
+
+        $loadingTimer=window.setInterval(function(){
+            index = (index+1) % words.length;
+            $($buttonID).html(words[index]);
+            // Increment the index modulo the length of words: 0, 1, 2, 0, 1, 2, etc
+        }, 500);
+    }
+
+    // 验证coupon
+    (function(){
+        var node = $('#order-coupon-wrapper').find('input');
+        var validateCoupon = function(){
+            var coupon = node.val().replace(/\s/g, '');
+            if(coupon.length == 8)
+            {
+                $.getJSON("?c=marry&a=coupon&storeid=<?=$storeInfo['id']?>&code="+ coupon, function(result){
+                    if(result.isValid){
+                        node.parents('.oi-coupon')
+                            .removeClass('oi-coupon-error')
+                            .removeClass('oi-coupon-empty')
+                            .addClass('oi-coupon-success')
+                            .find('p').css({
+                            paddingTop: '3px',
+                            lineHeight: '15px',
+                            height: 'auto',
+                            color: '#7CDFA8',
+                        }).html(result.error_msg);
+
+                    }else{
+                        node.parents('.oi-coupon')
+                            .removeClass('oi-coupon-success')
+                            .removeClass('oi-coupon-empty')
+                            .addClass('oi-coupon-error')
+                            .find('p').css({
+                            paddingTop: (result.error_msg.indexOf('<br />')>-1?'3px':'0'),
+                            lineHeight: (result.error_msg.indexOf('<br />')>-1?'15px':'36px'),
+                            color: '#FF8571'
+                        }).html(result.error_msg);
+                    }
+
+                });
+            }
+            else
+            {
+                if(coupon.length > 0)
+                {
+                    node.parents('.oi-coupon')
+                        .removeClass('oi-coupon-success')
+                        .addClass('oi-coupon-empty')
+                        .find('p').css({
+                        paddingTop: 0,
+                        lineHeight: '36px',
+                        fontWeight: 100,
+                        color: '#FF8571'
+                    }).html('7~8位字母数字');
+                }
+                else
+                {
+                    node.parents('.oi-coupon')
+                        .removeClass('oi-coupon-error')
+                        .removeClass('oi-coupon-success')
+                        .addClass('oi-coupon-empty')
+                        .find('p').html('');
+                }
+                couponCost = 0;
+                var newDepo = (finalDeposit - couponCost);
+                if (newDepo < 0) {
+                    newDepo = 0;
+                }
+                $('#deposit').html(newDepo.toFixed(0));
+            }
+        };
+
+        $('#order-coupon-wrapper').find('input').bind('keyup input', function(){
+            validateCoupon();
+        }).blur(function(){
+            validateCoupon();
+        })
+    })();
+
+    (function(){
+        $('.ui-input').find('input').click(function(e){
+            $('.ui-input-active').removeClass('ui-input-active');
+
+            //if($(this).parents('.utel-box').size() > 0){
+            //     $(this).parents('.utel-box').addClass('utel-box-active');
+            // } else {
+            //     $('.utel-box-active').removeClass('utel-box-active');
+            $(this).parent().addClass('ui-input-active');
+            // }
+
+            if($('#span-coupon').hasClass('ui-input-active')){
+                $('#span-coupon input').keyup();
+                //validateCoupon();
+            }
+            e.stopPropagation();
+        }).end().find('.ui-input-clear').click(function(e){
+
+            $(this).parent().addClass('ui-input-active').find('input').val('');
+            //$(this).parents('.utel-code').removeClass('ui-input-success');
+
+            //console.log($('#order-coupon-wrapper input'))
+            if($('#span-coupon').hasClass('ui-input-active')){
+                $('#span-coupon input').keyup();
+                //validateCoupon();
+            }
+            e.stopPropagation();
+        });
+
+        $('body').click(function(){
+            $('.ui-input-active').each(function(){
+                $(this).removeClass('ui-input-active');
+            })
+        })
+    })();
+
+    $('#confirm-order').on('click',function(){
+
+        var _self = $(this);
+        if(_self.hasClass('order-confirm-disable'))return;
+        $.ajax({
+            type: 'post',
+            url: '?c=order&a=createcard',
+            data: $('#order-form').serialize(),
+            dataType: 'json',
+            timeout: 5000,
+            success: function(data){
+                if(data && data.errorcode === 0){
+                    var cardid = data.data;
+                    $.ajax({
+                        type: 'post',
+                        url: '?ajax=1&c=wxpayjs&a=api',
+                        data: {cardid:cardid},
+                        dataType: 'json',
+                        timeout: 5000,
+                        success: function(data){
+                            if(data && data.errorcode === 0){
+                                JSAPI.chooseWXPay(data.data,function(res){
+                                    $.ajax({
+                                        type: 'post',
+                                        url: '?ajax=1&c=order&a=payquery',
+                                        data: {cardid:cardid},
+                                        dataType: 'json',
+                                        timeout: 5000,
+                                        success: function(data){
+                                            if(data && data.errorcode === 0){
+                                                customAlert('error', '支付成功!', '我的订单', function(){
+                                                    window.location.href = '?c=order&a=myorder';
+                                                });
+                                            }else{
+                                                customAlert('error', data ? data.data : '支付确认', '我的订单', function(){
+                                                    window.location.href = '?c=order&a=myorder';
+                                                });
+                                            }
+                                        },
+                                        error: function(xhr, type){
+                                            customAlert('error', '支付确认', '我的订单', function(){
+                                                window.location.href = '?c=order&a=myorder';
+                                            });
+                                        }
+                                    });
+                                    return;
+                                },function(res){
+                                    customAlert('error', '支付取消!', '我的订单', function(){
+                                        window.location.href = '?c=order&a=myorder';
+                                    });
+                                });
+                            }else{
+                                customAlert('error', data ? data.data : '操作失败', '好', function(){
+                                    window.location.href = '?c=order&a=myorder';
+                                });
+                            }
+                        },
+                        error: function(xhr, type){
+                            customAlert('error', '网络超时，请重试!', '好', function(){
+                                window.location.href = window.location.href + '&t=' + (new Date().getTime())
+                            });
+                        }
+                    });
+                    return;
+                }else{
+                    customAlert('error', data ? data.data : '操作失败', '好');
+                    _self.removeClass('order-confirm-disable');
+                }
+            },
+            beforeSend: function(xhr){
+                _self.addClass('order-confirm-disable');
+            },
+            error: function(xhr, type){
+                customAlert('error', '网络超时，请重试!', '好', function(){
+                    location.reload();
+                });
+            }
+        });
+    });
+
+    //var creating = false;
+    $('#confirm-order').on('click',function(){
+        // if(hasError())
+        // {
+        //     alert('出错啦...');
+        //     return;
+        // }
+
+        var postData = $('#order-form').serialize();
+        //if (!creating)
+        if($(this).html()!='确认并支付')
+            return ;
+
+        $(this).addClass('order-confirm-disable');
+        startLoading('#confirm-order', '加载中');
+
+        //creating = true;
+        $.post('/book/submitorder', postData, function(result){
+            console.log(result);
+            if(result.error){
+                //creating = false;
+                $('#confirm-order').html('确认并支付').removeClass('order-confirm-disable');
+                if(result.url) {
+                    customAlert('error', result.msg, '我的订单', function(){
+                        window.location.href = result.url;
+                    });
+                }else {
+                    customAlert('error', result.msg, '好');
+                }
+                clearInterval($loadingTimer);
+            }
+            else
+            {
+                if(result.url) {
+                    window.location.href = result.url;
+                }
+                else
+                {
+                    customAlert('error', '支付接口通信不畅，请再试一次', '好', function(){
+                        window.location.href='/user/orders?redirect=lastest';
+                    });
+                }
+            }
+        }).fail(function(response) {
+            console.log(response);
+        });
+
+    });
+</script>
+
+<?php include('footer.html') ?>

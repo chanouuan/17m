@@ -53,12 +53,12 @@ class CouponModel {
             return false;
         }
         $params = [
-                'type' => array_fill(0, $post['count'], $post['type']), 
-                'storeid' => array_fill(0, $post['count'], $post['storeid']), 
-                'cost' => array_fill(0, $post['count'], $post['cost']), 
+                'type' => array_fill(0, $post['count'], $post['type']),
+                'storeid' => array_fill(0, $post['count'], $post['storeid']),
+                'cost' => array_fill(0, $post['count'], $post['cost']),
                 'partner' => array_map(function  () {
                     return $this->getRandomString(8);
-                }, array_fill(0, $post['count'], null)), 
+                }, array_fill(0, $post['count'], null)),
                 'expire' => array_fill(0, $post['count'], $post['expire'])
         ];
         return $this->db->insert('~coupon~', $params);
@@ -88,7 +88,7 @@ class CouponModel {
 
     public function getcouponinfofromcode ($code, $storeid)
     {
-        return $this->db->table('~coupon~')->field('*')->where('partner="' . $code . '" and storeid="' . $storeid . '" and status<>1 and expire > "' . date('Y-m-d H:i:s', TIMESTAMP) . '"')->find();
+        return $this->db->table('~coupon~')->field('*')->where('partner="' . $code . '" and storeid="' . $storeid . '" and status<>1 and expire > "' . date('Y-m-d H:i:s', TIMESTAMP) . '"')->limit(1)->find();
     }
 
     /**

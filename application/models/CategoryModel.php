@@ -42,7 +42,7 @@ class CategoryModel {
     {
         if (isset($id)) {
             $id = intval($id);
-            $rs= $this->db->table('~category~')->field($field)->where('id='.$id)->find();
+            $rs= $this->db->table('~category~')->field($field)->where('id='.$id.($where?(' and ('.$where.')'):''))->find();
         } else {
             $rs = $this->db->table('~category~')->field($field)->where($where)->order($order)->limit($limit)->select();
         }

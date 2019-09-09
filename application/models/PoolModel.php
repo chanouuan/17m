@@ -123,6 +123,11 @@ class PoolModel {
         return $date;
     }
 
+    public function get ($where, $field = '*')
+    {
+        return $this->db->table('~pool~')->field($field)->where($where)->find();
+    }
+
     public function getPool ($code = '')
     {
         if ($code == "") {

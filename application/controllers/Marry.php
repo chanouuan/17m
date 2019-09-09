@@ -106,7 +106,7 @@ class Marry_Action extends ActionPDO {
     public function times ()
     {
         $categoryModel = new CategoryModel();
-        if (!$categoryInfo = $categoryModel->getCategory(intval(getgpc('productId')), 'project_id = ' . $this->projectId, null, 'id,name')) {
+        if (!$categoryInfo = $categoryModel->getCategory(intval(getgpc('category_id')), 'project_id = ' . $this->projectId, null, 'id,name,delay')) {
             $this->error('该产品不存在');
         }
         if (!$relationCategory = $categoryModel->getRelationCategory($categoryInfo['id'])) {
@@ -120,6 +120,70 @@ class Marry_Action extends ActionPDO {
         }
         $result = (new PoolModel())->getScheduleTimes($relationCategory['store_id'], getgpc('date'));
         echo json_encode($result);
+        exit(0);
+    }
+
+    /**
+     * 确认支付
+     */
+    public function payment ()
+    {
+        $categoryModel = new CategoryModel();
+        if (!$categoryInfo = $categoryModel->getCategory(intval(getgpc('category_id')), 'project_id = ' . $this->projectId, null, 'id,name,delay')) {
+            $this->error('该产品不存在');
+        }
+        if (!$relationCategory = $categoryModel->getRelationCategory($categoryInfo['id'])) {
+            $this->error('该产品无效');
+        }
+        if (!$storeInfo = (new StoreModel())->getStore($relationCategory['store_id'], 'status = 1 and project_id = ' . $this->projectId)) {
+            $this->error('门店不存在');
+        }
+        if (!$cityInfo = (new CityModel())->getCity($storeInfo['citycode'])) {
+            $this->error('城市未开通');
+        }
+        if (!$poolInfo = (new PoolModel())->get('maxcount > 0 and storeid = ' . $storeInfo['id'] . ' and id = ' . intval(getgpc('poolid')))) {
+            $this->error('本次预约已满，请选择其他时段');
+        }
+
+        $categoryInfo['delay'] = round($categoryInfo['delay'] / 3600, 1);
+        $poolInfo['ordertime'] = showWeekDate($poolInfo['starttime']);
+
+        if ($this->_jssdk) {
+            $jssdk = $this->_jssdk->GetSignPackage();
+            if ($jssdk['errorcode'] !== 0) {
+                $this->error($jssdk['data']);
+            } else {
+                $jssdk = $jssdk['data'];
+            }
+        }
+        $this->show([
+            'categoryInfo'    => $categoryInfo,
+            'storeInfo'       => $storeInfo,
+            'poolInfo'        => $poolInfo,
+            'price'           => round_dollar($relationCategory['price']),
+            'downpay_percent' => round_dollar(getConfig('downpay_percent')),
+            'userInfo'        => $this->_G['user'],
+            'refund_rule'     => json_decode(getConfig('refund_rule'), true),
+            'jssdk'           => $jssdk
+        ]);
+    }
+
+    public function coupon ()
+    {
+        $code = safe_subject(getgpc('code'));
+        $storeid = intval(getgpc('storeid'));
+        $coupon = new CouponModel();
+        if (!$result = $coupon->getcouponinfofromcode($code, $storeid)) {
+            echo json_encode([
+                'isValid' => false,
+                'error_msg' => '优惠码无效'
+            ]);
+            exit(0);
+        }
+        echo json_encode([
+            'isValid' => true,
+            'error_msg' => '优惠' . round_dollar($result['cost']) . '元'
+        ]);
         exit(0);
     }
 
