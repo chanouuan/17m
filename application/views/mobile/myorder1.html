@@ -1,0 +1,1065 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>十七平创意摄影工作室</title>
+    <link href="<?=$tpl_dir?>/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="<?=$tpl_dir?>/css/common2.css?v=1" rel="stylesheet" type="text/css">
+    <link href="<?=$tpl_dir?>/css/notice.css" rel="stylesheet" type="text/css">
+    <link href="<?=$tpl_dir?>/css/user-order.css?v=1" rel="stylesheet" type="text/css">
+    <style type="text/css">
+         .store-address-dialog {
+             color: #888888;
+             position: fixed;
+         }
+
+         .store-address-dialog .icon-store-info2 {
+             font-size: 48px;
+         }
+
+         .store-address-dialog .dialog-box-header {
+             border-bottom-color: #f3f3f3;
+             margin: 0 15px 10px;
+         }
+
+         .store-address-dialog .dialog-box {
+             position: absolute;
+             top: 50%;
+             left: 50%;
+             margin-top: -120px;
+             margin-left: -145px;
+             padding: 0;
+             overflow: hidden;
+         }
+
+         .store-address-dialog .dialog-box-content {
+             border-bottom: none;
+             padding: 0 15px;
+         }
+
+             .store-address-dialog .dialog-box-content p {
+                 position: relative;
+                 padding-left: 22px;
+                 margin-bottom: 19px;
+             }
+
+         .store-address-dialog p i {
+             position: absolute;
+             top: 3px;
+             left: 0;
+             width: 12px;
+             height: 12px;
+         }
+
+         .store-address-dialog .desc p {
+             padding: 0;
+             margin: 0;
+         }
+
+         .store-address-dialog a.tela {
+             padding: 7px 14px;
+             border: 1px solid #e4e4e4;
+             border-radius: 3px;
+             color: #888888;
+         }
+
+         .store-address-dialog a.tela:hover {
+             background: #e4e4e4;
+         }
+
+         .store-address-dialog a.tela:active {
+             background-color: #cccccc;
+             border-color: #cccccc;
+             color: #FFFFFF;
+         }
+     </style>
+</head>
+<body ontouchstart>
+    <div class="app">
+        <div class="toolbar">
+            <div class="toolbar-logo"><img src="<?=$tpl_dir?>/imgs/logo.png"></div>
+            <div class="toolbar-menu" id="toolbar-menu"><a href="javascript:void(0)" data-role="icon-ment" class="icon-menu"></a></div>
+            <div class="toolbar-back" id="toolbar-back"><a href="javascript:void(0);"><i class="icon-arrow-left"></i>上一步</a></div>
+        </div>
+        <?if($step=="detail"){?>
+        <div class="app-body">
+            <div class="wrap">
+                <span class="od-back">订单详情</span>
+                <div class="order-detail">
+                    <div class="od-title">
+                        <ul>
+                            <li>
+                                <label>订单编号：</label>
+                                <div><?=$order['ordercode']?></div>
+                            </li>
+                            <li>
+                                <label>创建时间：</label>
+                                <div><?=$order['createtime']?></div>
+                            </li>
+                        </ul>
+                        <div class="od-status">
+                            <?if($order['status']==1){?>
+                            <span class="order-status order-hasshot">已支付</span>
+                            <?}else if($order['status']==-1){?>
+                            <span class="order-status order-haspaid">已取消</span>
+                            <?}else if($order['status']==2){?>
+                            <span class="order-status order-finish"><? if($comment){ ?>已完成<? }else{ ?>待评价<? } ?></span>
+                            <?}else if(time()-strtotime($order['createtime'])<'1200'){?>
+                            <span class="order-status order-notpay">待支付</span>
+                            <div data-time="<?=1200-(time()-strtotime($order['createtime']))?>" class="count-down">
+                                <span class="num-0"></span><span class="num-0"></span><b class="num-uni3A"></b><span class="num-0"></span><span class="num-0"></span>
+                            </div>
+                            <?}else{?>
+                            <span class="order-status order-expired">已关闭</span>
+                            <?}?>
+                        </div>
+                    </div>
+                    <div class="od-info">
+                        <h4>拍摄信息</h4>
+                        <ul>
+                            <li>
+                                <label>姓<span style="opacity:0;">姓名</span>名：</label>
+                                <div class="odi-box"><?=$order['buyer']?>&nbsp;&nbsp;</div>
+                            </li>
+                            <li>
+                                <label>联系方式：</label>
+                                <div class="odi-box"><?=$order['buyerphone']?>&nbsp;&nbsp;</div>
+                            </li>
+                            <li>
+                                <label>拍摄日期：</label>
+                                <div class="odi-box">
+                                    <?=$order['ordertime']?>
+                                </div>
+                            </li>
+                            <li class="odi-address">
+                                <label>拍摄门店：</label>
+                                <div class="odi-box">
+                                    <p><?=$order['name']?></p>
+                                    <a class="icon-store-info1 check-address" href="javascript:;">门店信息</a>
+                                </div>
+                            </li>
+                            <!-- li>
+                                <label>拍摄人数：</label>
+                                <div class="odi-box">1人</div>
+                            </li -->
+                        </ul>
+                        <ul class="od-products">
+                            <li>
+                                <label><b>套餐信息</b></label>
+                                <div class="odi-box">
+                                    <table>
+                                        <tbody>
+                                            <?foreach($itemlist as $k=>$v){?>
+                                            <tr data-price="">
+                                                <th><?=explode(":",$v)[0]?></th>
+                                                <td>x<?=explode(":",$v)[1]?> 份</td>
+                                            </tr>
+                                            <?}?>
+                                        </tbody>
+                                    </table>
+                                    <em>套餐可至门店更改，以最终拍摄为准</em>
+                                </div>
+                            </li>
+                            <li>
+                                <label><b>预计耗时</b></label>
+                                <div class="odi-box">
+                                    <p><?=$order['delay']/3600?>小时</p>
+                                    <em>时长仅供参考，请预留充足的时间</em>
+                                </div>
+                            </li>
+                        </ul>
+                        <?if($order['status']==1){?>
+                        <ul class="od-price">
+                            <li class="odp-total">
+                                <b>订单金额</b>
+                                <span>￥<b><?=$order['pay']/100?></b> </span>
+                            </li>
+                            <li class="odp-deposit od-haspaid">
+                                <b>已支付金额</b>
+                                <span>
+                                    ￥<b><?=$order['downpay']/100?></b>
+                                </span>
+                            </li>
+                        </ul>
+                        <?}else if($order['status']==-1){?>
+                        <ul class="od-price">
+                            <li class="odp-total">
+                                <b>订单金额</b>
+                                <span>￥<b><?=$order['pay']/100?></b></span>
+                            </li>
+                            <li class="odp-deposit od-hasshot">
+                                <b>支付金额</b>
+                                <span>
+                                    ￥<b><?=$order['downpay']/100?></b>
+                                </span>
+                            </li>
+                        </ul>
+                        <?}else if($order['status']==2){?>
+                        <ul class="od-price">
+                            <li class="odp-total">
+                                <b>订单金额</b>
+                                <span>￥<b><?=$order['pay']/100?></b> </span>
+                            </li>
+                            <li class="odp-deposit od-finish">
+                                <b>已支付金额</b>
+                                <span>
+                                    ￥<b><?=$order['downpay']/100?></b>
+                                </span>
+                            </li>
+                        </ul>
+                        <?}else if(time()-strtotime($order['createtime'])<'1200'){?>
+                        <ul class="od-price">
+                            <li class="odp-total">
+                                <b>订单金额</b>
+                                <span>￥<b><?=$order['pay']/100?></b> </span>
+                            </li>
+                            <li class="odp-deposit od-notpay">
+                                <b>支付金额</b>
+                                <span>
+                                    ￥<b><?=$order['downpay']/100?></b>
+                                </span>
+                            </li>
+                        </ul>
+                        <?}else{?>
+                        <ul class="od-price">
+                            <li class="odp-total od-expires">
+                                <b>订单金额</b>
+                                <span>￥<b><?=$order['pay']/100?></b></span>
+                            </li>
+                            <li class="odp-deposit od-expires">
+                                <b class="icon-fail-fill">未付金额</b>
+                                <span>
+                                    ￥<b data-deposit="0"><?=$order['downpay']/100?></b>
+                                </span>
+                            </li>
+                        </ul>
+                        <?}?>
+                    </div>
+					<? if($order['couponcode']){ ?>
+					<div class="od-closed">
+                        <label>已使用优惠码：</label><?=$order['couponcode']?>
+                    </div>
+					<?}?>
+                    <?if($order['status']==1){?>
+                    <div class="od-closed">
+                        <label>订单状态：</label>已支付
+                    </div>
+                    <div class="action od-btn" id="orderBtnBox">
+                        <a href="javascript:;" id="cancel-order" class="od-white">取消订单</a>
+                    </div>
+                    <?}else if($order['status']==-1){?>
+                    <div class="od-closed">
+                        <label>订单状态：</label>已取消
+                    </div>
+                    <?}else if($order['status']==2){?>
+                    <div class="od-closed">
+                        <label>订单状态：</label><? if($comment){ ?>已完成<? }else{ ?>待评价 <? if($comment_reward){ ?><b style="color:#1e82d0">（本次评价有机会获得优惠劵 1 张）</b><? } ?><? } ?>
+                    </div>
+                    <?}else if(time()-strtotime($order['createtime'])<'1200'){?>
+                    <div class="action od-btn" id="orderBtnBox">
+                        <a href="javascript:;" id="refund-order" class="od-white">取消订单</a>
+                        <a href="javascript:void(0);" class="od-pink" id="order-pay">确认支付</a>
+                    </div>
+                    <?}else{?>
+                    <div class="od-closed">
+                        <label>订单状态：</label>已超时未支付
+                    </div>
+                    <div class="action od-btn" id="orderBtnBox">
+                        <a href="javascript:;" id="refund-order" class="od-white">关闭订单</a>
+                    </div>
+                    <?}?>
+                </div>
+
+                <? if($comment){ ?>
+                <span class="od-back">评价详情</span>
+                <div class="order-detail">
+                    <div class="od-info">
+                        <h4><?=$comment['message']?></h4>
+                        <ul>
+                            <li>
+                                <label>前　台：</label>
+                                <div><img style="width:100px;" src="/public/img/level/<?=$comment['score1']?>.png"></div>
+                            </li>
+                            <li>
+                                <label>化妆师：</label>
+                                <div><img style="width:100px;" src="/public/img/level/<?=$comment['score2']?>.png"></div>
+                            </li>
+                            <li>
+                                <label>摄影师：</label>
+                                <div><img style="width:100px;" src="/public/img/level/<?=$comment['score3']?>.png"></div>
+                            </li>
+                            <li>
+                                <label>修图师：</label>
+                                <div><img style="width:100px;" src="/public/img/level/<?=$comment['score4']?>.png"></div>
+                            </li>
+                            <li>
+                                <label>时　间：</label>
+                                <div><?=$comment['createtime']?></div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="od-info">
+                        <h4>本次评价获得优惠劵 <b style="color:red"><?=$comment['coupon']?1:0?></b> 张</h4>
+                        <? if($comment['coupon']){ ?>
+                        <ul style="border-bottom:none">
+                            <li>
+                                <label>优惠码：</label>
+                                <div>
+                                    <?=$comment['coupon']?>
+                                    <? if(!$comment['coupon_info']){ ?>
+                                    <span style="color:red">(不可用)</span>
+                                    <? }elseif($comment['coupon_info']['status']==1){ ?>
+                                    <span style="color:red">(已使用)</span>
+                                    <? }elseif(strtotime($comment['coupon_info']['expire'])<TIMESTAMP){ ?>
+                                    <span style="color:red">(已过期)</span>
+                                    <? }else{ ?>
+                                    <span style="color:green">(可用)</span>
+                                    <? } ?>
+                                </div>
+                            </li>
+                            <? if($comment['coupon_info']){ ?>
+                            <li>
+                                <label>面　值：</label>
+                                <div><?=$comment['coupon_info']['cost']/100?>元</div>
+                            </li>
+                            <li>
+                                <label>截　止：</label>
+                                <div><?=$comment['coupon_info']['expire']?></div>
+                            </li>
+                            <? } ?>
+                        </ul>
+                        <? } ?>
+                    </div>
+                </div>
+                <? }else{ ?>
+                <? if($order['status']==2){ ?>
+                <form id="comment_form" action="?<?=burl('step=comment')?>" method="post">
+                <span class="od-back" style="background-color:#FF8571;">发表评价</span>
+                <div class="order-detail">
+                    <div class="od-info">
+                        <h4>评价内容：</h4>
+                        <textarea id="comment_content" name="content" placeholder="为了更好为您提供服务，请填写对本次服务的评价。" maxlength="200" class="form-control" style="width:100%;height:100px;"></textarea>
+                    </div>
+                    <div class="od-info">
+                        <h4>服务评分：（选中对应评分的星星）</h4>
+                        <ul style="border-bottom:none;">
+                            <li style="height:40px;line-height:40px;">
+                                <label style="font-size:13px;color:#1e82d0;font-weight:700;">前　台</label>
+                                <div id="score1_dom" style="float:left;width:182px;height:30px;background:url(/public/img/level/0.png) no-repeat;background-size:182px 30px;">
+                                    <div onclick="score('score1',1)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score1',2)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score1',3)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score1',4)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score1',5)" style="float:left;width:36px;height:30px;"></div>
+                                    <input type="hidden" name="score1" id="score1_input" value="0">
+                                </div>
+                            </li>
+                            <li style="height:40px;line-height:40px;">
+                                <label style="font-size:13px;color:#1e82d0;font-weight:700;">化妆师</label>
+                                <div id="score2_dom" style="float:left;width:182px;height:30px;background:url(/public/img/level/0.png) no-repeat;background-size:182px 30px;">
+                                    <div onclick="score('score2',1)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score2',2)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score2',3)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score2',4)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score2',5)" style="float:left;width:36px;height:30px;"></div>
+                                    <input type="hidden" name="score2" id="score2_input" value="0">
+                                </div>
+                            </li>
+                            <li style="height:40px;line-height:40px;">
+                                <label style="font-size:13px;color:#1e82d0;font-weight:700;">摄影师</label>
+                                <div id="score3_dom" style="float:left;width:182px;height:30px;background:url(/public/img/level/0.png) no-repeat;background-size:182px 30px;">
+                                    <div onclick="score('score3',1)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score3',2)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score3',3)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score3',4)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score3',5)" style="float:left;width:36px;height:30px;"></div>
+                                    <input type="hidden" name="score3" id="score3_input" value="0">
+                                </div>
+                            </li>
+                            <li style="height:40px;line-height:40px;">
+                                <label style="font-size:13px;color:#1e82d0;font-weight:700;">修图师</label>
+                                <div id="score4_dom" style="float:left;width:182px;height:30px;background:url(/public/img/level/0.png) no-repeat;background-size:182px 30px;">
+                                    <div onclick="score('score4',1)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score4',2)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score4',3)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score4',4)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score4',5)" style="float:left;width:36px;height:30px;"></div>
+                                    <input type="hidden" name="score4" id="score4_input" value="0">
+                                </div>
+                            </li>
+                            <li style="font-size:13px;display:none">
+                                <label>五星代表</label>
+                                <div style="float:left;">
+                                    <div style="height:20px;line-height:20px;">
+                                        非常不满意 <img style="width:16px;" src="/public/img/level/a.png">
+                                    </div>
+                                    <div style="height:20px;line-height:20px;">
+                                        　　不满意 <img style="width:16px;" src="/public/img/level/a.png"> <img style="width:16px;" src="/public/img/level/a.png">
+                                    </div>
+                                    <div style="height:20px;line-height:20px;">
+                                        　基本满意 <img style="width:16px;" src="/public/img/level/a.png"> <img style="width:16px;" src="/public/img/level/a.png"> <img style="width:16px;" src="/public/img/level/a.png">
+                                    </div>
+                                    <div style="height:20px;line-height:20px;">
+                                      　　　满意 <img style="width:16px;" src="/public/img/level/a.png"> <img style="width:16px;" src="/public/img/level/a.png"> <img style="width:16px;" src="/public/img/level/a.png"> <img style="width:16px;" src="/public/img/level/a.png">
+                                    </div>
+                                    <div style="height:20px;line-height:20px;">
+                                      　非常满意 <img style="width:16px;" src="/public/img/level/a.png"> <img style="width:16px;" src="/public/img/level/a.png"> <img style="width:16px;" src="/public/img/level/a.png"> <img style="width:16px;" src="/public/img/level/a.png"> <img style="width:16px;" src="/public/img/level/a.png">
+                                    </div>
+                                </div>
+                            </li>
+                            <li style="font-size:13px;color:#bbb;">
+                                <div style="padding-left:55px;">
+                                    <ul style="border-bottom:none;">
+                                        <li style="margin-right:4px;width:36px;float:left;display:inline;font-size:12px;text-align:center;">非常<br>不满意</li>
+                                        <li style="margin-right:10px;width:36px;float:left;display:inline;font-size:12px">不满意</li>
+                                        <li style="margin-right:0px;width:36px;float:left;display:inline;">基本满意</li>
+                                        <li style="margin-right:0px;width:36px;float:left;display:inline;">满意</li>
+                                        <li style="width:36px;float:left;display:inline;">非常满意</li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="action od-btn">
+                        <a id="comment_submit" href="javascript:;" class="od-pink">发表评价</a>
+                    </div>
+                </div>
+                </form>
+                <? } ?>
+                <? } ?>
+
+                <div class="order-detail" style="display:none;">
+                    <div class="action" style="text-align:left">
+                        <img style="width:40%;margin-left:20px" src="<?=$tpl_dir?>/imgs/logo.png">
+                    </div>
+                    <div style="text-align:center">
+                        <img src="<?=$tpl_dir?>/imgs/weixin.jpg" style="border:0" />
+                    </div>
+                    <div style="text-align:center;height:35px;line-height:35px;">
+                        <label style="color:#888;font-weight:400">长按二维码添加我们</label>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="nb-dialog store-address-dialog" style="display: none;">
+                <div class="dialog-box" style="margin-top: -139px;">
+                    <div class="dialog-box-header">
+                        <p><span class="icon-store-info2"></span></p>
+                        <p style="height: 31px;"><?=$order['name']?></p>
+                        <a href="javascript:$('.store-address-dialog').hide();" class="icon-close close"></a>
+                    </div>
+                    <div class="dialog-box-content list" style="font-size: 12px;">
+                        <p><i class="icon-location-gray"></i><?=$order['address']?></p>
+                        <p><i class="icon-phone2"></i><a href="tel:<?=$order['tel']?>" class="tela" style=""><?=$order['tel']?></a></p>
+                        <p><i class="icon-email"></i><?=$order['email']?></p>
+                        <p><i class="icon-bus"></i><?=$order['transit']?></p>
+                    </div>
+                    <div class="desc"></div>
+                </div>
+                <div class="mask"></div>
+            </div>
+            <div class="nb-dialog dialog-refund" id="dialog-refund" style="position: fixed; display: none;">
+                <div class="mask"></div>
+                <div class="dialog-box" style="margin-top: 286.5px;">
+                    <a href="javascript:;" class="icon-close close dialog-hide"></a>
+                    <h3 class="icon-warning">你正在取消下列订单</h3>
+                    <div class="drorder-info">
+                        <p><?=$order['buyer']?>&nbsp;&nbsp;</p>
+                        <p><?=$order['ordertime']?></p>
+                        <p><?=$order['name']?></p>
+                        <div>
+                            <span><?=str_replace(";"," ",str_replace(":1","",$order['item']))?></span>
+                        </div>
+                        <span class="order-status order-notpay">待支付</span>
+
+                    </div>
+                    <div class="action dialog-btn">
+                        <a href="javascript:;" class="od-white dialog-hide">不取消了</a>
+                        <a href="javascript:;" class="od-red" id="refund-order-confirm">
+                            取消订单
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="nb-dialog dialog-refund" id="dialog-cancel" style="position: fixed; display: none;">
+                <div class="mask"></div>
+                <div class="dialog-box" style="margin-top: 286.5px;">
+                    <a href="javascript:;" class="icon-close close dialog-hide"></a>
+                    <h3 class="icon-warning">你正在取消订单</h3>
+                    <div class="drorder-info">
+                        <p><?=$order['buyer']?>&nbsp;&nbsp;</p>
+                        <p><?=$order['ordertime']?></p>
+                        <p><?=$order['name']?></p>
+                        <div>
+                            <span><?=str_replace(";"," ",str_replace(":1","",$order['item']))?></span>
+                        </div>
+                        <div><b style="color:#ff0000">实退金额：￥<?=round_dollar($order['downpay']*$refund_money)?></b>（退<?=$refund_money*100?>%）</div>
+                        <div>
+                            <? foreach($refund_rule as $k=>$v){ ?>
+                            <span style="font-size:12px;color:#ccc;"><?=$v['mark']?></span>
+                            <? } ?>
+                        </div>
+                        <span class="order-status order-notpay">￥<?=round_dollar($order['downpay'])?></span>
+                    </div>
+                    <div class="action dialog-btn">
+                        <a href="javascript:;" class="od-white dialog-hide">不取消了</a>
+                        <a href="javascript:;" class="od-red" id="cancel-order-confirm">确定取消</a>
+                    </div>
+                </div>
+            </div>
+            <div id="page-mask" class="page-mask"></div>
+        </div>
+        <?}else{?>
+        <div class="app-body">
+            <div class="wrap ">
+                <h2 class="icon-orderlist">我的订单</h2>
+                <ul>
+                    <?foreach($order as $v){?>
+                    <li class="order-info  order-notpay ">
+                        <a href="?c=order&a=myorder&step=detail&id=<?=$v['id']?>">
+                            <div class="oi-item"><?=$v['buyer']?></div>
+                            <div class="oi-item"><?=$v['ordertime']?></div>
+                            <div class="oi-item"><?=$v['name']?></div>
+                            <div class="oi-list">
+                                <span><?=$v['item']?></span>
+                            </div>
+                            <? if($v['comment_mark']&&$comment_reward){ ?>
+                            <div class="oi-item">
+                                <img style="width:20px" src="/public/img/comment.png"> <b style="color:#1e82d0">本次评价有机会获得优惠劵 1 张</b>
+                            </div>
+                            <? } ?>
+                            <div class="oi-status">
+                                <?if($v['status']==1){?>
+                                <span class="order-status order-hasshot">已支付</span>
+                                <?}else if($v['status']==-1){?>
+                                <span class="order-status order-haspaid">已取消</span>
+                                <?}else if($v['status']==2){?>
+                                <span class="order-status order-finish">
+                                <? if($v['comment_mark']){ ?>待评价<? }else{ ?>已完成<? } ?>
+                                </span>
+                                <?}elseif(time()-strtotime($v['createtime'])<'1200'){?>
+                                <span class="order-status order-notpay">待支付</span>
+                                <div data-time="<?=1200-(time()-strtotime($v['createtime']))?>" class="count-down">
+                                    <span class="num-0"></span><span class="num-0"></span><b class="num-uni3A"></b><span class="num-0"></span><span class="num-0"></span>
+                                </div>
+                                <?}else{?>
+                                <span class="order-status order-expired">已关闭</span>
+                                <?}?>
+                            </div>
+                            <span class="oi-more" href="?c=order&a=myorder&step=detail&id=<?=$v['id']?>">
+                                查看订单详情<i class="icon-arrow-right"></i>
+                            </span>
+                        </a>
+                    </li>
+                    <?}?>
+                </ul>
+            </div>
+            <div id="page-mask" class="page-mask"></div>
+        </div>
+        <?}?>
+    </div>
+    <!-- 菜单 start -->
+    <div id="toolbar-submenu" class="toolbar-submenu">
+        <ul class="ts-menu" id="ts-menu">
+            <li><a href="?c=project&a=book"><i class="icon-order"></i>开始预约</a></li>
+            <li><a href="?c=order&a=myorder"><i class="icon-orderlist"></i>我的订单</a></li>
+            <li><a href="?c=order&a=Personal"><i class="icon-profile"></i>个人资料</a></li>
+            <li><a href="?c=order&a=negative"><i class="icon-vip2"></i>个人底片</a></li>
+            <li><a href="?c=order&a=address"><i class="icon-store-info1"></i>门店地址</a></li>
+            <li><a href="?c=order&a=help"><i class="icon-notice"></i>拍摄须知</a></li>
+        </ul>
+        <div class="mask"></div>
+    </div>
+    <!-- 菜单 end -->
+    <div id="alert-dialog" class="alert-dialog" style="display: none;">
+        <div class="alert-box">
+            <a href="javascript:$(&#39;#alert-dialog&#39;).hide();" class="close icon-close"></a>
+            <div class="alert-header">
+                <i class="icon-warning"></i>
+            </div>
+            <div class="alert-content">
+            </div>
+            <div class="alert-footer">
+                <a href="javascript:void(0)" class="action-btn">好</a>
+            </div>
+        </div>
+
+        <div class="mask"></div>
+    </div>
+    <script src="<?=APPLICATION_URL?>/public/js/jquery.min.js"></script>
+    <script src="//res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script type="text/javascript">
+
+    function score(input,number){
+        $('#'+input+'_dom').css('background-image','url(/public/img/level/'+number+'.png)');
+        $('#'+input+'_input').val(number);
+    }
+
+    $(function(){
+    	$('#comment_submit').on('click',function(){
+    		if($('#comment_content').val() == ''){
+    			customAlert('error', '请填写评价内容!', '好');
+    			return false;
+    		}
+    		if($('#score1_input').val() == '0'){
+    			customAlert('error', '请给前台评分!', '好');
+                return false;
+    		}
+    		if($('#score2_input').val() == '0'){
+                customAlert('error', '请给化妆师评分!', '好');
+                return false;
+            }
+    		if($('#score3_input').val() == '0'){
+                customAlert('error', '请给摄影师评分!', '好');
+                return false;
+            }
+    		if($('#score4_input').val() == '0'){
+                customAlert('error', '请给修图师评分!', '好');
+                return false;
+            }
+    		var _self = $(this);
+            if(_self.hasClass('od-disable'))return;
+            $.ajax({
+                type: 'post',
+                url: "?<?=burl('step=comment')?>",
+                data: {id:"<?=intval($_GET['id'])?>",content:$('#comment_content').val(),score1:$('#score1_input').val(),score2:$('#score2_input').val(),score3:$('#score3_input').val(),score4:$('#score4_input').val()},
+                dataType: 'json',
+                timeout: 5000,
+                success: function(data){
+                     if(data.errorcode !== 0){
+                         customAlert('error', data.data, '好', function(){
+                             location.reload();
+                         });
+                     }else{
+                    	 customAlert('error', data.data, '好', function(){
+                             location.reload();
+                         });
+                     }
+                },
+                beforeSend: function(xhr){
+                    _self.removeClass().addClass('od-disable');
+                },
+                error: function(xhr, type){
+                    customAlert('error', '网络超时，请重试!', '好', function(){
+                        location.reload();
+                    });
+                }
+            });
+    	});
+    });
+
+        var toolbarLocationElm = $('#toolbar-location');
+        toolbarLocationElm.show();
+        toolbarLocationElm.on('click', function() {
+            $(this).find('[data-role="arrow"]').toggleClass('icon-arrow-down');
+            $(this).find('[data-role="arrow"]').toggleClass('icon-arrow-up');
+            $('#toolbar-citys').toggleClass('toolbar-citys-show');
+        });
+        $('#toolbar-submenu').on('click', '.mask', function() {
+
+            $('#toolbar-submenu').hide();
+            var mentEl = $('#toolbar-menu').find('[data-role="icon-ment"]');
+            if (mentEl.hasClass('icon-menu')) {
+                mentEl.removeClass('icon-menu');
+                mentEl.addClass('icon-arrow-right');
+            } else {
+                mentEl.addClass('icon-menu');
+                mentEl.removeClass('icon-arrow-right');
+            }
+            $('#ts-menu').removeClass('ts-menu-active');
+        });
+        $('#toolbar-back').click(function(){
+            if($('#schedules-calender-open').length)
+            {
+                if(!$('#schedules-calender-open').hasClass('schedules-calender-open-show'))
+                {
+                    $('#schedules-calender-open').addClass('schedules-calender-open-show');
+                    return ;
+                }
+            }
+
+            history.back();
+        });
+        function decideBtn(){
+            setTimeout(function () {
+                if($('#agreeCheckbox').is(':checked'))
+                    $('#goBooking').removeClass('nb-btn-disable').addClass('nb-btn-primary');
+                else
+                    $('#goBooking').removeClass('nb-btn-primary').addClass('nb-btn-disable');
+            }, 100);
+        }
+        $('#agreeWrapper').on('click', function() {
+            if($('#agreeCheckbox').is(':checked'))
+                $('#agreeCheckbox').prop('checked',false).triggerHandler('click');
+            else
+                $('#agreeCheckbox').prop('checked',true).triggerHandler('click');
+            decideBtn();
+        });
+        $('#agreeCheckbox').on('click',function(){
+            decideBtn();
+        });
+        $('#toolbar-menu').click(function(){
+            var mentEl = $(this).find('[data-role="icon-ment"]');
+            $('#toolbar-submenu').toggle();
+            if (mentEl.hasClass('icon-menu')) {
+                mentEl.removeClass('icon-menu');
+                mentEl.addClass('icon-arrow-right');
+            } else {
+                mentEl.addClass('icon-menu');
+                mentEl.removeClass('icon-arrow-right');
+            }
+            setTimeout(function() {
+                $('#ts-menu').toggleClass('ts-menu-active');
+            }, 0);
+        });
+        $('#goBooking').on('click', function() {
+            if($(this).hasClass('nb-btn-disable'))return;
+            if($(this).hasClass('validateTel')){
+                window.location.href = '?c=Personal&a=personal';
+            }else{
+                window.location.href = "?<?=burl('step=city')?>";
+            }
+        });
+
+var JSAPI = {
+    chooseWXPay: function(config, success, fail){
+        try{
+            config = JSON.parse(config);
+        }catch(e){
+            fail && fail(e);
+            return;
+        }
+        config.success = success;
+        config.cancel = fail;
+        wx.chooseWXPay(config);
+    },
+    share: function(){
+        var _share = {
+            title: document.title,
+            desc: '十七平，一群热爱生活、热爱摄影的年轻人，把摄影当作一种情怀，追求创意、自然、美丽、简洁、大方的拍摄理念，致力于高端形象创意摄影。',
+            link: '<?=APPLICATION_URL?>/?c=order&a=createorder',
+            imgUrl: '<?=$tpl_dir?>/imgs/01.jpg'
+        };
+        wx.onMenuShareTimeline(_share);
+        wx.onMenuShareAppMessage(_share);
+    }
+};
+
+/*<?php if(isset($jssdk) && $jssdk){ ?>*/
+wx.config({
+    debug: false,
+    appId: "<?=$jssdk['appId']?>",
+    timestamp: "<?=$jssdk['timestamp']?>",
+    nonceStr: "<?=$jssdk['nonceStr']?>",
+    signature: "<?=$jssdk['signature']?>",
+    jsApiList: [
+      'hideMenuItems',
+      'onMenuShareTimeline',
+      'onMenuShareAppMessage',
+      'chooseWXPay'
+    ]
+});
+wx.error(function(res){
+    //window.location.href = window.location.href;
+});
+wx.ready(function () {
+    wx.hideMenuItems({
+        menuList: [
+            'menuItem:share:qq',
+            'menuItem:share:weiboApp',
+            'menuItem:share:facebook',
+            'menuItem:share:QZone'
+        ]
+    });
+    JSAPI.share();
+});
+/*<?php } ?>*/
+
+
+        $(function(){
+            if (/Android/gi.test(navigator.userAgent)) {
+                window.addEventListener('resize', function () {
+                    if (document.activeElement.tagName == 'INPUT' || document.activeElement.tagName == 'TEXTAREA') {
+                        window.setTimeout(function () {
+                            document.activeElement.scrollIntoViewIfNeeded();
+                        }, 0);
+                    }
+                })
+            }
+        });
+    </script>
+    <script>
+        function decideBtn()
+        {
+            setTimeout(function () {
+                if($('#agreeCheckbox').is(':checked'))
+                    $('#refund-order-confirm').removeClass('od-disable').addClass('od-red');
+                else
+                    $('#refund-order-confirm').removeClass('od-red').addClass('od-disable');
+            }, 100);
+        }
+        $('#agreeWrapper').on('click', function() {
+            if($('#agreeCheckbox').is(':checked'))
+                $('#agreeCheckbox').prop('checked',false).triggerHandler('click');
+            else
+                $('#agreeCheckbox').prop('checked',true).triggerHandler('click');
+            decideBtn();
+        });
+        $('#agreeCheckbox').on('click',function(){
+            decideBtn();
+        });
+        // 查看门店
+        $('.check-address').on('click', function() {
+            var el = $('.store-address-dialog');
+            el.css('display', 'block').find('.dialog-box').css({
+                'marginTop': el.find('.dialog-box').height()/2 * -1
+            });
+        });
+        // 展开收起退款规则
+        (function () {
+            $('#order-tips').find('.open').click(function () {
+                $('#order-tips').addClass('order-tips-active');
+            }).end().find('.closed').click(function () {
+                $('#order-tips').removeClass('order-tips-active');
+            })
+        })();
+
+        $('#cancel-order').click(function(){
+            var el = $('#dialog-cancel').find('.dialog-box');
+            $('#dialog-cancel').show().find('.dialog-box').css({
+                marginTop: ($('#dialog-cancel').height() - el.height())/2
+            });
+        });
+
+        // 取消支付
+        $('#refund-order').click(function(){
+            var el = $('#dialog-refund').find('.dialog-box');
+            $('#dialog-refund').show().find('.dialog-box').css({
+                marginTop: ($('#dialog-refund').height() - el.height())/2
+            });
+        });
+        $('.dialog-hide').click(function(){
+            $('#dialog-refund').hide();
+            $('#dialog-cancel').hide();
+        });
+
+        var refundStatus = false;
+        $('#refund-order-confirm').click(function(){
+        	var _self = $(this);
+            if(_self.hasClass('od-disable'))return;
+            $.ajax({
+                type: 'post',
+                url: '?c=order&a=refundorder&id=<?=$id?>',
+                dataType: 'json',
+                timeout: 5000,
+                success: function(data){
+                     if(data.errorcode !== 0){
+                         customAlert('error', data.data, '好', function(){
+                             location.reload();
+                         });
+                     }else{
+                         window.location = '?c=order&a=myorder&rand='+Math.random();
+                     }
+                },
+                beforeSend: function(xhr){
+                    _self.removeClass().addClass('od-disable');
+                },
+                error: function(xhr, type){
+                    customAlert('error', '网络超时，请重试!', '好', function(){
+                        location.reload();
+                    });
+                }
+            });
+        });
+
+        $('#cancel-order-confirm').click(function(){
+        	var _self = $(this);
+        	if(_self.hasClass('od-disable'))return;
+        	$.ajax({
+                type: 'post',
+                url: '?c=order&a=cancelorder&id=<?=$id?>',
+                dataType: 'json',
+                timeout: 5000,
+                success: function(data){
+                	 if(data.errorcode !== 0){
+                         customAlert('error', data.data, '好', function(){
+                             location.reload();
+                         });
+                     }else{
+                         window.location = '?c=order&a=myorder&rand='+Math.random();
+                     }
+                },
+                beforeSend: function(xhr){
+                    _self.removeClass().addClass('od-disable');
+                },
+                error: function(xhr, type){
+                    customAlert('error', '网络超时，请重试!', '好', function(){
+                        location.reload();
+                    });
+                }
+            });
+        });
+
+        // 倒计时
+        (function(){
+
+            var timer = null;
+            var addSuff = function(number){
+                return (number) > 9 ? number.toString() : '0'+ number;
+            }
+            var countDown = function(){
+                clearTimeout(timer);
+                $('.count-down').each(function(){
+                    var el = $(this);
+                    var time = el.data('time');
+                    time--;
+                    el.data('time', time);
+                    if(time == 0){
+                        el.removeClass('count-down').end()
+                                .prev('.order-status').removeClass('order-notpay').addClass('order-expired')
+                                .html('已过期');
+                        el.parents('.order-info').addClass('order-expired');
+                    }else{
+                        var hours = addSuff(Math.floor(time/(60 * 60))).split('');
+                        var minutes = addSuff(Math.floor((time%(60 * 60))/60)).split('');
+                        var seconds = addSuff((time%60).toString()).split('');
+                        var str = '';
+
+                        if(Math.floor(time/(60 * 60)) > 0){
+                            $.each(hours, function(index, num){
+                                str += '<span class="num-'+ num +'"></span>';
+                            });
+                            str += '<b class="num-uni3A"></b>';
+                        }
+                        $.each(minutes, function(index, num){
+                            str += '<span class="num-'+ num +'"></span>';
+                        });
+                        str += '<b class="num-uni3A"></b>';
+
+                        $.each(seconds, function(index, num){
+                            str += '<span class="num-'+ num +'"></span>';
+                        });
+
+                        el.html(str);
+                    }
+                });
+                if($('.count-down').length > 0) {
+                    timer = setTimeout(function () {
+                        countDown();
+                    }, 1000);
+                }
+            };
+
+            timer = setTimeout(function(){
+                countDown();
+            }, 1000);
+        })();
+    </script>
+    <script type="text/javascript">
+        $('#order-pay').click(function(){
+        	var _self = $(this);
+            if(_self.hasClass('od-disable'))return;
+            $.ajax({
+                type: 'post',
+                url: "?ajax=1&c=order&a=checkorderpay&orderid=<?=$order['id']?>&cardid=<?=$order['cardid']?>",
+                dataType: 'json',
+                timeout: 5000,
+                success: function(data){
+                	if(data && data.errorcode === 0){
+                		var cardid = data.data;
+                        $.ajax({
+                            type: 'post',
+                            url: '?ajax=1&c=wxpayjs&a=api',
+                            data: {cardid:cardid},
+                            dataType: 'json',
+                            timeout: 5000,
+                            success: function(data){
+                                if(data && data.errorcode === 0){
+                                    JSAPI.chooseWXPay(data.data,function(res){
+                                        $.ajax({
+                                            type: 'post',
+                                            url: '?ajax=1&c=order&a=payquery',
+                                            data: {cardid:cardid},
+                                            dataType: 'json',
+                                            timeout: 5000,
+                                            success: function(data){
+                                                if(data && data.errorcode === 0){
+                                                    customAlert('error', '支付成功!', '我的订单', function(){
+                                                        window.location.href = '?c=order&a=myorder';
+                                                    });
+                                                }else{
+                                                    customAlert('error', data ? data.data : '支付确认', '我的订单', function(){
+                                                        window.location.href = '?c=order&a=myorder';
+                                                    });
+                                                }
+                                            },
+                                            error: function(xhr, type){
+                                                customAlert('error', '支付确认', '我的订单', function(){
+                                                    window.location.href = '?c=order&a=myorder';
+                                                });
+                                            }
+                                        });
+                                        return;
+                                    },function(res){
+                                        customAlert('error', '支付取消!', '我的订单', function(){
+                                             window.location.href = '?c=order&a=myorder';
+                                        });
+                                    });
+                                }else{
+                                    customAlert('error', data ? data.data : '操作失败', '好', function(){
+                                         window.location.href = '?c=order&a=myorder';
+                                    });
+                                }
+                            },
+                            error: function(xhr, type){
+                                customAlert('error', '网络超时，请重试!', '好', function(){
+                                    window.location.href = window.location.href + '&t=' + (new Date().getTime())
+                                });
+                            }
+                        });
+                        return;
+                	}else{
+                		customAlert('error', data.data, '好', function(){
+                            window.location.href = window.location.href + '&t=' + (new Date().getTime())
+                        });
+                		_self.removeClass('od-disable');
+                	}
+                },
+                beforeSend: function(xhr){
+                    _self.removeClass().addClass('od-disable');
+                },
+                error: function(xhr, type){
+                    customAlert('error', '网络超时，请重试!', '好', function(){
+                        location.reload();
+                    });
+                }
+            });
+        });
+        function customAlert(status, message, actionText, callback) {
+            var statusClass = '';
+            if(status == 'error') {
+                statusClass = 'error';
+            }
+            $('#alert-dialog').addClass(statusClass);
+            $('#alert-dialog .alert-content').html(message);
+            $('#alert-dialog .action-btn').html(actionText);
+            $('#alert-dialog .action-btn').on('click', function() {
+                if (callback != null) {
+                    callback($('#alert-dialog'));
+                }
+                $('#alert-dialog').hide();
+            });
+            $('#alert-dialog').show();
+            var h = $('#alert-dialog .alert-box').height();
+            $('#alert-dialog .alert-box').height(h);
+            $('#alert-dialog .alert-box').css('margin-top', -h/2)
+        }
+        $('.mask').on('click', function() {
+            $(this).parent().hide();
+        });
+
+    </script>
+</body>
+</html>

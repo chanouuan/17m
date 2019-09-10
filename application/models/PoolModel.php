@@ -32,7 +32,7 @@ class PoolModel {
 
         $condition = implode(' and ', $condition);
         // 获取排班
-        if (!$poolList = $this->db->table('pro_pool')->field('id,right(starttime,8) as time,maxcount')->where($condition)->order('starttime asc')->select()) {
+        if (!$poolList = $this->db->table('pro_pool')->field('id,right(starttime,8) as time,amount')->where($condition)->order('starttime asc')->select()) {
             return [];
         }
 
@@ -50,7 +50,7 @@ class PoolModel {
             foreach ($poolList as $k => $v) {
                 // 减去占号数
                 if (isset($orderPool[$v['id']])) {
-                    $poolList[$k]['maxcount'] = min(0, $v['maxcount'] - $orderPool[$v['id']]);
+                    $poolList[$k]['amount'] = min(0, $v['amount'] - $orderPool[$v['id']]);
                 }
             }
         }
@@ -58,7 +58,7 @@ class PoolModel {
         // 格式化输出
         foreach ($poolList as $k => $v) {
             $poolList[$k]['time'] = substr($v['time'], 0, 5);
-            $poolList[$k]['leFT'] = $v['maxcount'];
+            $poolList[$k]['leFT'] = $v['amount'];
         }
 
         return $poolList;
@@ -82,10 +82,10 @@ class PoolModel {
 
         $condition = implode(' and ', $condition);
         // 获取排班剩号数
-        $poolList = $this->db->table('pro_pool')->field('today,sum(maxcount) as maxcount')->where($condition)->group('today')->select();
+        $poolList = $this->db->table('pro_pool')->field('today,sum(amount) as amount')->where($condition)->group('today')->select();
 
         if ($poolList) {
-            $poolList = array_column($poolList, 'maxcount', 'today');
+            $poolList = array_column($poolList, 'amount', 'today');
             // 获取未过期占号
             $condition = [
                 'storeid = ' . $store_id,

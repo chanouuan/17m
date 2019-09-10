@@ -414,9 +414,27 @@ class Order_Action extends ActionPDO {
      */
     public function createcard ()
     {
-        $cardsmodel = new CardsModel();
-        $ret = $cardsmodel->createCard($this->_G['user'], $_POST);
-        echo json_unicode_encode($ret);
+        $categoryModel = new CategoryModel();
+        if (!$relationCategory = $categoryModel->getRelationCategory(intval(getgpc('store_id')), intval(getgpc('category_id')))) {
+            $this->error('该产品无效');
+        }
+        if (!$categoryInfo = $categoryModel->getCategory($relationCategory['category_id'], null, null, 'id,name,delay')) {
+            $this->error('该产品不存在');
+        }
+        if (!$storeInfo = (new StoreModel())->getStore($relationCategory['store_id'], 'status = 1')) {
+            $this->error('门店不存在');
+        }
+        if (!$cityInfo = (new CityModel())->getCity($storeInfo['citycode'])) {
+            $this->error('城市未开通');
+        }
+
+        $_POST['citycode']      = $storeInfo['citycode'];
+        $_POST['store_id']      = $storeInfo['id'];
+        $_POST['category_name'] = $categoryInfo['name'];
+        $_POST['delay']         = $categoryInfo['delay'];
+        $_POST['price']         = $relationCategory['price'];
+        $result = (new CardsModel())->createCard($this->_G['user'], $_POST);
+        echo json_encode($result);
         return null;
     }
 
@@ -502,15 +520,6 @@ class Order_Action extends ActionPDO {
         $ordermodel = new OrderModel();
         $userinfo = $this->_G['user'];
         $step = $_GET["step"];
-        $weekarray = array(
-                "日",
-                "一",
-                "二",
-                "三",
-                "四",
-                "五",
-                "六"
-        );
 
         switch ($step) {
             case 'comment':
@@ -554,17 +563,23 @@ class Order_Action extends ActionPDO {
                 );
                 break;
             default:
-                $sql = 'select pro_order.*,`name` from pro_order LEFT JOIN pro_store ON pro_store.`id` = pro_order.storeid where pro_order.uid=' . $userinfo['id'] . ' order by  createtime DESC, ordertime DESC ';
-                $order = $ordermodel->getOrderlist($sql);
-                $comment = $ordermodel->getCommentList('orderid', 'raterid = ' . $userinfo['id']);
-                $comment = array_column($comment, 'orderid', 'orderid');
-                foreach ($order as $k => $v) {
-                    $order[$k]['comment_mark'] = $v['status'] == 2 && !isset($comment[$v['id']]) ? 1 : 0;
-                    $order[$k]['ordertime'] = showWeekDate($v['ordertime']);
-                    $order[$k]['item'] = str_replace(";", " ", preg_replace("/\:\d+/", "", $v['item']));
+
+                $order = $ordermodel->getOrder(null, 'uid = ' . $userinfo['id'], null, 'id,storeid,buyer,item,ordertime,status', 'id desc');
+                if ($order) {
+                    $stores = (new StoreModel())->getStore(null, 'id in (' . implode(',', array_column($order, 'storeid')) . ')', null, 'id,name');
+                    $stores = array_column($stores, 'name', 'id');
+                    $comment = $ordermodel->getCommentList('orderid', 'raterid = ' . $userinfo['id']);
+                    $comment = array_column($comment, 'orderid', 'orderid');
+                    foreach ($order as $k => $v) {
+                        $order[$k]['store_name'] = $stores[$v['storeid']];
+                        $order[$k]['comment_mark'] = ($v['status'] == 2 && !isset($comment[$v['id']])) ? 1 : 0;
+                        $order[$k]['ordertime'] = showWeekDate($v['ordertime']);
+                        $order[$k]['item'] = str_replace(':1', '',  $v['item']);
+                    }
                 }
+
                 // 评价是否获得优惠劵
-                $comment_reward = intval(getConfig()['comment_reward']);
+                $comment_reward = intval(getConfig('comment_reward'));
                 $result = array(
                         'userinfo' => $userinfo,
                         'step' => $step,

@@ -41,7 +41,7 @@ class CardsModel {
     public function insertCards ($cardsarray)
     {
         return $this->db->insert("pro_cards", $cardsarray);
-    
+
     }
 
     public function getlastid ()
@@ -64,99 +64,116 @@ class CardsModel {
      */
     public function createCard ($user, $params)
     {
-        $params['item'] = safe_subject($params['item']);
-        $params['coupon'] = safe_subject(strtoupper(trim($params['coupon'])));
-        $params['storeId'] = intval($params['storeId']);
-        $params['citycode'] = intval($params['citycode']);
-        $params['poolid'] = intval($params['poolid']);
-        $params['fullpay'] = intval($params['fullpay']); // 是否全款
-        if (!$params['item'] || !$params['storeId'] || !$params['citycode'] || !$params['poolid']) {return error('参数错误');}
+        $params['citycode']    = intval($params['citycode']);
+        $params['poolid']      = intval($params['poolid']);
+        $params['store_id']    = intval($params['store_id']);
+        $params['coupon']      = strlen($params['coupon']) == 8 ? strtoupper($params['coupon']) : null;
+        $params['category_id'] = intval($params['category_id']);
+        $params['fullpay']     = intval($params['fullpay']); // 是否全款
+        $params['price']       = intval($params['price']); // 订单金额
+        if (!$params['citycode'] || !$params['poolid'] || !$params['category_id'] || !$params['store_id'] || $params['price'] <= 0) {
+            return error('参数错误');
+        }
+
         // 预约姓名
         $params['buyer'] = safe_subject(msubstr($params['buyer'], 0, 20));
         $params['buyer'] = $params['buyer'] ? $params['buyer'] : $user['nickname'];
+
         // 校验号源
-        $poolinfo = $this->db->table('~pool~')->field('starttime')->where('id = ' . $params['poolid'] . ' and storeid = ' . $params['storeId'] . ' and maxcount > ordercount')->find();
-        if (!$poolinfo) {return error('抱歉！档期' . showWeekDate($params['date'] . ' ' . $params['time'] . ':00') . '，已预约满。');}
+        $poolinfo = $this->db->table('pro_pool')->field('starttime,amount')->where('id = ' . $params['poolid'] . ' and storeid = ' . $params['store_id'] . ' and amount > 0')->find();
+        if (!$poolinfo) {
+            return error('抱歉！本时段已预约满，请选择其他时段。');
+        }
+
         $params['ordertime'] = $poolinfo['starttime'];
-        if (strtotime($params['ordertime']) < TIMESTAMP) {return error('预约日期无效');}
-        // 选取套餐种类
-        $payitem = array_column(array_map(function  ($v) {
-            return explode(':', $v);
-        }, explode(';', $params['item'])), 1, 0);
-        $category = $this->db->table('~category~')->field('id,name,delay')->where('name in (' . ('\'' . implode('\',\'', array_keys($payitem)) . '\'') . ')')->select();
-        if (empty($category)) {return error('未指定套餐');}
-        $category_price = $this->db->table('~story_category~')->field('categroy_id,price')->where('store_id = '.$params['storeId'].' and categroy_id in ('.implode(',', array_column($category, 'id')).')')->select();
-        $category_price = array_column($category_price, 'price', 'categroy_id');
-        foreach ($category as $k => $v) {
-            $category[$k]['price'] = intval($category_price[$v['id']]);
+        if (strtotime($params['ordertime']) < TIMESTAMP) {
+            return error('预约日期无效');
         }
-        // 计算总耗时
-        $params['delay'] = array_sum(array_column($category, 'delay'));
-        // 计算应支付金额
-        $itemprice = array_column($category, 'price', 'name');
-        foreach ($itemprice as $k => $v) {
-            $itemprice[$k] = $v * intval($payitem[$k]);
+
+        // 减去占号数
+        $orderPool = $this->db->table('pro_order')->field('count(*) as count')->where('storeid = ' . $params['store_id'] . ' and status = 0 and poolid = ' . $params['poolid'] . ' and createtime > "' . date('Y-m-d H:i:s', TIMESTAMP - 1200) . '"')->find();
+        if ($orderPool) {
+            if ($poolinfo['amount'] - $orderPool['count'] <= 0) {
+                return error('本时段预约已被其他人占用，请选择其他时段！');
+            }
         }
-        $params['pay'] = array_sum($itemprice);
-        if ($params['pay'] <= 0) {return error('应付金额为空');}
+
         // 计算定金
-        $params['downpay'] = $params['pay'];
-        $downpay_percent = floatval(getConfig()['downpay_percent']);
+        $params['downpay'] = $params['price'];
+        $downpay_percent   = intval(getConfig('downpay_percent'));
         if ($downpay_percent > 0 && !$params['fullpay']) {
             $params['downpay'] = $downpay_percent;
         }
+
         // 计算优惠卷
         $params['couponcost'] = 0;
         if ($params['coupon']) {
-            $coupon_info = $this->db->table('~coupon~')->field('cost')->where('storeid = ' . $params['storeId'] . ' and partner = "' . $params['coupon'] . '" and status <> 1 and expire > "' . date('Y-m-d H:i:s', TIMESTAMP) . '"')->find();
-            if (!$coupon_info) {return error('优惠码不正确或已过期');}
-            if ($coupon_info['cost'] >= $params['downpay']) {return error('优惠码当前不可用');}
-            $params['downpay'] = $params['downpay'] - $coupon_info['cost'];
+            $coupon_info = $this->db->table('pro_coupon')->field('id,cost')->where('storeid = ' . $params['store_id'] . ' and partner = "' . $params['coupon'] . '" and status <> 1 and expire > "' . date('Y-m-d H:i:s', TIMESTAMP) . '"')->find();
+            if (!$coupon_info) {
+                return error('优惠码无效或已过期！');
+            }
+            if ($coupon_info['cost'] >= $params['downpay']) {
+                return error('优惠码当前不可用'); // 优惠金额不能大于等于订单金额
+            }
+            $params['downpay']    = $params['downpay'] - $coupon_info['cost'];
             $params['couponcost'] = $coupon_info['cost'];
+            $params['coupon_id'] = $coupon_info['id'];
         }
+
         // 支付方式
         $params['payway'] = 'wxpayjs';
         // 订单号
         $params['ordercode'] = $this->generateOrderCode();
-        // 提交内容
-        if (!$cardid = $this->db->transaction(function  ($db) use( $user, $params) {
+
+        if (!$cardid = $this->db->transaction(function ($db) use($user, $params) {
             // 添加未支付订单
-            if (!$db->insert('~order~', array(
-                    'uid' => $user['id'], 
-                    'pay' => $params['pay'], 
-                    'downpay' => $params['downpay'], 
-                    'coupon' => $params['couponcost'], 
-                    'poolid' => $params['poolid'], 
-                    'storeid' => $params['storeId'], 
-                    'citycode' => $params['citycode'], 
-                    'ordertime' => $params['ordertime'], 
-                    'delay' => $params['delay'], 
-                    'item' => $params['item'], 
-                    'buyersex' => $user['gender'], 
-                    'buyerphone' => $user['telephone'], 
-                    'buyer' => $params['buyer'], 
-                    'createtime' => date('Y-m-d H:i:s', TIMESTAMP)
-            ))) return false;
-            if (!$orderid = $db->getlastid()) return false;
+            if (!$db->insert('pro_order', array(
+                'uid'        => $user['id'],
+                'pay'        => $params['price'],
+                'downpay'    => $params['downpay'],
+                'coupon'     => $params['couponcost'],
+                'poolid'     => $params['poolid'],
+                'storeid'    => $params['store_id'],
+                'citycode'   => $params['citycode'],
+                'ordertime'  => $params['ordertime'],
+                'delay'      => $params['delay'],
+                'item'       => $params['category_name'] . ':1',
+                'buyersex'   => $user['gender'],
+                'buyerphone' => $user['telephone'],
+                'buyer'      => $params['buyer'],
+                'createtime' => date('Y-m-d H:i:s', TIMESTAMP)
+            ))) {
+                return false;
+            }
+            if (!$orderid = $db->getlastid()) {
+                return false;
+            }
             // 添加交易单
-            if (!$db->insert('~cards~', array(
-                    'uid' => $user['id'], 
-                    'orderid' => $orderid, 
-                    'pay' => $params['downpay'], 
-                    'coupon' => $params['coupon'], 
-                    'payway' => $params['payway'], 
-                    'ordercode' => $params['ordercode'], 
-                    'createtime' => date('Y-m-d H:i:s', TIMESTAMP)
-            ))) return false;
-            if (!$cardid = $db->getlastid()) return false;
+            if (!$db->insert('pro_cards', array(
+                'uid'        => $user['id'],
+                'orderid'    => $orderid,
+                'pay'        => $params['downpay'],
+                'coupon'     => $params['coupon'],
+                'payway'     => $params['payway'],
+                'ordercode'  => $params['ordercode'],
+                'createtime' => date('Y-m-d H:i:s', TIMESTAMP)
+            ))) {
+                return false;
+            }
+            if (!$cardid = $db->getlastid()) {
+                return false;
+            }
             // 更新优惠卷状态
-            if ($params['coupon']) {
-                if (!$db->update('~coupon~', array(
-                        'status' => 1
-                ), 'storeid = ' . $params['storeId'] . ' and partner = "' . $params['coupon'] . '" and status <> 1 and expire > "' . date('Y-m-d H:i:s', TIMESTAMP) . '"')) return false;
+            if ($params['coupon_id']) {
+                if (!$db->update('pro_coupon', array('status' => 1), 'status <> 1 and id = ' . $params['coupon_id'])) {
+                    return false;
+                }
             }
             return $cardid;
-        })) {return error('操作失败');}
+        })) {
+            return error('下单失败');
+        }
+
         return success($cardid);
     }
 
@@ -218,7 +235,8 @@ class CardsModel {
         // 更新档期已预约数
         $orderinfo = $this->db->table('~order~')->field('id,poolid')->where('id = ' . $orderid)->find();
         $this->db->update('~pool~', array(
-                'ordercount' => '~ordercount-1'
+            'ordercount' => '~ordercount-1',
+            'amount' => '~amount+1'
         ), 'id = ' . $orderinfo['poolid']);
         // 删除提醒
         $this->db->delete('~alert~', 'orderid = ' . $orderid);
@@ -229,17 +247,17 @@ class CardsModel {
         $info['template_id'] = '__7kE5wMdS-xJlueCYhO9lDmdgV8DlgTSNUVz1_ayGA';
         $info['data'] = [
                 'first' => [
-                        'value' => '退款申请接收成功！', 
+                        'value' => '退款申请接收成功！',
                         'color' => '#7CDFA8'
-                ], 
+                ],
                 'keyword1' => [
-                        'value' => $cardinfo['ordercode'], 
+                        'value' => $cardinfo['ordercode'],
                         'color' => '#1e82d0'
-                ], 
+                ],
                 'keyword2' => [
-                        'value' => round_dollar($cardinfo['refundpay']) . '元', 
+                        'value' => round_dollar($cardinfo['refundpay']) . '元',
                         'color' => '#1e82d0'
-                ], 
+                ],
                 'remark' => [
                         'value' => '受理时间：1~7个工作日。'
                 ]
@@ -257,7 +275,7 @@ class CardsModel {
     {
         if (!$card = $this->db->field('id,payway,refundpay')->table('~cards~')->where('id = ' . $cardid . ' and status = 1')->find()) {return error('参数错误');}
         if (!$this->db->update('~cards~', array(
-                'status' => $card['payway'] == 'alipayapp' ? -2 : -1, 
+                'status' => $card['payway'] == 'alipayapp' ? -2 : -1,
                 'refundtime' => date('Y-m-d H:i:s', TIMESTAMP)
         ), 'id = ' . $cardid . ' and status = 1')) return error('退款失败');
         return success($card['payway'] . '已退款' . $card['refundpay'] . '分');
@@ -278,17 +296,18 @@ class CardsModel {
      * @param $mchid 商户ID
      * @param $trade_type 支付类型
      * @param $trade_status 支付状态
+     * @return array
      */
     public function paySuccess ($out_trade_no, $trade_no, $mchid, $trade_type, $trade_status = '')
     {
         if (!$card = $this->db->table('~cards~')->field('id,uid,pay,orderid,ordercode,status')->where('ordercode = "' . $out_trade_no . '"')->find()) {return error($out_trade_no . '未找到');}
         if ($card['status'] != 0) {return success($out_trade_no . '已交易完成');}
         $_cards = array(
-                'status' => 1, 
-                'trade_no' => $trade_no, 
-                'paytime' => date('Y-m-d H:i:s', TIMESTAMP), 
-                'mchid' => $mchid, 
-                'trade_type' => $trade_type, 
+                'status' => 1,
+                'trade_no' => $trade_no,
+                'paytime' => date('Y-m-d H:i:s', TIMESTAMP),
+                'mchid' => $mchid,
+                'trade_type' => $trade_type,
                 'trade_status' => $trade_status
         );
         if ($trade_type == 'JSAPI' || $trade_type == 'NATIVE') $_cards['payway'] = 'wxpayjs';
@@ -296,27 +315,28 @@ class CardsModel {
         if (!$this->db->transaction(function  ($db) use( $_cards, $card) {
             if (!$db->update('~order~', array(
                     'status' => 1
-            ), 'id = ' . $card['orderid'])) {return false;}
-            if (!$db->update('~cards~', $_cards, 'id = ' . $card['id'])) {return false;}
+            ), 'status = 0 and id = ' . $card['orderid'])) {return false;}
+            if (!$db->update('~cards~', $_cards, 'status = 0 and id = ' . $card['id'])) {return false;}
             return true;
         })) {return error('操作失败');}
         // 更新档期已预约数
         $orderinfo = $this->db->table('~order~')->field('id,downpay,uid,poolid,ordertime,buyer,buyerphone,storeid,item')->where('id = ' . $card['orderid'])->find();
         $this->db->update('~pool~', array(
-                'ordercount' => '~ordercount+1'
+            'ordercount' => '~ordercount+1',
+            'amount' => '~amount-1'
         ), 'id = ' . $orderinfo['poolid']);
         $storeinfo = $this->db->table('~store~')->field('name,address,tel')->where('id = ' . $orderinfo['storeid'])->find();
         // 添加提醒
         $this->db->insert('~alert~', array(
-                'orderid' => $orderinfo['id'], 
-                'telephone' => $orderinfo['buyerphone'], 
-                'sendtime' => date('Y-m-d 20:00:00', strtotime($orderinfo['ordertime']) - 86400), 
-                'expiretime' => $orderinfo['ordertime'], 
+                'orderid' => $orderinfo['id'],
+                'telephone' => $orderinfo['buyerphone'],
+                'sendtime' => date('Y-m-d 20:00:00', strtotime($orderinfo['ordertime']) - 86400),
+                'expiretime' => $orderinfo['ordertime'],
                 'content' => json_unicode_encode(array(
-                        'ordertime' => $orderinfo['ordertime'], 
-                        'storename' => $storeinfo['name'], 
-                        'item' => str_replace(';', ' ', str_replace(':1', '', $orderinfo['item'])), 
-                        'address' => $storeinfo['address'], 
+                        'ordertime' => $orderinfo['ordertime'],
+                        'storename' => $storeinfo['name'],
+                        'item' => str_replace(';', ' ', str_replace(':1', '', $orderinfo['item'])),
+                        'address' => $storeinfo['address'],
                         'telephone' => $storeinfo['tel']
                 ))
         ));
@@ -326,29 +346,29 @@ class CardsModel {
         $info['template_id'] = 'RmKZ3ZwPlH8sH-FNMFQ9thEA2hf7p0v3lXegzAwzY2g';
         $info['data'] = [
                 'first' => [
-                        'value' => '你的订单已 支付成功，感谢你的预约！', 
+                        'value' => '你的订单已 支付成功，感谢你的预约！',
                         'color' => '#7CDFA8'
-                ], 
+                ],
                 'keyword1' => [
-                        'value' => $orderinfo['buyer'], 
+                        'value' => $orderinfo['buyer'],
                         'color' => '#1e82d0'
-                ], 
+                ],
                 'keyword2' => [
-                        'value' => $storeinfo['name'] . '(' . $storeinfo['address'] . ')', 
+                        'value' => $storeinfo['name'] . '(' . $storeinfo['address'] . ')',
                         'color' => '#1e82d0'
-                ], 
+                ],
                 'keyword3' => [
-                        'value' => showWeekDate($orderinfo['ordertime']), 
+                        'value' => showWeekDate($orderinfo['ordertime']),
                         'color' => '#1e82d0'
-                ], 
+                ],
                 'keyword4' => [
-                        'value' => str_replace(';', ' ', str_replace(':1', '', $orderinfo['item'])), 
+                        'value' => str_replace(';', ' ', str_replace(':1', '', $orderinfo['item'])),
                         'color' => '#1e82d0'
-                ], 
+                ],
                 'keyword5' => [
-                        'value' => round_dollar($orderinfo['downpay']) . '元', 
+                        'value' => round_dollar($orderinfo['downpay']) . '元',
                         'color' => '#1e82d0'
-                ], 
+                ],
                 'remark' => [
                         'value' => '请您提早15分钟到店。'
                 ]
@@ -397,9 +417,9 @@ class CardsModel {
     public function logPay ($type, $title, $info)
     {
         $this->db->insert('~log_pay~', array(
-                'type' => $type, 
-                'title' => $title, 
-                'info' => $info, 
+                'type' => $type,
+                'title' => $title,
+                'info' => $info,
                 'createtime' => date('Y-m-d H:i:s', TIMESTAMP)
         ));
     }
@@ -466,7 +486,7 @@ class CardsModel {
                 ), 'orderid = ' . $v['orderid']);
             }
         }
-        
+
         return true;
     }
 
@@ -484,7 +504,7 @@ class CardsModel {
         curl_close($curl);
         return $return_str;
     }
-    
+
     // 将 xml数据转换为数组格式。
     public function xml_to_array ($xml)
     {

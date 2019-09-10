@@ -14,11 +14,11 @@ class CategoryModel {
     /**
      * 获取产品关联信息
      */
-    public function getRelationCategory ($categroy_id)
+    public function getRelationCategory ($store_id, $categroy_id)
     {
-        return $this->db->table('pro_story_category')
-            ->field('id,store_id,categroy_id,price')
-            ->where('categroy_id = ' . $categroy_id)
+        return $this->db->table('pro_category a inner join pro_story_category b on b.categroy_id = a.id')
+            ->field('b.store_id,b.categroy_id as category_id,b.price')
+            ->where('b.store_id = ' . $store_id . ' and b.categroy_id = ' . $categroy_id)
             ->find();
     }
 
@@ -68,7 +68,7 @@ class CategoryModel {
 
     public function getCategoryNew($storeId,$categoryid){
         $sql="SELECT pro_category.type, pro_category.`name`, pro_category.`icon`, pro_category.`delay`, pro_category.`description`
-	            , pro_story_category.id, pro_story_category.price
+	            , pro_category.id, pro_story_category.price
             FROM pro_category LEFT JOIN pro_story_category ON pro_category.id = pro_story_category.categroy_id
                         WHERE pro_story_category.store_id = '{$storeId}' and pro_story_category.categroy_id='{$categoryid}'";
         $rs =  $this->db->find($sql);

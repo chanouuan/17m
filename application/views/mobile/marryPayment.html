@@ -86,7 +86,7 @@
                         </li>
                     </ul>
 
-                    <ul class="order-info-price" style="border-top:1px solid #E4E4E4;overflow: show;">
+                    <ul class="order-info-price" style="border-top:1px solid #E4E4E4;overflow: hidden;">
                         <li style="width:60%;height:auto;min-height:40px;">
                             <b>订单金额</b>
                             <span style="display: inline-block;margin-right:10px">￥<b id="price-total"><?=$price?></b></span>
@@ -142,29 +142,47 @@
 
 <?php include('rightMenu.html') ?>
 
+<script src="//res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script>
-    var totalPrice = 180;
-    var isVip = 0;
+    /*<?php if(isset($jssdk) && $jssdk){ ?>*/
+    wx.config({
+        debug: false,
+        appId: "<?=$jssdk['appId']?>",
+        timestamp: "<?=$jssdk['timestamp']?>",
+        nonceStr: "<?=$jssdk['nonceStr']?>",
+        signature: "<?=$jssdk['signature']?>",
+        jsApiList: [
+            'hideMenuItems',
+            'onMenuShareTimeline',
+            'onMenuShareAppMessage',
+            'chooseWXPay'
+        ]
+    });
+    wx.ready(function () {
+        wx.hideMenuItems({
+            menuList: [
+                'menuItem:share:qq',
+                'menuItem:share:weiboApp',
+                'menuItem:share:facebook',
+                'menuItem:share:QZone'
+            ]
+        });
+    });
+    /*<?php } ?>*/
 
-    var couponCost = 0;
-    var finalDeposit=60;
-
-    var $loadingTimer;
-    function startLoading($buttonID, $text)
-    {
-        // List of words to loop on
-        var words = [$text+'...',$text,$text+'.', $text+'..'];
-
-        var index = 0;
-        $($buttonID).html(words[index]);
-        // Index of the words array
-
-        $loadingTimer=window.setInterval(function(){
-            index = (index+1) % words.length;
-            $($buttonID).html(words[index]);
-            // Increment the index modulo the length of words: 0, 1, 2, 0, 1, 2, etc
-        }, 500);
-    }
+    var JSAPI = {
+        chooseWXPay: function(config, success, fail){
+            try{
+                config = JSON.parse(config);
+            }catch(e){
+                fail && fail(e);
+                return;
+            }
+            config.success = success;
+            config.cancel = fail;
+            wx.chooseWXPay(config);
+        }
+    };
 
     // 验证coupon
     (function(){
@@ -222,12 +240,6 @@
                         .addClass('oi-coupon-empty')
                         .find('p').html('');
                 }
-                couponCost = 0;
-                var newDepo = (finalDeposit - couponCost);
-                if (newDepo < 0) {
-                    newDepo = 0;
-                }
-                $('#deposit').html(newDepo.toFixed(0));
             }
         };
 
@@ -277,10 +289,13 @@
     $('#confirm-order').on('click',function(){
 
         var _self = $(this);
-        if(_self.hasClass('order-confirm-disable'))return;
+        if(_self.hasClass('order-confirm-disable')) {
+            return;
+        }
+
         $.ajax({
             type: 'post',
-            url: '?c=order&a=createcard',
+            url: '?c=order&a=createcard&ajax=1',
             data: $('#order-form').serialize(),
             dataType: 'json',
             timeout: 5000,
@@ -354,54 +369,6 @@
         });
     });
 
-    //var creating = false;
-    $('#confirm-order').on('click',function(){
-        // if(hasError())
-        // {
-        //     alert('出错啦...');
-        //     return;
-        // }
-
-        var postData = $('#order-form').serialize();
-        //if (!creating)
-        if($(this).html()!='确认并支付')
-            return ;
-
-        $(this).addClass('order-confirm-disable');
-        startLoading('#confirm-order', '加载中');
-
-        //creating = true;
-        $.post('/book/submitorder', postData, function(result){
-            console.log(result);
-            if(result.error){
-                //creating = false;
-                $('#confirm-order').html('确认并支付').removeClass('order-confirm-disable');
-                if(result.url) {
-                    customAlert('error', result.msg, '我的订单', function(){
-                        window.location.href = result.url;
-                    });
-                }else {
-                    customAlert('error', result.msg, '好');
-                }
-                clearInterval($loadingTimer);
-            }
-            else
-            {
-                if(result.url) {
-                    window.location.href = result.url;
-                }
-                else
-                {
-                    customAlert('error', '支付接口通信不畅，请再试一次', '好', function(){
-                        window.location.href='/user/orders?redirect=lastest';
-                    });
-                }
-            }
-        }).fail(function(response) {
-            console.log(response);
-        });
-
-    });
 </script>
 
 <?php include('footer.html') ?>

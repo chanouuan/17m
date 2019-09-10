@@ -45,10 +45,10 @@ class OrderModel {
         $store_list = array_column($store_list, 'name', 'id');
         $result = [];
         $merge = [
-                1 => '', 
-                2 => '', 
-                3 => '', 
-                4 => '', 
+                1 => '',
+                2 => '',
+                3 => '',
+                4 => '',
                 5 => ''
         ];
         foreach ($data as $k => $v) {
@@ -62,11 +62,11 @@ class OrderModel {
                 $score4 = $vv['score4'] + $merge;
                 ksort($score4);
                 $result['score'][] = [
-                        'store' => $store_list[$k], 
-                        'date' => $kk, 
-                        'score1' => $score1, 
-                        'score2' => $score2, 
-                        'score3' => $score3, 
+                        'store' => $store_list[$k],
+                        'date' => $kk,
+                        'score1' => $score1,
+                        'score2' => $score2,
+                        'score3' => $score3,
                         'score4' => $score4
                 ];
                 $result['total'][$store_list[$k]]['date'] = date('Y年m月', strtotime($kk));
@@ -114,16 +114,16 @@ class OrderModel {
         $coupon = $couponModel->getCommentCoupon($order_info['storeid']);
         // 增加评论
         if (!$this->db->insert('~comment~', [
-                'orderid' => $post['id'], 
-                'storeid' => $order_info['storeid'], 
-                'raterid' => $order_info['uid'], 
-                'rater' => $order_info['buyer'], 
-                'coupon' => $coupon, 
-                'message' => $post['content'], 
-                'score1' => $post['score1'], 
-                'score2' => $post['score2'], 
-                'score3' => $post['score3'], 
-                'score4' => $post['score4'], 
+                'orderid' => $post['id'],
+                'storeid' => $order_info['storeid'],
+                'raterid' => $order_info['uid'],
+                'rater' => $order_info['buyer'],
+                'coupon' => $coupon,
+                'message' => $post['content'],
+                'score1' => $post['score1'],
+                'score2' => $post['score2'],
+                'score3' => $post['score3'],
+                'score4' => $post['score4'],
                 'createtime' => date('Y-m-d H:i:s', TIMESTAMP)
         ])) {
             return error('操作失败');
@@ -192,7 +192,7 @@ class OrderModel {
         $storelist = $this->db->field('id,name')->table('~store~')->select();
         $storelist = array_column($storelist, 'name', 'id');
         $where = [
-                'status = 1', 
+                'status = 1',
                 'ordertime between "' . (date('Y-m-d', TIMESTAMP) . ' 00:00:00') . '" and "' . (date('Y-m-d', TIMESTAMP) . ' 23:59:59') . '"'
         ];
         if ($userinfo['area'] > 0) {
@@ -226,15 +226,15 @@ class OrderModel {
         }
         return $rs;
     }
-    
+
     // 获取订单信息
     public function getOrder ($id = null, $where = '', $limit = '', $field = '*', $order = 'id desc')
     {
         if (isset($id)) {
             $id = intval($id);
-            $rs = $this->db->table('~order~')->field('*')->where('id=' . $id)->find();
+            $rs = $this->db->table('~order~')->field('*')->where('id=' . $id . ($where ? ' and ' . $where : ''))->find();
         } else {
-            $rs = $this->db->table('~order~')->field($field)->where($where)->select();
+            $rs = $this->db->table('~order~')->field($field)->where($where)->order($order)->limit($limit)->select();
         }
         return $rs;
     }
@@ -260,7 +260,7 @@ class OrderModel {
     public function insertOrder ($orderarray)
     {
         $this->db->insert("pro_order", $orderarray);
-    
+
     }
 
     public function getlastid ()
@@ -327,7 +327,7 @@ class OrderModel {
         if ($where) {
             $sql = $sql . "where " . $where;
         }
-        
+
         if ($limit != "") {
             $sql = $sql . $limit;
         }

@@ -55,11 +55,11 @@ class Marry_Action extends ActionPDO {
     public function detail ()
     {
         $categoryModel = new CategoryModel();
-        if (!$categoryInfo = $categoryModel->getCategory(intval(getgpc('category_id')), 'project_id = ' . $this->projectId)) {
-            $this->error('该产品不存在');
-        }
-        if (!$relationCategory = $categoryModel->getRelationCategory($categoryInfo['id'])) {
+        if (!$relationCategory = $categoryModel->getRelationCategory(intval(getgpc('store_id')), intval(getgpc('category_id')))) {
             $this->error('该产品无效');
+        }
+        if (!$categoryInfo = $categoryModel->getCategory($relationCategory['category_id'], 'project_id = ' . $this->projectId)) {
+            $this->error('该产品不存在');
         }
         if (!$storeInfo = (new StoreModel())->getStore($relationCategory['store_id'], 'status = 1 and project_id = ' . $this->projectId)) {
             $this->error('门店不存在');
@@ -79,11 +79,11 @@ class Marry_Action extends ActionPDO {
     public function schedules ()
     {
         $categoryModel = new CategoryModel();
-        if (!$categoryInfo = $categoryModel->getCategory(intval(getgpc('category_id')), 'project_id = ' . $this->projectId, null, 'id,name')) {
-            $this->error('该产品不存在');
-        }
-        if (!$relationCategory = $categoryModel->getRelationCategory($categoryInfo['id'])) {
+        if (!$relationCategory = $categoryModel->getRelationCategory(intval(getgpc('store_id')), intval(getgpc('category_id')))) {
             $this->error('该产品无效');
+        }
+        if (!$categoryInfo = $categoryModel->getCategory($relationCategory['category_id'], 'project_id = ' . $this->projectId, null, 'id,name')) {
+            $this->error('该产品不存在');
         }
         if (!$storeInfo = (new StoreModel())->getStore($relationCategory['store_id'], 'status = 1 and project_id = ' . $this->projectId)) {
             $this->error('门店不存在');
@@ -91,6 +91,7 @@ class Marry_Action extends ActionPDO {
         if (!$cityInfo = (new CityModel())->getCity($storeInfo['citycode'])) {
             $this->error('城市未开通');
         }
+
         $schedules = (new PoolModel())->getScheduleDays($relationCategory['store_id']);
         $this->show([
             'city_name' => $cityInfo['name'],
@@ -106,11 +107,11 @@ class Marry_Action extends ActionPDO {
     public function times ()
     {
         $categoryModel = new CategoryModel();
-        if (!$categoryInfo = $categoryModel->getCategory(intval(getgpc('category_id')), 'project_id = ' . $this->projectId, null, 'id,name,delay')) {
-            $this->error('该产品不存在');
-        }
-        if (!$relationCategory = $categoryModel->getRelationCategory($categoryInfo['id'])) {
+        if (!$relationCategory = $categoryModel->getRelationCategory(intval(getgpc('store_id')), intval(getgpc('category_id')))) {
             $this->error('该产品无效');
+        }
+        if (!$categoryInfo = $categoryModel->getCategory($relationCategory['category_id'], 'project_id = ' . $this->projectId, null, 'id,name,delay')) {
+            $this->error('该产品不存在');
         }
         if (!$storeInfo = (new StoreModel())->getStore($relationCategory['store_id'], 'status = 1 and project_id = ' . $this->projectId)) {
             $this->error('门店不存在');
@@ -118,9 +119,10 @@ class Marry_Action extends ActionPDO {
         if (!$cityInfo = (new CityModel())->getCity($storeInfo['citycode'])) {
             $this->error('城市未开通');
         }
+
         $result = (new PoolModel())->getScheduleTimes($relationCategory['store_id'], getgpc('date'));
         echo json_encode($result);
-        exit(0);
+        return null;
     }
 
     /**
@@ -129,11 +131,11 @@ class Marry_Action extends ActionPDO {
     public function payment ()
     {
         $categoryModel = new CategoryModel();
-        if (!$categoryInfo = $categoryModel->getCategory(intval(getgpc('category_id')), 'project_id = ' . $this->projectId, null, 'id,name,delay')) {
-            $this->error('该产品不存在');
-        }
-        if (!$relationCategory = $categoryModel->getRelationCategory($categoryInfo['id'])) {
+        if (!$relationCategory = $categoryModel->getRelationCategory(intval(getgpc('store_id')), intval(getgpc('category_id')))) {
             $this->error('该产品无效');
+        }
+        if (!$categoryInfo = $categoryModel->getCategory($relationCategory['category_id'], 'project_id = ' . $this->projectId, null, 'id,name,delay')) {
+            $this->error('该产品不存在');
         }
         if (!$storeInfo = (new StoreModel())->getStore($relationCategory['store_id'], 'status = 1 and project_id = ' . $this->projectId)) {
             $this->error('门店不存在');
@@ -141,7 +143,7 @@ class Marry_Action extends ActionPDO {
         if (!$cityInfo = (new CityModel())->getCity($storeInfo['citycode'])) {
             $this->error('城市未开通');
         }
-        if (!$poolInfo = (new PoolModel())->get('maxcount > 0 and storeid = ' . $storeInfo['id'] . ' and id = ' . intval(getgpc('poolid')))) {
+        if (!$poolInfo = (new PoolModel())->get('amount > 0 and storeid = ' . $storeInfo['id'] . ' and id = ' . intval(getgpc('poolid')))) {
             $this->error('本次预约已满，请选择其他时段');
         }
 
@@ -168,6 +170,9 @@ class Marry_Action extends ActionPDO {
         ]);
     }
 
+    /**
+     * 优惠券验证
+     */
     public function coupon ()
     {
         $code = safe_subject(getgpc('code'));
@@ -178,13 +183,13 @@ class Marry_Action extends ActionPDO {
                 'isValid' => false,
                 'error_msg' => '优惠码无效'
             ]);
-            exit(0);
+            return null;
         }
         echo json_encode([
             'isValid' => true,
             'error_msg' => '优惠' . round_dollar($result['cost']) . '元'
         ]);
-        exit(0);
+        return null;
     }
 
     protected function show (array $data = [])
