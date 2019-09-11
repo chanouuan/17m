@@ -31,72 +31,25 @@
                         <div class="oi-status">
                             <?php if($v['status']==1){ ?>
                             <span class="order-status order-hasshot">已支付</span>
-                            <?php }else if($v['status']==-1){ ?>
+                            <?php }elseif($v['status']==-1){ ?>
                             <span class="order-status order-haspaid">已取消</span>
-                            <?php }else if($v['status']==2){ ?>
-                            <span class="order-status order-finish">
-                                <? if($v['comment_mark']){ ?>待评价<? }else{ ?>已完成<? } ?>
-                                </span>
+                            <?php }elseif($v['status']==2){ ?>
+                            <span class="order-status order-hasshot"><?=$v['comment_mark']?'待评价':'已完成'?></span>
                             <?php }elseif(time()-strtotime($v['createtime'])<1200){ ?>
                             <span class="order-status order-notpay">待支付</span>
                             <div data-time="<?=1200-(time()-strtotime($v['createtime']))?>" class="count-down">
                                 <span class="num-0"></span><span class="num-0"></span><b class="num-uni3A"></b><span class="num-0"></span><span class="num-0"></span>
                             </div>
-                            <?}else{?>
+                            <?php }else{ ?>
                             <span class="order-status order-expired">已关闭</span>
-                            <?}?>
+                            <?php }?>
                         </div>
                         <span class="oi-more" href="?c=order&a=myorder&step=detail&id=<?=$v['id']?>">
-                                查看订单详情<i class="icon-arrow-right"></i>
-                            </span>
+                            查看订单详情<i class="icon-arrow-right"></i>
+                        </span>
                     </a>
                 </li>
                 <?}?>
-                <li class="order-info">
-                    <a href="/user/order/E091459104350301009">
-                        <div class="oi-item">cyq </div>
-                        <div class="oi-item">2019年9月10日 (周二) 18:30</div>
-                        <div class="oi-item">上海五角场店</div>
-                        <div class="oi-list">
-                            <span>证件照</span>
-                        </div>
-                        <div class="oi-status">
-                            <span class="order-status order-notpay">待支付</span>
-                            <div data-time="1188" class="count-down">
-                                <span class="num-1"></span><span class="num-9"></span><b class="num-uni3A"></b><span class="num-4"></span><span class="num-2"></span>
-                            </div>
-                        </div>
-                        <span class="oi-more" href="/user/order/E091459104350301009">查看订单详情<i class="icon-arrow-right"></i></span>
-                    </a>
-                </li>
-                <li class="order-info">
-                    <a href="/user/order/C035968054350301549">
-                        <div class="oi-item">cyq </div>
-                        <div class="oi-item">2017年3月24日 (周五) 15:00</div>
-                        <div class="oi-item">长沙五一店</div>
-                        <div class="oi-list">
-                            <span>全身形象照</span>
-                        </div>
-                        <div class="oi-status">
-                            <span class="order-status order-expired">已关闭</span>
-                        </div>
-                        <span class="oi-more" href="/user/order/C035968054350301549">查看订单详情<i class="icon-arrow-right"></i></span>
-                    </a>
-                </li>
-                <li class="order-info">
-                    <a href="/user/order/C031224814350301592">
-                        <div class="oi-item">cyq </div>
-                        <div class="oi-item">2017年3月28日 (周二) 13:00</div>
-                        <div class="oi-item">昆明南亚店</div>
-                        <div class="oi-list">
-                            <span>全身形象照</span>
-                        </div>
-                        <div class="oi-status">
-                            <span class="order-status order-expired">已关闭</span>
-                        </div>
-                        <span class="oi-more" href="/user/order/C031224814350301592">查看订单详情<i class="icon-arrow-right"></i></span>
-                    </a>
-                </li>
             </ul>
         </div>
         <div id="page-mask" class="page-mask"></div>

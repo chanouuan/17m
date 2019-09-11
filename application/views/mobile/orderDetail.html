@@ -1,0 +1,581 @@
+<?php include('header.html') ?>
+
+<link href="<?=$tpl_dir?>/yue/css/user-order.css?v=3.1" rel="stylesheet" type="text/css">
+
+<div class="app">
+    <div class="toolbar">
+        <div class="toolbar-logo"><img src="<?=$tpl_dir?>/imgs/logo.png"></div>
+        <div class="toolbar-menu" id="toolbar-menu"><a href="javascript:void(0)" data-role="icon-ment" class="icon-menu"></a></div>
+        <div class="toolbar-back" style="display: block;"><a href="javascript:window.location='?c=order&a=myorder';"><i class="icon-arrow-left"></i>上一步</a></div>
+
+    </div>
+
+
+    <div class="app-body">
+        <div class="wrap">
+            <span class="od-back">订单详情</span>
+            <div class="order-detail">
+                <div class="od-title">
+                    <ul>
+                        <li>
+                            <label>订单编号：</label>
+                            <div><?=$cardInfo['ordercode']?></div>
+                        </li>
+                        <li>
+                            <label>创建时间：</label>
+                            <div><?=$order['createtime']?></div>
+                        </li>
+                    </ul>
+                    <div class="od-status">
+                        <?php if($order['status']==1){ ?>
+                        <span class="order-status order-hasshot">已支付</span>
+                        <?php }elseif($order['status']==-1){ ?>
+                        <span class="order-status order-haspaid">已取消</span>
+                        <?php }elseif($order['status']==2){ ?>
+                        <span class="order-status order-hasshot"><?=$comment?'已完成':'待评价'?></span>
+                        <?php }elseif(time()-strtotime($order['createtime'])<1200){ ?>
+                        <span class="order-status order-notpay">待支付</span>
+                        <div data-time="<?=1200-(time()-strtotime($order['createtime']))?>" class="count-down">
+                            <span class="num-0"></span><span class="num-0"></span><b class="num-uni3A"></b><span class="num-0"></span><span class="num-0"></span>
+                        </div>
+                        <?php }else{ ?>
+                        <span class="order-status order-expired">已关闭</span>
+                        <?php }?>
+                    </div>
+                </div>
+                <div class="od-info">
+                    <h4>预约信息</h4>
+                    <ul>
+                        <li>
+                            <label>姓<span style="opacity:0;">姓名</span>名：</label>
+                            <div class="odi-box"><?=$order['buyer']?></div>
+                        </li>
+                        <li>
+                            <label>联系方式：</label>
+                            <div class="odi-box"><?=$order['buyerphone']?></div>
+                        </li>
+                        <li>
+                            <label>预约日期：</label>
+                            <div class="odi-box">
+                                <?=$order['ordertime']?>
+                            </div>
+                        </li>
+                        <li class="odi-address">
+                            <label>预约门店：</label>
+                            <div class="odi-box">
+                                <p><?=$storeInfo['name']?></p>
+                                <a class="icon-store-info1 check-address" href="javascript:;">门店信息</a>
+                            </div>
+                        </li>
+                        <!-- li>
+                            <label>拍摄人数：</label>
+                            <div class="odi-box">1人</div>
+                        </li -->
+                    </ul>
+                    <ul class="od-products">
+                        <li>
+                            <label><b>套餐信息</b></label>
+                            <div class="odi-box">
+
+                                <table>
+                                    <tbody><tr data-price="">
+                                        <th><?=$order['item']?></th>
+                                        <td>x1 份</td>
+                                    </tr>
+                                    </tbody></table>
+                                <em>套餐可至门店更改，以最终拍摄为准</em>
+                            </div>
+                        </li>
+                        <?php if($order['delay']){ ?>
+                        <li>
+                            <label><b>预计耗时</b></label>
+                            <div class="odi-box">
+                                <p>约<?=$order['delay']?>小时</p>
+                                <em>时长仅供参考，请预留充足的时间</em>
+                            </div>
+                        </li>
+                        <?php } ?>
+
+                    </ul>
+                    <ul class="od-price">
+                        <li class="odp-total">
+                            <b>订单金额</b>
+                            <span>￥<b><?=$order['pay']/100?></b></span>
+                        </li>
+                        <li class="odp-deposit od-notpay">
+                            <b>支付金额</b>
+                            <span>￥<b><?=$order['downpay']/100?></b></span>
+                        </li>
+                    </ul>
+                </div>
+
+                <?php if($cardInfo['coupon']){ ?>
+                <div class="od-closed">
+                    <label>已使用优惠码：</label><?=$cardInfo['coupon']?>
+                </div>
+                <?php } ?>
+
+                <?php if($order['status']==2){ ?>
+                <?php if(!$comment&&$comment_reward){ ?>
+                <div class="od-closed">
+                    <b style="color:#1e82d0">（本次评价有机会获得优惠劵 1 张）</b>
+                </div>
+                <?php } ?>
+                <?php } ?>
+
+
+                <div class="action od-btn" id="orderBtnBox" style="display: block;">
+                    <?php if($order['status']==1){ ?>
+                        <a href="javascript:;" id="refund-order" class="od-white">取消订单</a>
+                    <?php }elseif($order['status']==0){ ?>
+                        <?php if(time()-strtotime($order['createtime'])<1200){ ?>
+                            <a href="javascript:;" id="order-pay" class="od-pink">确认支付</a>
+                        <?php } ?>
+                        <a href="javascript:;" id="cancel-order" class="od-white">关闭订单</a>
+                    <?php } ?>
+                </div>
+            </div>
+
+<?php if($comment){ ?>
+            <span class="od-back">评价详情</span>
+            <div class="order-detail">
+                <div class="od-info">
+                    <h4><?=$comment['message']?></h4>
+                    <ul>
+                        <li>
+                            <label>前　台：</label>
+                            <div><img style="width:100px;" src="/public/img/level/<?=$comment['score1']?>.png"></div>
+                        </li>
+                        <li>
+                            <label>化妆师：</label>
+                            <div><img style="width:100px;" src="/public/img/level/<?=$comment['score2']?>.png"></div>
+                        </li>
+                        <li>
+                            <label>摄影师：</label>
+                            <div><img style="width:100px;" src="/public/img/level/<?=$comment['score3']?>.png"></div>
+                        </li>
+                        <li>
+                            <label>修图师：</label>
+                            <div><img style="width:100px;" src="/public/img/level/<?=$comment['score4']?>.png"></div>
+                        </li>
+                        <li>
+                            <label>时　间：</label>
+                            <div><?=$comment['createtime']?></div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="od-info">
+                    <h4>本次评价获得优惠劵 <b style="color:red"><?=$comment['coupon']?1:0?></b> 张</h4>
+                    <?php if($comment['coupon']){ ?>
+                    <ul style="border-bottom:none">
+                        <li>
+                            <label>优惠码：</label>
+                            <div>
+                                <?=$comment['coupon']?>
+                                <?php if(!$comment['coupon_info']){ ?>
+                                <span style="color:red">(不可用)</span>
+                                <?php }elseif($comment['coupon_info']['status']==1){ ?>
+                                <span style="color:red">(已使用)</span>
+                                <?php }elseif(strtotime($comment['coupon_info']['expire'])<TIMESTAMP){ ?>
+                                <span style="color:red">(已过期)</span>
+                                <?php }else{ ?>
+                                <span style="color:green">(可用)</span>
+                                <?php } ?>
+                            </div>
+                        </li>
+                        <?php if($comment['coupon_info']){ ?>
+                        <li>
+                            <label>面　值：</label>
+                            <div><?=$comment['coupon_info']['cost']/100?>元</div>
+                        </li>
+                        <li>
+                            <label>截　止：</label>
+                            <div><?=$comment['coupon_info']['expire']?></div>
+                        </li>
+                        <?php } ?>
+                    </ul>
+                    <?php } ?>
+                </div>
+            </div>
+<?php }else{ ?>
+<?php if($order['status']==2){ ?>
+            <form id="comment_form" action="?<?=burl('step=comment')?>" method="post">
+                <span class="od-back" style="background-color:#FF8571;">发表评价</span>
+                <div class="order-detail">
+                    <div class="od-info">
+                        <h4>评价内容：</h4>
+                        <textarea id="comment_content" name="content" placeholder="为了更好为您提供服务，请填写对本次服务的评价。" maxlength="200" class="form-control" style="width:100%;height:100px;"></textarea>
+                    </div>
+                    <div class="od-info">
+                        <h4>服务评分：（选中对应评分的星星）</h4>
+                        <ul style="border-bottom:none;">
+                            <li style="height:40px;line-height:40px;">
+                                <label style="font-size:13px;color:#1e82d0;font-weight:700;">前　台</label>
+                                <div id="score1_dom" style="float:left;width:182px;height:30px;background:url(/public/img/level/0.png) no-repeat;background-size:182px 30px;">
+                                    <div onclick="score('score1',1)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score1',2)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score1',3)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score1',4)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score1',5)" style="float:left;width:36px;height:30px;"></div>
+                                    <input type="hidden" name="score1" id="score1_input" value="0">
+                                </div>
+                            </li>
+                            <li style="height:40px;line-height:40px;">
+                                <label style="font-size:13px;color:#1e82d0;font-weight:700;">化妆师</label>
+                                <div id="score2_dom" style="float:left;width:182px;height:30px;background:url(/public/img/level/0.png) no-repeat;background-size:182px 30px;">
+                                    <div onclick="score('score2',1)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score2',2)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score2',3)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score2',4)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score2',5)" style="float:left;width:36px;height:30px;"></div>
+                                    <input type="hidden" name="score2" id="score2_input" value="0">
+                                </div>
+                            </li>
+                            <li style="height:40px;line-height:40px;">
+                                <label style="font-size:13px;color:#1e82d0;font-weight:700;">摄影师</label>
+                                <div id="score3_dom" style="float:left;width:182px;height:30px;background:url(/public/img/level/0.png) no-repeat;background-size:182px 30px;">
+                                    <div onclick="score('score3',1)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score3',2)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score3',3)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score3',4)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score3',5)" style="float:left;width:36px;height:30px;"></div>
+                                    <input type="hidden" name="score3" id="score3_input" value="0">
+                                </div>
+                            </li>
+                            <li style="height:40px;line-height:40px;">
+                                <label style="font-size:13px;color:#1e82d0;font-weight:700;">修图师</label>
+                                <div id="score4_dom" style="float:left;width:182px;height:30px;background:url(/public/img/level/0.png) no-repeat;background-size:182px 30px;">
+                                    <div onclick="score('score4',1)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score4',2)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score4',3)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score4',4)" style="float:left;width:36px;height:30px;"></div>
+                                    <div onclick="score('score4',5)" style="float:left;width:36px;height:30px;"></div>
+                                    <input type="hidden" name="score4" id="score4_input" value="0">
+                                </div>
+                            </li>
+                            <li style="font-size:13px;display:none">
+                                <label>五星代表</label>
+                                <div style="float:left;">
+                                    <div style="height:20px;line-height:20px;">
+                                        非常不满意 <img style="width:16px;" src="/public/img/level/a.png">
+                                    </div>
+                                    <div style="height:20px;line-height:20px;">
+                                        　　不满意 <img style="width:16px;" src="/public/img/level/a.png"> <img style="width:16px;" src="/public/img/level/a.png">
+                                    </div>
+                                    <div style="height:20px;line-height:20px;">
+                                        　基本满意 <img style="width:16px;" src="/public/img/level/a.png"> <img style="width:16px;" src="/public/img/level/a.png"> <img style="width:16px;" src="/public/img/level/a.png">
+                                    </div>
+                                    <div style="height:20px;line-height:20px;">
+                                        　　　满意 <img style="width:16px;" src="/public/img/level/a.png"> <img style="width:16px;" src="/public/img/level/a.png"> <img style="width:16px;" src="/public/img/level/a.png"> <img style="width:16px;" src="/public/img/level/a.png">
+                                    </div>
+                                    <div style="height:20px;line-height:20px;">
+                                        　非常满意 <img style="width:16px;" src="/public/img/level/a.png"> <img style="width:16px;" src="/public/img/level/a.png"> <img style="width:16px;" src="/public/img/level/a.png"> <img style="width:16px;" src="/public/img/level/a.png"> <img style="width:16px;" src="/public/img/level/a.png">
+                                    </div>
+                                </div>
+                            </li>
+                            <li style="font-size:13px;color:#bbb;">
+                                <div style="padding-left:55px;">
+                                    <ul style="border-bottom:none;">
+                                        <li style="margin-right:4px;width:36px;float:left;display:inline;font-size:12px;text-align:center;">非常<br>不满意</li>
+                                        <li style="margin-right:10px;width:36px;float:left;display:inline;font-size:12px">不满意</li>
+                                        <li style="margin-right:0px;width:36px;float:left;display:inline;">基本满意</li>
+                                        <li style="margin-right:0px;width:36px;float:left;display:inline;">满意</li>
+                                        <li style="width:36px;float:left;display:inline;">非常满意</li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="action od-btn">
+                        <a id="comment_submit" href="javascript:;" class="od-pink">发表评价</a>
+                    </div>
+                </div>
+            </form>
+<?php } ?>
+<?php } ?>
+
+            <div class="order-detail" style="display:none;">
+                <div class="action" style="text-align:left">
+                    <img style="width:40%;margin-left:20px" src="<?=$tpl_dir?>/imgs/logo.png">
+                </div>
+                <div style="text-align:center">
+                    <img src="<?=$tpl_dir?>/imgs/weixin.jpg" style="border:0" />
+                </div>
+                <div style="text-align:center;height:35px;line-height:35px;">
+                    <label style="color:#888;font-weight:400">长按二维码添加我们</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="nb-dialog dialog-refund" id="dialog-cancel" style="position: fixed;display: none;">
+            <div class="mask"></div>
+            <div class="dialog-box">
+                <a href="javascript:;" class="icon-close close dialog-hide"></a>
+                <h3 class="icon-warning">你正在关闭下列订单</h3>
+                <div class="drorder-info">
+                    <p><?=$order['buyer']?></p>
+                    <p><?=$order['ordertime']?></p>
+                    <p><?=$storeInfo['name']?></p>
+
+                    <div>
+                        <span><?=$order['item']?></span>
+                    </div>
+                    <span class="order-status order-notpay">待支付</span>
+
+                </div>
+
+
+                <div class="action dialog-btn">
+                    <a href="javascript:;" class="od-white dialog-hide">返回</a>
+
+                    <a href="javascript:;" class="od-red" id="cancel-order-confirm">
+                        关闭订单
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="nb-dialog dialog-refund" id="dialog-refund" style="position: fixed; display: none;">
+            <div class="mask"></div>
+            <div class="dialog-box" style="margin-top: 286.5px;">
+                <a href="javascript:;" class="icon-close close dialog-hide"></a>
+                <h3 class="icon-warning">你正在取消订单</h3>
+                <div class="drorder-info">
+                    <p><?=$order['buyer']?></p>
+                    <p><?=$order['ordertime']?></p>
+                    <p><?=$storeInfo['name']?></p>
+                    <div>
+                        <span><?=$order['item']?></span>
+                    </div>
+                    <div><b style="color:#ff0000">实退金额：￥<?=round_dollar($order['downpay']*$refund_money)?></b>（退<?=$refund_money*100?>%）</div>
+                    <div>
+                        <? foreach($refund_rule as $k=>$v){ ?>
+                        <span style="font-size:12px;color:#ccc;"><?=$v['mark']?></span>
+                        <? } ?>
+                    </div>
+                    <span class="order-status order-notpay">￥<?=round_dollar($order['downpay'])?></span>
+                </div>
+                <div class="action dialog-btn">
+                    <a href="javascript:;" class="od-white dialog-hide">不取消了</a>
+                    <a href="javascript:;" class="od-red" id="refund-order-confirm">确定取消</a>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-mask" class="page-mask"></div>
+    </div>
+</div>
+
+<?php include('rightMenu.html') ?>
+
+<script>
+
+    function score(input,number){
+        $('#'+input+'_dom').css('background-image','url(/public/img/level/'+number+'.png)');
+        $('#'+input+'_input').val(number);
+    }
+
+    $('#comment_submit').on('click',function(){
+        if($('#comment_content').val() == ''){
+            customAlert('error', '请填写评价内容!', '好');
+            return false;
+        }
+        if($('#score1_input').val() == '0'){
+            customAlert('error', '请给前台评分!', '好');
+            return false;
+        }
+        if($('#score2_input').val() == '0'){
+            customAlert('error', '请给化妆师评分!', '好');
+            return false;
+        }
+        if($('#score3_input').val() == '0'){
+            customAlert('error', '请给摄影师评分!', '好');
+            return false;
+        }
+        if($('#score4_input').val() == '0'){
+            customAlert('error', '请给修图师评分!', '好');
+            return false;
+        }
+        var _self = $(this);
+        if(_self.hasClass('od-disable'))return;
+        $.ajax({
+            type: 'post',
+            url: "?<?=burl('step=comment')?>",
+            data: {id:"<?=intval($_GET['id'])?>",content:$('#comment_content').val(),score1:$('#score1_input').val(),score2:$('#score2_input').val(),score3:$('#score3_input').val(),score4:$('#score4_input').val()},
+            dataType: 'json',
+            timeout: 5000,
+            success: function(data){
+                if(data.errorcode !== 0){
+                    customAlert('error', data.data, '好', function(){
+                        location.reload();
+                    });
+                }else{
+                    customAlert('error', data.data, '好', function(){
+                        location.reload();
+                    });
+                }
+            },
+            beforeSend: function(xhr){
+                _self.removeClass().addClass('od-disable');
+            },
+            error: function(xhr, type){
+                customAlert('error', '网络超时，请重试!', '好', function(){
+                    location.reload();
+                });
+            }
+        });
+    });
+
+    var $loadingTimer;
+    function startLoading($buttonID, $text)
+    {
+        // List of words to loop on
+        var words = [$text+'...',$text,$text+'.', $text+'..'];
+
+        var index = 0;
+        $($buttonID).html(words[index]);
+        // Index of the words array
+
+        $loadingTimer=window.setInterval(function(){
+            index = (index+1) % words.length;
+            $($buttonID).html(words[index]);
+            // Increment the index modulo the length of words: 0, 1, 2, 0, 1, 2, etc
+        }, 500);
+    }
+
+    // 关闭订单
+    $('#cancel-order').click(function(){
+        var el = $('#dialog-cancel').find('.dialog-box');
+        $('#dialog-cancel').show().find('.dialog-box').css({
+            marginTop: ($('#dialog-cancel').height() - el.height())/2
+        });
+    });
+
+    // 取消支付
+    $('#refund-order').click(function(){
+        var el = $('#dialog-refund').find('.dialog-box');
+        $('#dialog-refund').show().find('.dialog-box').css({
+            marginTop: ($('#dialog-refund').height() - el.height())/2
+        });
+    });
+
+    $('.dialog-hide').click(function(){
+        $('#dialog-refund').hide();
+        $('#dialog-cancel').hide();
+    });
+
+    // 取消订单并退款
+    $('#refund-order-confirm').click(function(){
+        var _self = $(this);
+        if(_self.hasClass('od-disable'))return;
+        $.ajax({
+            type: 'post',
+            url: '?c=order&a=refundOrder&id=<?=$id?>',
+            dataType: 'json',
+            timeout: 5000,
+            success: function(data){
+                if(data.errorcode !== 0){
+                    customAlert('error', data.data, '好', function(){
+                        location.reload();
+                    });
+                }else{
+                    window.location = '?c=order&a=myorder&rand='+Math.random();
+                }
+            },
+            beforeSend: function(xhr){
+                _self.removeClass().addClass('od-disable');
+            },
+            error: function(xhr, type){
+                customAlert('error', '网络超时，请重试!', '好', function(){
+                    location.reload();
+                });
+            }
+        });
+    });
+
+    // 关闭订单
+    $('#cancel-order-confirm').click(function(){
+        var _self = $(this);
+        if(_self.hasClass('od-disable'))return;
+        $.ajax({
+            type: 'post',
+            url: '?c=order&a=closeOrder&id=<?=$id?>',
+            dataType: 'json',
+            timeout: 5000,
+            success: function(data){
+                if(data.errorcode !== 0){
+                    customAlert('error', data.data, '好', function(){
+                        location.reload();
+                    });
+                }else{
+                    window.location = '?c=order&a=myorder&rand='+Math.random();
+                }
+            },
+            beforeSend: function(xhr){
+                _self.removeClass().addClass('od-disable');
+            },
+            error: function(xhr, type){
+                customAlert('error', '网络超时，请重试!', '好', function(){
+                    location.reload();
+                });
+            }
+        });
+    });
+
+
+    // 倒计时
+    (function(){
+        var timer = null;
+        var addSuff = function(number){
+            return (number) > 9 ? number.toString() : '0'+ number;
+        }
+        var countDown = function(){
+            clearTimeout(timer);
+            $('.count-down').each(function(){
+                var el = $(this);
+                var time = el.data('time');
+                time--;
+                el.data('time', time);
+                if(time == 0){
+                    el.removeClass('count-down').end()
+                        .prev('.order-status').removeClass('order-notpay').addClass('order-expired')
+                        .html('已过期');
+                    el.parents('.order-info').addClass('order-expired');
+                }else{
+                    var hours = addSuff(Math.floor(time/(60 * 60))).split('');
+                    var minutes = addSuff(Math.floor((time%(60 * 60))/60)).split('');
+                    var seconds = addSuff((time%60).toString()).split('');
+                    var str = '';
+
+                    if(Math.floor(time/(60 * 60)) > 0){
+                        $.each(hours, function(index, num){
+                            str += '<span class="num-'+ num +'"></span>';
+                        });
+                        str += '<b class="num-uni3A"></b>';
+                    }
+                    $.each(minutes, function(index, num){
+                        str += '<span class="num-'+ num +'"></span>';
+                    });
+                    str += '<b class="num-uni3A"></b>';
+
+                    $.each(seconds, function(index, num){
+                        str += '<span class="num-'+ num +'"></span>';
+                    });
+
+                    el.html(str);
+                }
+            });
+            if($('.count-down').length > 0) {
+                timer = setTimeout(function () {
+                    countDown();
+                }, 1000);
+            }
+        };
+
+        timer = setTimeout(function(){
+            countDown();
+        }, 1000);
+    })();
+</script>
+
+<?php include('footer.html') ?>

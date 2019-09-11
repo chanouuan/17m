@@ -15,6 +15,7 @@
         <form id="order-form" method="post" action="?<?=burl('a=createCard')?>" onsubmit="$('input').blur();return false;">
             <input type="hidden" name="poolid" value="<?=$poolInfo['id']?>">
             <input type="hidden" name="category_id" value="<?=$categoryInfo['id']?>">
+            <input type="hidden" name="store_id" value="<?=$storeInfo['id']?>">
 
             <div class="wrap">
                 <div class="order-info">
@@ -142,47 +143,7 @@
 
 <?php include('rightMenu.html') ?>
 
-<script src="//res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script>
-    /*<?php if(isset($jssdk) && $jssdk){ ?>*/
-    wx.config({
-        debug: false,
-        appId: "<?=$jssdk['appId']?>",
-        timestamp: "<?=$jssdk['timestamp']?>",
-        nonceStr: "<?=$jssdk['nonceStr']?>",
-        signature: "<?=$jssdk['signature']?>",
-        jsApiList: [
-            'hideMenuItems',
-            'onMenuShareTimeline',
-            'onMenuShareAppMessage',
-            'chooseWXPay'
-        ]
-    });
-    wx.ready(function () {
-        wx.hideMenuItems({
-            menuList: [
-                'menuItem:share:qq',
-                'menuItem:share:weiboApp',
-                'menuItem:share:facebook',
-                'menuItem:share:QZone'
-            ]
-        });
-    });
-    /*<?php } ?>*/
-
-    var JSAPI = {
-        chooseWXPay: function(config, success, fail){
-            try{
-                config = JSON.parse(config);
-            }catch(e){
-                fail && fail(e);
-                return;
-            }
-            config.success = success;
-            config.cancel = fail;
-            wx.chooseWXPay(config);
-        }
-    };
 
     // 验证coupon
     (function(){

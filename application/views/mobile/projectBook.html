@@ -57,80 +57,18 @@
 
 <?php include('rightMenu.html') ?>
 
-<script src="//res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script>
 
     /*<?php if(isset($jssdk) && $jssdk){ ?>*/
-        wx.config({
-            debug: false,
-            appId: "<?=$jssdk['appId']?>",
-            timestamp: "<?=$jssdk['timestamp']?>",
-            nonceStr: "<?=$jssdk['nonceStr']?>",
-            signature: "<?=$jssdk['signature']?>",
-            jsApiList: [
-                'hideMenuItems',
-                'onMenuShareTimeline',
-                'onMenuShareAppMessage',
-                'previewImage',
-                'getLocation',
-                'chooseWXPay'
-            ]
+    wx.ready(function(){
+        JSAPI.getLocation(function(location){
+            location_city = location || '';
+            gpsCheckTimeUp = true;
+        },function(err){
+            gpsCheckTimeUp = true;
         });
-        wx.ready(function () {
-            wx.hideMenuItems({
-                menuList: [
-                    'menuItem:share:qq',
-                    'menuItem:share:weiboApp',
-                    'menuItem:share:facebook',
-                    'menuItem:share:QZone'
-                ]
-            });
-            JSAPI.getLocation(function(location){
-                location_city = location || '';
-                gpsCheckTimeUp = true;
-            },function(err){
-                gpsCheckTimeUp = true;
-            });
-        });
+    });
     /*<?php } ?>*/
-
-    var JSAPI = {
-        getLocation: function(success, fail){
-            var local_location = localStorage.getItem('data-location') || [];
-            if(local_location.length){
-                local_location = JSON.parse(local_location);
-                if(local_location['lastCacheTime'] > (new Date().getTime())){
-                    success(local_location['citycode']);
-                    return;
-                }
-            }
-            wx.getLocation({
-                type: 'gcj02',
-                success: function(res){
-                    if(res.errMsg == 'getLocation:ok'){
-                        $.getJSON('?ajax=1&c=order&a=getLocation&lon='+res.longitude+'&lat='+res.latitude,function(data){
-                            if(data && data.errorcode === 0){
-                                if(data.data){
-                                    localStorage.setItem('data-location', JSON.stringify({citycode:data.data,lastCacheTime:(new Date().getTime()+86400000)}));
-                                }
-                                success(data.data);
-                            }else{
-                                fail && fail(data.data);
-                            }
-                        });
-                    }else{
-                        fail && fail(res.errMsg);
-                    }
-                },
-                cancel: function(res){
-                    fail && fail('获取位置不可用');
-                },
-                fail: function(res){
-                    fail && fail('未获取到位置')
-                }
-            });
-        }
-    };
 
     //wait maximum 5 seconds for gps
     var location_city='';

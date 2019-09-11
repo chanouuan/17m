@@ -101,7 +101,94 @@
 <?php } ?>
 
 <script src="<?=$tpl_dir?>/yue/js/jQuery-2.1.4.min.js"></script>
+<script src="//res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script type="text/javascript">
+
+    /*<?php if(isset($jssdk) && $jssdk){ ?>*/
+    wx.config({
+        debug: false,
+        appId: "<?=$jssdk['appId']?>",
+        timestamp: "<?=$jssdk['timestamp']?>",
+        nonceStr: "<?=$jssdk['nonceStr']?>",
+        signature: "<?=$jssdk['signature']?>",
+        jsApiList: [
+            'hideMenuItems',
+            'onMenuShareTimeline',
+            'onMenuShareAppMessage',
+            'getLocation',
+            'chooseWXPay'
+        ]
+    });
+    wx.ready(function () {
+        wx.hideMenuItems({
+            menuList: [
+                'menuItem:share:qq',
+                'menuItem:share:weiboApp',
+                'menuItem:share:facebook',
+                'menuItem:share:QZone'
+            ]
+        });
+        JSAPI.share();
+    });
+    var JSAPI = {
+        chooseWXPay: function(config, success, fail){
+            try{
+                config = JSON.parse(config);
+            }catch(e){
+                fail && fail(e);
+                return;
+            }
+            config.success = success;
+            config.cancel = fail;
+            wx.chooseWXPay(config);
+        },
+        share: function(){
+            var _share = {
+                title: document.title,
+                desc: '十七平，一群热爱生活、热爱摄影的年轻人，把摄影当作一种情怀，追求创意、自然、美丽、简洁、大方的拍摄理念，致力于高端形象创意摄影。',
+                link: '<?=APPLICATION_URL?>/?c=project&a=book',
+                imgUrl: '<?=$tpl_dir?>/imgs/01.jpg'
+            };
+            wx.onMenuShareTimeline(_share);
+            wx.onMenuShareAppMessage(_share);
+        },
+        getLocation: function(success, fail){
+            var local_location = localStorage.getItem('data-location') || [];
+            if(local_location.length){
+                local_location = JSON.parse(local_location);
+                if(local_location['lastCacheTime'] > (new Date().getTime())){
+                    success(local_location['citycode']);
+                    return;
+                }
+            }
+            wx.getLocation({
+                type: 'gcj02',
+                success: function(res){
+                    if(res.errMsg == 'getLocation:ok'){
+                        $.getJSON('?ajax=1&c=order&a=getLocation&lon='+res.longitude+'&lat='+res.latitude,function(data){
+                            if(data && data.errorcode === 0){
+                                if(data.data){
+                                    localStorage.setItem('data-location', JSON.stringify({citycode:data.data,lastCacheTime:(new Date().getTime()+86400000)}));
+                                }
+                                success(data.data);
+                            }else{
+                                fail && fail(data.data);
+                            }
+                        });
+                    }else{
+                        fail && fail(res.errMsg);
+                    }
+                },
+                cancel: function(res){
+                    fail && fail('获取位置不可用');
+                },
+                fail: function(res){
+                    fail && fail('未获取到位置')
+                }
+            });
+        }
+    };
+    /*<?php } ?>*/
 
     $('#toolbar-menu').click(function(){
         var mentEl = $(this).find('[data-role="icon-ment"]');

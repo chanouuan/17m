@@ -18,11 +18,11 @@ class Order_Action extends ActionPDO {
     /**
      * 取消订单并退款
      */
-    public function cancelorder ()
+    public function refundOrder ()
     {
         $id = $_GET['id'];
         $cardsmodel = new CardsModel();
-        $ret = $cardsmodel->createRefund($this->_G['user']['id'], $id);
+        $ret = $cardsmodel->createRefund($this->_G['user']['id'], intval(getgpc('id')));
         echo json_unicode_encode($ret);
         return null;
     }
@@ -519,26 +519,32 @@ class Order_Action extends ActionPDO {
     {
         $ordermodel = new OrderModel();
         $userinfo = $this->_G['user'];
-        $step = $_GET["step"];
+        $step = getgpc('step');
 
         switch ($step) {
             case 'comment':
+
                 die(json_unicode_encode($ordermodel->postComment($userinfo, $_POST)));
                 break;
             case 'detail':
-                $id = intval($_GET["id"]);
-                $sql = 'select pro_order.*,pro_cards.id as cardid,pro_cards.coupon as couponcode,ordercode,pro_store.name,pro_store.address,pro_store.tel,pro_store.email,pro_store.transit from pro_order LEFT JOIN pro_cards on pro_order.id=pro_cards.orderid left JOIN pro_store on pro_order.storeid=pro_store.id where pro_order.id=' . $id . ' and pro_order.uid=' . $userinfo['id'];
-                $order = $ordermodel->getOrderinfo($sql);
-                if (!$order) {
+
+                $id = intval(getgpc('id'));
+                if (!$order = $ordermodel->getOrder($id, 'uid = ' . $userinfo['id'])) {
                     $this->error('该订单不存在或已删除');
                 }
-                // 评价信息
+                // 获取交易单
+                if (!$cardInfo = (new CardsModel())->getCardInfo('orderid = ' . $id, 'id,ordercode,coupon')) {
+                    $this->error('该订单无效');
+                }
+                // 获取门店
+                $storeInfo = ((new StoreModel())->getStore($order['storeid']));
+                // 获取评价
                 if ($order['status'] == 2) {
                     $comment = $ordermodel->getCommentInfo(null, $id);
                 }
-                // 用户信息
                 $order['ordertime'] = showWeekDate($order['ordertime']);
-                $itemlist = explode(";", $order['item']);
+                $order['item'] = str_replace(':1', '',  $order['item']);
+                $order['delay'] = round($order['delay'] / 3600,1);
                 if ($this->_jssdk) {
                     $jssdk = $this->_jssdk->GetSignPackage();
                     if ($jssdk['errorcode'] !== 0) {
@@ -548,23 +554,25 @@ class Order_Action extends ActionPDO {
                     }
                 }
                 // 评价是否获得优惠劵
-                $comment_reward = intval(getConfig()['comment_reward']);
+                $comment_reward = intval(getConfig('comment_reward'));
                 $result = array(
                         'jssdk' => $jssdk,
                         'userinfo' => $userinfo,
                         'step' => $step,
                         'order' => $order,
+                        'cardInfo' => $cardInfo,
+                        'storeInfo' => $storeInfo,
                         'refund_money' => getRefundMoney($order['ordertime']),
-                        'refund_rule' => json_decode(getConfig()['refund_rule'], true),
+                        'refund_rule' => json_decode(getConfig('refund_rule'), true),
                         'id' => $id,
-                        'itemlist' => $itemlist,
                         'comment' => $comment,
                         'comment_reward' => $comment_reward
                 );
+                $this->render('orderDetail.html', $result);
                 break;
             default:
 
-                $order = $ordermodel->getOrder(null, 'uid = ' . $userinfo['id'], null, 'id,storeid,buyer,item,ordertime,status', 'id desc');
+                $order = $ordermodel->getOrder(null, 'uid = ' . $userinfo['id'], null, 'id,storeid,buyer,item,ordertime,createtime,status', 'id desc');
                 if ($order) {
                     $stores = (new StoreModel())->getStore(null, 'id in (' . implode(',', array_column($order, 'storeid')) . ')', null, 'id,name');
                     $stores = array_column($stores, 'name', 'id');
@@ -590,6 +598,7 @@ class Order_Action extends ActionPDO {
         }
         return $result;
     }
+
     // 我的底片信息
     public function negative ()
     {
@@ -600,15 +609,16 @@ class Order_Action extends ActionPDO {
                 'piclist' => $piclist
         );
     }
-    // 取消订单
-    public function refundorder ()
+
+    // 关闭订单
+    public function closeOrder ()
     {
-        $id = $_GET['id'];
         $order = new OrderModel();
-        $ret = $order->refundorder($this->_G['user']['id'], $id);
+        $ret = $order->closeOrder($this->_G['user']['id'], intval(getgpc('id')));
         echo json_unicode_encode($ret);
         return null;
     }
+
     // 获取门店地址
     public function address ()
     {

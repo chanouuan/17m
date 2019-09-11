@@ -191,6 +191,11 @@ class CardsModel {
         return $rs;
     }
 
+    public function getCardInfo ($where, $field = '*')
+    {
+        return $this->db->table('~cards~')->field($field)->where($where)->limit(1)->find();
+    }
+
     /**
      * 更新交易单
      */
@@ -430,7 +435,7 @@ class CardsModel {
      */
     public function generateOrderCode ()
     {
-        return strval(date('YmdHis', TIMESTAMP) . (rand() % 10) . (rand() % 10) . (rand() % 10) . (rand() % 10) . (rand() % 10) . (rand() % 10) . (rand() % 10) . (rand() % 10) . (rand() % 10) . (rand() % 10) . (rand() % 10) . (rand() % 10) . (rand() % 10) . (rand() % 10));
+        return strval(date('YmdHis', TIMESTAMP) . (rand() % 10) . (rand() % 10) . (rand() % 10) . (rand() % 10));
     }
 
     /**

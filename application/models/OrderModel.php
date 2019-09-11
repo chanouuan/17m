@@ -275,13 +275,15 @@ class OrderModel {
                 "status" => 1
         ), " partner='{$code}' and storeid=" . $storeid);
     }
-    // 取消临时订单
-    public function refundorder ($uid, $id)
+
+    // 关闭订单
+    public function closeOrder ($uid, $id)
     {
-        $id = intval($id);
-        $cardinfo = $this->db->table('~cards~')->field('coupon')->where('orderid = ' . $id)->find();
+        if (!$cardinfo = $this->db->table('~cards~')->field('coupon')->where('status = 0 and orderid = ' . $id)->find()) {
+            return error('该订单不能关闭');
+        }
         if (!$this->db->query('delete a,b from ~order~ a inner join ~cards~ b on b.orderid = a.id where a.status = 0 and a.uid = ' . $uid . ' and a.id = ' . $id)) {
-            return error('操作失败');
+            return error('关闭订单失败');
         }
         if ($cardinfo['coupon']) {
             $this->db->update('~coupon~', array(
