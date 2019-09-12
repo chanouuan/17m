@@ -24,18 +24,23 @@
             <?php if(!$categories){ ?>
             <div class="title" style="text-align: center">暂无产品</div>
             <?php } ?>
+            <?php $i=0; foreach($categories as $k=>$v){ ?>
             <div class="product-list">
+                <?php if($i>0){ ?>
+                <div class="tel-tip"><?=$k?></div>
+                <?php } ?>
                 <ul class="clearfix">
-                    <?php foreach($categories as $v){ ?>
+                    <?php foreach($v as $kk=>$vv){ ?>
                     <li>
-                        <a href="?<?=burl('a=detail&category_id='.$v['id'])?>">
-                            <span class="photo"><img src="<?=$v['icon']?>"></span>
-                            <span class="title"><?=$v['name']?></span>
+                        <a href="?<?=burl('a=detail&category_id='.$vv['id'])?>">
+                            <span class="photo"><img src="<?=$vv['icon']?>"></span>
+                            <span class="title"><?=$vv['name']?></span>
                         </a>
                     </li>
                     <?php } ?>
                 </ul>
             </div>
+            <?php $i++;} ?>
         </div>
 
         <div id="page-mask" class="page-mask"></div>

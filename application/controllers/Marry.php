@@ -41,7 +41,19 @@ class Marry_Action extends ActionPDO {
         if (!$cityInfo = (new CityModel())->getCity($storeInfo['citycode'])) {
             $this->error('城市未开通');
         }
-        $categories = (new CategoryModel())->getCategoryByStore($storeInfo['id']);
+        $categoryModel = new CategoryModel();
+        $categories    = $categoryModel->getCategoryByStore($storeInfo['id']);
+        $categoryType  = $categoryModel->getCategoryType();
+        $categoryList = [];
+        foreach ($categories as $k => $v) {
+            $categoryList[$v['type']][] = $v;
+        }
+        $categories = [];
+        foreach ($categoryType as $k => $v) {
+            if (isset($categoryList[$k])) {
+                $categories[$v['name']] = $categoryList[$k];
+            }
+        }
         $this->show([
             'city_name' => $cityInfo['name'],
             'storeInfo' => $storeInfo,

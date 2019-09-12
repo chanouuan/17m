@@ -522,6 +522,87 @@
         });
     });
 
+    // 支付
+    $('#order-pay').click(function(){
+        var _self = $(this);
+        if(_self.hasClass('od-disable'))return;
+        $.ajax({
+            type: 'post',
+            url: "?ajax=1&c=order&a=checkorderpay&orderid=<?=$order['id']?>&cardid=<?=$cardInfo['id']?>",
+            dataType: 'json',
+            timeout: 5000,
+            success: function(data){
+                if(data && data.errorcode === 0){
+                    var cardid = data.data;
+                    $.ajax({
+                        type: 'post',
+                        url: '?ajax=1&c=wxpayjs&a=api',
+                        data: {cardid:cardid},
+                        dataType: 'json',
+                        timeout: 5000,
+                        success: function(data){
+                            if(data && data.errorcode === 0){
+                                JSAPI.chooseWXPay(data.data,function(res){
+                                    $.ajax({
+                                        type: 'post',
+                                        url: '?ajax=1&c=order&a=payquery',
+                                        data: {cardid:cardid},
+                                        dataType: 'json',
+                                        timeout: 5000,
+                                        success: function(data){
+                                            if(data && data.errorcode === 0){
+                                                customAlert('error', '支付成功!', '我的订单', function(){
+                                                    window.location.href = '?c=order&a=myorder';
+                                                });
+                                            }else{
+                                                customAlert('error', data ? data.data : '支付确认', '我的订单', function(){
+                                                    window.location.href = '?c=order&a=myorder';
+                                                });
+                                            }
+                                        },
+                                        error: function(xhr, type){
+                                            customAlert('error', '支付确认', '我的订单', function(){
+                                                window.location.href = '?c=order&a=myorder';
+                                            });
+                                        }
+                                    });
+                                    return;
+                                },function(res){
+                                    customAlert('error', '支付取消!', '我的订单', function(){
+                                        window.location.href = '?c=order&a=myorder';
+                                    });
+                                });
+                            }else{
+                                customAlert('error', data ? data.data : '操作失败', '好', function(){
+                                    window.location.href = '?c=order&a=myorder';
+                                });
+                            }
+                        },
+                        error: function(xhr, type){
+                            customAlert('error', '网络超时，请重试!', '好', function(){
+                                window.location.href = window.location.href + '&t=' + (new Date().getTime())
+                            });
+                        }
+                    });
+                    return;
+                }else{
+                    customAlert('error', data.data, '好', function(){
+                        window.location.href = window.location.href + '&t=' + (new Date().getTime())
+                    });
+                    _self.removeClass('od-disable');
+                }
+            },
+            beforeSend: function(xhr){
+                _self.removeClass().addClass('od-disable');
+            },
+            error: function(xhr, type){
+                customAlert('error', '网络超时，请重试!', '好', function(){
+                    location.reload();
+                });
+            }
+        });
+    });
+
 
     // 倒计时
     (function(){

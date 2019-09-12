@@ -217,9 +217,10 @@ class CardsModel {
      */
     public function createRefund ($uid, $orderid)
     {
-        $orderid = intval($orderid);
         $_cards = $this->db->field('id,payway')->table('~cards~')->where('status = 1 and orderid = ' . $orderid . ' and uid = ' . $uid)->find();
-        if (!$_cards) {return error('订单已退款或不存在');}
+        if (!$_cards) {
+            return error('订单已退款或不存在');
+        }
         $refund_percent = $this->getRefundPercent($orderid);
         if ($refund_percent > 0) {
             try {
@@ -227,7 +228,9 @@ class CardsModel {
             } catch (Exception $e) {
                 return error($e->getMessage());
             }
-            if ($refund_result['errorcode'] !== 0) {return error($refund_result['data']);}
+            if ($refund_result['errorcode'] !== 0) {
+                return error($refund_result['data']);
+            }
         } else {
             // 不退钱记录时间
             $this->db->update('~cards~', array(
@@ -236,7 +239,9 @@ class CardsModel {
         }
         if (!$this->db->update('~order~', array(
                 'status' => -1
-        ), 'status = 1 and id = ' . $orderid)) {return error('操作失败');}
+        ), 'status = 1 and id = ' . $orderid)) {
+            return error('退款失败');
+        }
         // 更新档期已预约数
         $orderinfo = $this->db->table('~order~')->field('id,poolid')->where('id = ' . $orderid)->find();
         $this->db->update('~pool~', array(

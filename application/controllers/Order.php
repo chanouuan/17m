@@ -20,7 +20,6 @@ class Order_Action extends ActionPDO {
      */
     public function refundOrder ()
     {
-        $id = $_GET['id'];
         $cardsmodel = new CardsModel();
         $ret = $cardsmodel->createRefund($this->_G['user']['id'], intval(getgpc('id')));
         echo json_unicode_encode($ret);
@@ -542,6 +541,7 @@ class Order_Action extends ActionPDO {
                 if ($order['status'] == 2) {
                     $comment = $ordermodel->getCommentInfo(null, $id);
                 }
+                $refund_money = floatval(getRefundMoney($order['ordertime']));
                 $order['ordertime'] = showWeekDate($order['ordertime']);
                 $order['item'] = str_replace(':1', '',  $order['item']);
                 $order['delay'] = round($order['delay'] / 3600,1);
@@ -562,7 +562,7 @@ class Order_Action extends ActionPDO {
                         'order' => $order,
                         'cardInfo' => $cardInfo,
                         'storeInfo' => $storeInfo,
-                        'refund_money' => getRefundMoney($order['ordertime']),
+                        'refund_money' => $refund_money,
                         'refund_rule' => json_decode(getConfig('refund_rule'), true),
                         'id' => $id,
                         'comment' => $comment,

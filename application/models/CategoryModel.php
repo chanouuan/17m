@@ -12,6 +12,15 @@ class CategoryModel {
     }
 
     /**
+     * 获取套餐分类
+     */
+    public function getCategoryType ()
+    {
+        $list = $this->db->table('pro_category_type')->field('id,name')->where('status = 1')->order('sort desc')->select();
+        return array_column($list, null, 'id');
+    }
+
+    /**
      * 获取产品关联信息
      */
     public function getRelationCategory ($store_id, $categroy_id)
