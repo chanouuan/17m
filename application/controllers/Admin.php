@@ -4,8 +4,8 @@ class Admin_Action extends ActionPDO {
     function __init ()
     {
         $_notAuth = array(
-                'login', 
-                'checkcode', 
+                'login',
+                'checkcode',
                 'loginout'
         );
         if (!in_array($this->_action, $_notAuth)) {
@@ -84,7 +84,7 @@ class Admin_Action extends ActionPDO {
         if (strlen($search_starttime) <= 10 && $search_starttime) {
             $search_starttime = $search_starttime . " 00:00:00";
         }
-        
+
         if (strlen($search_endtime) <= 10 && $search_endtime) {
             $search_endtime = $search_endtime . " 23:59:00";
         }
@@ -92,12 +92,12 @@ class Admin_Action extends ActionPDO {
             $storeinfo = $order->getOrderinfowhere(" pro_order.id=" . $id);
             $Photolist = $order->getPhoto($id);
             $weekarray = array(
-                    "日", 
-                    "一", 
-                    "二", 
-                    "三", 
-                    "四", 
-                    "五", 
+                    "日",
+                    "一",
+                    "二",
+                    "三",
+                    "四",
+                    "五",
                     "六"
             );
             $storeinfo['week'] = "周" . $weekarray[date("w", strtotime($storeinfo['ordertime']))];
@@ -105,8 +105,8 @@ class Admin_Action extends ActionPDO {
             $storeinfo['time'] = substr($ordertime[1], 0, 5);
             $storeinfo['itemlist'] = explode(";", $storeinfo['item']);
             return array(
-                    "storeinfo" => $storeinfo, 
-                    "action" => $action, 
+                    "storeinfo" => $storeinfo,
+                    "action" => $action,
                     'Photolist' => $Photolist
             );
         } else if ($action == "editbuyer" && $id) {
@@ -115,17 +115,17 @@ class Admin_Action extends ActionPDO {
                     "buyer" => $buyer
             ), $id);
             $this->success('操作成功', '?' . burl('action='), 0);
-        
+
         } else if ($action == "editinfo" && $id) {
             $storeinfo = $order->getOrderinfowhere(" pro_order.id=" . $id);
             $Photolist = $order->getPhoto($id);
             $weekarray = array(
-                    "日", 
-                    "一", 
-                    "二", 
-                    "三", 
-                    "四", 
-                    "五", 
+                    "日",
+                    "一",
+                    "二",
+                    "三",
+                    "四",
+                    "五",
                     "六"
             );
             $storeinfo['week'] = "周" . $weekarray[date("w", strtotime($storeinfo['ordertime']))];
@@ -133,11 +133,11 @@ class Admin_Action extends ActionPDO {
             $storeinfo['time'] = substr($ordertime[1], 0, 5);
             $storeinfo['itemlist'] = explode(";", $storeinfo['item']);
             return array(
-                    "storeinfo" => $storeinfo, 
-                    "action" => $action, 
+                    "storeinfo" => $storeinfo,
+                    "action" => $action,
                     'Photolist' => $Photolist
             );
-        } 
+        }
 
         else if ($action == "savefile") {
             // 图片上传
@@ -147,7 +147,7 @@ class Admin_Action extends ActionPDO {
             $str = strstr($file, '-');
             if ($str) {
                 $output = array(
-                        "success" => "0", 
+                        "success" => "0",
                         "msg" => $str
                 );
                 echo json_encode($output);
@@ -161,7 +161,7 @@ class Admin_Action extends ActionPDO {
                 // 发送成功
                 if ($gets['SubmitResult']['code'] != 2) {
                     $output = array(
-                            "success" => "0", 
+                            "success" => "0",
                             "msg" => $gets['SubmitResult']['msg']
                     );
                     echo json_encode($output);
@@ -169,12 +169,12 @@ class Admin_Action extends ActionPDO {
                 }
             }
             $photoarray = array(
-                    "uid" => $storeinfo['uid'], 
-                    "orderid" => $storeinfo['id'], 
-                    'name' => $file['name'], 
-                    'url' => $file['url'], 
-                    'thumb' => $file['thumburl'], 
-                    'size' => $file['size'], 
+                    "uid" => $storeinfo['uid'],
+                    "orderid" => $storeinfo['id'],
+                    'name' => $file['name'],
+                    'url' => $file['url'],
+                    'thumb' => $file['thumburl'],
+                    'size' => $file['size'],
                     'createtime' => date('Y-m-d H:i:s', time())
             );
             $result = $order->insertphoto($photoarray);
@@ -183,15 +183,15 @@ class Admin_Action extends ActionPDO {
                         'status' => 2
                 ), $orderid);
             }
-        
+
         } else if ($action == "delete") {
             $result = $order->deletephoto($id);
             if ($result) {
                 $output = array(
-                        "success" => "1", 
+                        "success" => "1",
                         "msg" => "删除成功!"
                 );
-            
+
             }
             echo json_encode($output);
             exit();
@@ -200,7 +200,7 @@ class Admin_Action extends ActionPDO {
         $action = getgpc("action");
         $city = new CityModel();
         $citylist = $city->getCity();
-        
+
         $page_count = 20;
         $page = $page < 1 ? 1 : $page;
         if ($page == "1") {
@@ -244,25 +244,25 @@ class Admin_Action extends ActionPDO {
             $storelist = $store->getstorewhere('');
         }
         $result = array(
-                'storelist' => $storelist, 
-                'userinfo' => $userinfo, 
-                'Orderlist' => $Orderlist, 
-                "pagestr" => $pagestr, 
-                "totalcount" => $totalcount, 
-                "page_count" => $page_count, 
-                "buyerphone" => $buyerphone, 
-                'page' => $page, 
-                'action' => $action, 
-                'citylist' => $citylist, 
-                'totalpage' => $totalpage, 
-                'search_starttime' => $search_starttime, 
-                'search_endtime' => $search_endtime, 
-                'status' => $status, 
+                'storelist' => $storelist,
+                'userinfo' => $userinfo,
+                'Orderlist' => $Orderlist,
+                "pagestr" => $pagestr,
+                "totalcount" => $totalcount,
+                "page_count" => $page_count,
+                "buyerphone" => $buyerphone,
+                'page' => $page,
+                'action' => $action,
+                'citylist' => $citylist,
+                'totalpage' => $totalpage,
+                'search_starttime' => $search_starttime,
+                'search_endtime' => $search_endtime,
+                'status' => $status,
                 'storeid' => $storeid
         );
         $result = array_merge($result, $this->gettimearray());
         return $result;
-    
+
     }
     // 邀请码
     function coupon ()
@@ -315,24 +315,24 @@ class Admin_Action extends ActionPDO {
                 }
             }
             $result = array(
-                    'couponlist' => $couponlist, 
-                    'search_starttime' => $search_starttime, 
-                    'search_endtime' => $search_endtime, 
-                    "pagestr" => $pagestr, 
-                    "totalcount" => $totalcount, 
-                    "page_count" => $page_count, 
-                    "name" => $name, 
-                    'page' => $page, 
-                    'action' => $action, 
-                    'totalpage' => $totalpage, 
-                    'storelist' => $storelist, 
-                    'storeid' => $storeid, 
+                    'couponlist' => $couponlist,
+                    'search_starttime' => $search_starttime,
+                    'search_endtime' => $search_endtime,
+                    "pagestr" => $pagestr,
+                    "totalcount" => $totalcount,
+                    "page_count" => $page_count,
+                    "name" => $name,
+                    'page' => $page,
+                    'action' => $action,
+                    'totalpage' => $totalpage,
+                    'storelist' => $storelist,
+                    'storeid' => $storeid,
                     'status' => $status
             );
             return $result;
         } elseif ($action == "from") {
             return array(
-                    'storelist' => $storelist, 
+                    'storelist' => $storelist,
                     'action' => $action
             );
         } elseif ($action == "save") {
@@ -343,7 +343,7 @@ class Admin_Action extends ActionPDO {
         } else if ($action == "delete") {
             $coupon->deleteCoupon($id);
             $output = array(
-                    "success" => "1", 
+                    "success" => "1",
                     "msg" => "删除成功!"
             );
             echo json_encode($output);
@@ -361,7 +361,7 @@ class Admin_Action extends ActionPDO {
         if ($action == "from" && $name) {
             $configinfo = $config->getconfiginfo("name='{$name}'");
             return array(
-                    "configinfo" => $configinfo, 
+                    "configinfo" => $configinfo,
                     "action" => $action
             );
         }
@@ -375,17 +375,17 @@ class Admin_Action extends ActionPDO {
             }
             if ($name) {
                 $cityarray = array(
-                        "name" => $name, 
-                        "value" => $value, 
-                        'description' => $description, 
+                        "name" => $name,
+                        "value" => $value,
+                        'description' => $description,
                         'type' => $type
                 );
                 $config->updateconfig($cityarray, $name);
             } else {
                 $cityarray = array(
-                        "name" => $name, 
-                        "value" => $value, 
-                        'description' => $description, 
+                        "name" => $name,
+                        "value" => $value,
+                        'description' => $description,
                         'type' => $type
                 );
                 $config->insertconfig($cityarray);
@@ -396,7 +396,7 @@ class Admin_Action extends ActionPDO {
         } else if ($action == "delete") {
             $config->deleteconfig($id);
             $output = array(
-                    "success" => "1", 
+                    "success" => "1",
                     "msg" => "删除成功!"
             );
             echo json_encode($output);
@@ -418,13 +418,13 @@ class Admin_Action extends ActionPDO {
         $limit = " $pagenum,$page_count ";
         $configlist = $config->getcitylist($where, $limit);
         $result = array(
-                'configlist' => $configlist, 
-                "pagestr" => $pagestr, 
-                "totalcount" => $totalcount, 
-                "page_count" => $page_count, 
-                "name" => $name, 
-                'page' => $page, 
-                'action' => $action, 
+                'configlist' => $configlist,
+                "pagestr" => $pagestr,
+                "totalcount" => $totalcount,
+                "page_count" => $page_count,
+                "name" => $name,
+                'page' => $page,
+                'action' => $action,
                 'totalpage' => $totalpage
         );
         $result = array_merge($result, $this->gettimearray());
@@ -438,7 +438,7 @@ class Admin_Action extends ActionPDO {
         $year_end = date('Y-m-d 23:59:59', mktime(0, 0, 0, 12, 31, date('Y', time())));
         $yesteryear_begin = date('Y-m-d 00:00:00', mktime(0, 0, 0, 1, 1, date('Y', strtotime('-1 year', time()))));
         $yesteryear_end = date('Y-m-d 23:59:59', mktime(0, 0, 0, 12, 31, date('Y', strtotime('-1 year', time()))));
-        
+
         $tomorrow_start = date("Y-m-d 00:00:00", strtotime("+1 day"));
         $tomorrow_end = date("Y-m-d 23:59:00", strtotime("+1 day"));
         $yesterday_start = date("Y-m-d 00:00:00", strtotime("-1 day"));
@@ -463,27 +463,27 @@ class Admin_Action extends ActionPDO {
         $year_starttime = date('Y-m-d H:i:s', mktime(0, 0, 0, 1, 1, date("Y")));
         $year_endtime = date('Y-m-d H:i:s', mktime(23, 59, 59, 1, 1, date("Y") + 1) - 24 * 3600);
         $timearr = array(
-                'tomorrow_start' => $tomorrow_start, 
-                'tomorrow_end' => $tomorrow_end, 
-                'year_begin' => $year_begin, 
-                'year_end' => $year_end, 
-                'yesteryear_begin' => $yesteryear_begin, 
-                'yesteryear_end' => $yesteryear_end, 
-                'yesterday_start' => $yesterday_start, 
-                'yesterday_end' => $yesterday_end, 
-                'today_start' => $today_start, 
-                'today_end' => $today_end, 
-                'lweek_starttime' => $lweek_starttime, 
-                'lweek_endtime' => $lweek_endtime, 
-                'week_starttime' => $week_starttime, 
-                'week_endtime' => $week_endtime, 
-                'lmonth_starttime' => $lmonth_starttime, 
-                'lmonth_endtime' => $lmonth_endtime, 
-                'month_starttime' => $month_starttime, 
-                "month_endtime" => $month_endtime, 
-                'lyear_starttime' => $lyear_starttime, 
-                'lyear_endtime' => $lyear_endtime, 
-                'year_starttime' => $year_starttime, 
+                'tomorrow_start' => $tomorrow_start,
+                'tomorrow_end' => $tomorrow_end,
+                'year_begin' => $year_begin,
+                'year_end' => $year_end,
+                'yesteryear_begin' => $yesteryear_begin,
+                'yesteryear_end' => $yesteryear_end,
+                'yesterday_start' => $yesterday_start,
+                'yesterday_end' => $yesterday_end,
+                'today_start' => $today_start,
+                'today_end' => $today_end,
+                'lweek_starttime' => $lweek_starttime,
+                'lweek_endtime' => $lweek_endtime,
+                'week_starttime' => $week_starttime,
+                'week_endtime' => $week_endtime,
+                'lmonth_starttime' => $lmonth_starttime,
+                'lmonth_endtime' => $lmonth_endtime,
+                'month_starttime' => $month_starttime,
+                "month_endtime" => $month_endtime,
+                'lyear_starttime' => $lyear_starttime,
+                'lyear_endtime' => $lyear_endtime,
+                'year_starttime' => $year_starttime,
                 'year_endtime' => $year_endtime
         );
         return $timearr;
@@ -501,7 +501,7 @@ class Admin_Action extends ActionPDO {
         $id = getgpc("id");
         $story_categoryid = getgpc("story_categoryid");
         $store_id = getgpc("store_id");
-        $categorylist = $category->getCategory();
+        $categorylist = $category->getCategory(null, null, null, 'id,project_id,name,icon');
         if ($step == "package") {
             $sql = "SELECT
 	            pro_category.*, pro_story_category.id story_categoryid,pro_story_category.price
@@ -513,15 +513,15 @@ class Admin_Action extends ActionPDO {
             $storeinfo = $store->getStore($store_id);
             $categorylist = $category->getCategorylist($sql);
             return array(
-                    "categorylist" => $categorylist, 
-                    "action" => $action, 
-                    'citylist' => $citylist, 
-                    'step' => $step, 
-                    'store_id' => $store_id, 
+                    "categorylist" => $categorylist,
+                    "action" => $action,
+                    'citylist' => $citylist,
+                    'step' => $step,
+                    'store_id' => $store_id,
                     'storeinfo' => $storeinfo
             );
         } else if ($step == "story_category") {
-            
+
             $story_categoryid = getgpc("story_categoryid");
             $sql = "SELECT
 	            pro_category.*, pro_story_category.id story_categoryid,pro_story_category.price
@@ -532,10 +532,10 @@ class Admin_Action extends ActionPDO {
 	            pro_story_category.id = '{$story_categoryid}'";
             $categoryinfo = $category->getCategoryInfo($sql);
             return array(
-                    "categoryinfo" => $categoryinfo, 
-                    "action" => $action, 
-                    'citylist' => $citylist, 
-                    'step' => $step, 
+                    "categoryinfo" => $categoryinfo,
+                    "action" => $action,
+                    'citylist' => $citylist,
+                    'step' => $step,
                     'store_id' => $store_id
             );
         }
@@ -544,28 +544,33 @@ class Admin_Action extends ActionPDO {
             $store->updatestory_category(array(
                     "price" => $price
             ), $id);
-            
+
             header('Location:?c=admin&a=store&step=package&store_id=' . $store_id);
             exit();
         }
-        if ($action == "from" && $id) {
-            $storeinfo = $store->getstoreinfo("id=" . $id);
-            
-            $sql = "select * from pro_category where id in (select categroy_id from pro_story_category where store_id='{$id}')";
-            $Categorystore = $category->getCategorylist($sql);
-            $package = [];
-            foreach ($Categorystore as $v) {
-                array_push($package, $v['id']);
+        if ($action == "from") {
+
+            if ($id) {
+                $storeinfo = $store->getstoreinfo('id=' . intval($id));
+                $sql = "select id from pro_category where id in (select categroy_id from pro_story_category where store_id='{$id}')";
+                $Categorystore = $category->getCategorylist($sql);
+                $package = [];
+                foreach ($Categorystore as $v) {
+                    array_push($package, $v['id']);
+                }
             }
+
+            $projects = (new ProjectModel())->getProjects();
             return array(
-                    "storeinfo" => $storeinfo, 
-                    "action" => $action, 
-                    'citylist' => $citylist, 
-                    'categorylist' => $categorylist, 
-                    'package' => $package
+                    "storeinfo" => $storeinfo,
+                    "action" => $action,
+                    'citylist' => $citylist,
+                    'categorylist' => $categorylist,
+                    'package' => $package,
+                    'projects' => $projects
             );
         }
-        
+
         if ($action == "save") {
             // 保存门店信息
             $citycode = getgpc("citycode");
@@ -576,39 +581,42 @@ class Admin_Action extends ActionPDO {
             $email = getgpc("email");
             $transit = getgpc("transit");
             $package = getgpc("package");
+            $project_id = intval(getgpc('project_id'));
             if ($id) {
                 $storearray = array(
-                        "citycode" => $citycode, 
-                        "name" => $name, 
-                        'sort' => $sort, 
-                        'tel' => $tel, 
-                        'address' => $address, 
-                        'email' => $email, 
-                        'transit' => $transit
+                    'citycode' => $citycode,
+                    'name' => $name,
+                    'sort' => $sort,
+                    'tel' => $tel,
+                    'address' => $address,
+                    'email' => $email,
+                    'transit' => $transit,
+                    'project_id' => $project_id
                 );
                 $store->updatestore($storearray, $id);
             } else {
                 $storearray = array(
-                        "citycode" => $citycode, 
-                        "name" => $name, 
-                        'sort' => $sort, 
-                        'tel' => $tel, 
-                        'address' => $address, 
-                        'email' => $email, 
-                        'transit' => $transit
+                    'citycode' => $citycode,
+                    'name' => $name,
+                    'sort' => $sort,
+                    'tel' => $tel,
+                    'address' => $address,
+                    'email' => $email,
+                    'transit' => $transit,
+                    'project_id' => $project_id
                 );
                 $store->insertstore($storearray);
                 $id = $store->getlastid();
             }
             $store->insertcategory($id, $package);
-            
+
             header('Location:?c=admin&a=store');
             exit();
         } else if ($action == "delete") {
             // 删除门店信息
             $store->deletestore($id);
             $output = array(
-                    "success" => "1", 
+                    "success" => "1",
                     "msg" => "删除成功!"
             );
             echo json_encode($output);
@@ -636,29 +644,31 @@ class Admin_Action extends ActionPDO {
         $totalpage = ($totalcount % $page_count) > 0 ? (intval($totalcount / $page_count) + 1) : intval($totalcount / $page_count);
         $pagestr = auto_page_arr($page, $totalpage);
         $limit = " $pagenum,$page_count ";
-        $storelist = $store->getstorewhere($where, $limit);
+        $storelist = $store->getstorewhere($where, $limit, 'project_id,sort');
+        $citys = array_column($citylist, 'name', 'code');
+        $projects = (new ProjectModel())->getProjects(null);
+        $projects = array_column($projects, 'name', 'id');
         foreach ($storelist as $k => $v) {
-            $storeinfo = $store->getcityname($v['citycode']);
-            $storelist[$k]['cityname'] = $storeinfo['name'];
+            $storelist[$k]['cityname'] = $citys[$v['citycode']];
+            $storelist[$k]['project_name'] = $projects[$v['project_id']];
         }
         if ($story_categoryid != null) {
             $story_category = $category->getpackage($story_categoryid);
-        
         }
         $package = explode(",", $story_category['package']);
         return array(
-                'storelist' => $storelist, 
-                "pagestr" => $pagestr, 
-                "totalcount" => $totalcount, 
-                "page_count" => $page_count, 
-                "name" => $name, 
-                'page' => $page, 
-                'action' => $action, 
-                'citylist' => $citylist, 
-                'totalpage' => $totalpage, 
-                'categorylist' => $categorylist, 
-                'story_categoryid' => $story_categoryid, 
-                'package' => $package, 
+                'storelist' => $storelist,
+                "pagestr" => $pagestr,
+                "totalcount" => $totalcount,
+                "page_count" => $page_count,
+                "name" => $name,
+                'page' => $page,
+                'action' => $action,
+                'citylist' => $citylist,
+                'totalpage' => $totalpage,
+                'categorylist' => $categorylist,
+                'story_categoryid' => $story_categoryid,
+                'package' => $package,
                 'step' => $step
         );
     }
@@ -681,12 +691,12 @@ class Admin_Action extends ActionPDO {
         if ($action == "from" && $id) {
             $storeinfo = $order->getOrderinfowhere(" pro_order.id=" . $id);
             $weekarray = array(
-                    "日", 
-                    "一", 
-                    "二", 
-                    "三", 
-                    "四", 
-                    "五", 
+                    "日",
+                    "一",
+                    "二",
+                    "三",
+                    "四",
+                    "五",
                     "六"
             );
             $storeinfo['week'] = "周" . $weekarray[date("w", strtotime($storeinfo['ordertime']))];
@@ -694,8 +704,8 @@ class Admin_Action extends ActionPDO {
             $storeinfo['time'] = substr($ordertime[1], 0, 5);
             $storeinfo['itemlist'] = explode(";", $storeinfo['item']);
             return array(
-                    "storeinfo" => $storeinfo, 
-                    "action" => $action, 
+                    "storeinfo" => $storeinfo,
+                    "action" => $action,
                     'package' => $package
             );
         }
@@ -734,24 +744,24 @@ class Admin_Action extends ActionPDO {
         $pagestr = auto_page_arr($page, $totalpage);
         $limit = " limit $pagenum,$page_count ";
         $Orderlist = $order->getOrderlistwhere($where, $limit);
-        
+
         $result = array(
-                'Orderlist' => $Orderlist, 
-                "pagestr" => $pagestr, 
-                "totalcount" => $totalcount, 
-                "page_count" => $page_count, 
-                "buyerphone" => $buyerphone, 
-                'page' => $page, 
-                'action' => $action, 
-                'citylist' => $citylist, 
-                'totalpage' => $totalpage, 
-                'search_starttime' => $search_starttime, 
-                'search_endtime' => $search_endtime, 
+                'Orderlist' => $Orderlist,
+                "pagestr" => $pagestr,
+                "totalcount" => $totalcount,
+                "page_count" => $page_count,
+                "buyerphone" => $buyerphone,
+                'page' => $page,
+                'action' => $action,
+                'citylist' => $citylist,
+                'totalpage' => $totalpage,
+                'search_starttime' => $search_starttime,
+                'search_endtime' => $search_endtime,
                 'status' => $status
         );
         $result = array_merge($result, $this->gettimearray());
         return $result;
-    
+
     }
     // 统计分析
     function statistic ()
@@ -768,7 +778,7 @@ class Admin_Action extends ActionPDO {
         }
         $search_starttime = date('Y-m-d 00:00:00', strtotime($search_starttime));
         $search_endtime = date('Y-m-d 23:59:59', strtotime($search_endtime));
-        
+
         $order = new OrderModel();
         $page = getgpc("page");
         $action = getgpc("action");
@@ -781,7 +791,7 @@ class Admin_Action extends ActionPDO {
         } else {
             $pagenum = ($page - 1) * $page_count;
         }
-        
+
         $where = " pro_order.status>0 ";
         if ($search_starttime) {
             $where = $where . " and pro_order.createtime>='{$search_starttime}'";
@@ -793,7 +803,7 @@ class Admin_Action extends ActionPDO {
         if ($userinfo['area'] > 0) {
             $where = $where . " and pro_order.storeid='{$userinfo['area']}'";
         }
-        
+
         if ($storeid > 0) {
             $where = $where . " and  pro_order.storeid='{$storeid}'";
         }
@@ -810,32 +820,32 @@ class Admin_Action extends ActionPDO {
             array_push($data4, $v['num']);
         }
         $result = array(
-                'current_sum' => floatval(array_sum($data3)), 
-                'current_count' => intval(array_sum($data4)), 
-                'Orderlist' => $Orderlist, 
-                "pagestr" => $pagestr, 
-                'storeid' => $storeid, 
-                'userinfo' => $userinfo, 
-                'storelist' => $storelist, 
-                "totalcount" => $totalcount, 
-                "page_count" => $page_count, 
-                'page' => $page, 
-                'action' => $action, 
-                'citylist' => $citylist, 
-                'totalpage' => $totalpage, 
-                'search_starttime' => $search_starttime, 
-                'search_endtime' => $search_endtime, 
-                'sumcount' => $sumcount, 
-                'orderin' => $orderin, 
-                'data3' => $data3, 
-                'x_axis' => $x_axis, 
-                'orderCount' => $orderCount, 
-                'data4' => $data4, 
+                'current_sum' => floatval(array_sum($data3)),
+                'current_count' => intval(array_sum($data4)),
+                'Orderlist' => $Orderlist,
+                "pagestr" => $pagestr,
+                'storeid' => $storeid,
+                'userinfo' => $userinfo,
+                'storelist' => $storelist,
+                "totalcount" => $totalcount,
+                "page_count" => $page_count,
+                'page' => $page,
+                'action' => $action,
+                'citylist' => $citylist,
+                'totalpage' => $totalpage,
+                'search_starttime' => $search_starttime,
+                'search_endtime' => $search_endtime,
+                'sumcount' => $sumcount,
+                'orderin' => $orderin,
+                'data3' => $data3,
+                'x_axis' => $x_axis,
+                'orderCount' => $orderCount,
+                'data4' => $data4,
                 'sumCount1' => $sumCount1
         );
         $result = array_merge($result, $search_date);
         return $result;
-    
+
     }
 
     function package ()
@@ -861,14 +871,14 @@ class Admin_Action extends ActionPDO {
         $action = getgpc("action");
         $id = getgpc("id");
         $hour = explode(",", "10,10:30,11,11:30,12,12:30,13,13:30,14,14:30,15,15:30,16,16:30,17,17:30");
-        
+
         if ($action == "edit" && $id) {
-            
+
             $poolinfo = $poolmodel->getPoolwhereinfo("id=" . $id);
             return array(
-                    "poolinfo" => $poolinfo, 
-                    "action" => $action, 
-                    'hour' => $hour, 
+                    "poolinfo" => $poolinfo,
+                    "action" => $action,
+                    'hour' => $hour,
                     'storelist' => $storelist
             );
         }
@@ -878,7 +888,7 @@ class Admin_Action extends ActionPDO {
             $hour = getgpc("hour");
             $start = new DateTime($starttime);
             $end = new DateTime($endtime);
-            
+
             $maxcount = getgpc("maxcount");
             $storeid = getgpc("storeid");
             if ($id) {
@@ -886,10 +896,10 @@ class Admin_Action extends ActionPDO {
                 $storeid = getgpc("storeid");
                 $today = getgpc("today");
                 $cityarray = array(
-                        "starttime" => $starttime, 
-                        "endtime" => $endtime, 
-                        'today' => $today, 
-                        'storeid' => $storeid, 
+                        "starttime" => $starttime,
+                        "endtime" => $endtime,
+                        'today' => $today,
+                        'storeid' => $storeid,
                         'maxcount' => $maxcount
                 );
                 $poolmodel->updatePool($cityarray, $id);
@@ -949,7 +959,7 @@ class Admin_Action extends ActionPDO {
             // 删除排班信息
             $poolmodel->deletePool($id);
             $output = array(
-                    "success" => "1", 
+                    "success" => "1",
                     "msg" => "删除成功!"
             );
             echo json_encode($output);
@@ -999,18 +1009,18 @@ class Admin_Action extends ActionPDO {
             }
         }
         $result = array(
-                'Poollist' => $Poollist, 
-                "pagestr" => $pagestr, 
-                "totalcount" => $totalcount, 
-                "page_count" => $page_count, 
-                "name" => $name, 
-                'page' => $page, 
-                'action' => $action, 
-                'storelist' => $storelist, 
-                'storeid' => $storeid, 
-                'search_starttime' => $search_starttime, 
-                'search_endtime' => $search_endtime, 
-                'hour' => $hour, 
+                'Poollist' => $Poollist,
+                "pagestr" => $pagestr,
+                "totalcount" => $totalcount,
+                "page_count" => $page_count,
+                "name" => $name,
+                'page' => $page,
+                'action' => $action,
+                'storelist' => $storelist,
+                'storeid' => $storeid,
+                'search_starttime' => $search_starttime,
+                'search_endtime' => $search_endtime,
+                'hour' => $hour,
                 'totalpage' => $totalpage
         );
         $result = array_merge($result, $this->gettimearray());
@@ -1025,26 +1035,32 @@ class Admin_Action extends ActionPDO {
         $date = date('Y年m月d日', time());
         $storeinfo = $order->getOrderinfowhere(" pro_order.id=" . $id);
         return array(
-                'storeinfo' => $storeinfo, 
-                'date' => $date, 
+                'storeinfo' => $storeinfo,
+                'date' => $date,
                 'user' => $user
         );
     }
     // 套餐信息
     function category ()
     {
-        
         $category = new CategoryModel();
-        $categorylist = $category->getCategory();
         $page = getgpc("page");
-        
+
         $action = getgpc("action");
         $id = getgpc("id");
-        if ($action == "from" && $id) {
-            $categoryinfo = $category->getCategorywhereinfo("id=" . $id);
+        if ($action == "from") {
+
+            if ($id) {
+                $categoryinfo = $category->getCategorywhereinfo('id=' . intval($id));
+            }
+
+            $projects = (new ProjectModel())->getProjects();
+            $types = (new CategoryModel())->getCategoryType();
             return array(
-                    "categoryinfo" => $categoryinfo, 
-                    "action" => $action
+                'categoryinfo' => $categoryinfo,
+                'action' => $action,
+                'projects' => $projects,
+                'types' => $types
             );
         }
         if ($action == "save") {
@@ -1055,25 +1071,30 @@ class Admin_Action extends ActionPDO {
                 $icon = $file['url'];
             }
             $name = getgpc("name");
-            $type = getgpc("type");
-            $sort = getgpc("sort");
-            $delay = getgpc("delay") * 3600;
+            $type = intval(getgpc("type"));
+            $sort = intval(getgpc("sort"));
+            $delay = intval(getgpc("delay")) * 3600;
+            $project_id = intval(getgpc('project_id'));
             if ($id) {
                 $cityarray = array(
-                        "icon" => $icon, 
-                        "delay" => $delay, 
-                        "name" => $name, 
-                        'sort' => $sort, 
-                        'type' => $type
+                    "icon" => $icon,
+                    "delay" => $delay,
+                    "name" => $name,
+                    'sort' => $sort,
+                    'type' => $type,
+                    'project_id' => $project_id,
+                    'description' => htmlspecialchars_decode(trim($_POST['description']))
                 );
                 $category->updateCategory($cityarray, $id);
             } else {
                 $cityarray = array(
-                        "icon" => $icon, 
-                        "delay" => $delay, 
-                        "name" => $name, 
-                        'sort' => $sort, 
-                        'type' => $type
+                    "icon" => $icon,
+                    "delay" => $delay,
+                    "name" => $name,
+                    'sort' => $sort,
+                    'type' => $type,
+                    'project_id' => $project_id,
+                    'description' => htmlspecialchars_decode(trim($_POST['description']))
                 );
                 $category->insertCategory($cityarray);
             }
@@ -1083,39 +1104,25 @@ class Admin_Action extends ActionPDO {
             // 删除套餐信息
             $category->deleteCategory($id);
             $output = array(
-                    "success" => "1", 
+                    "success" => "1",
                     "msg" => "删除成功!"
             );
             echo json_encode($output);
             exit();
         }
-        $page_count = 20;
-        $page = $page < 1 ? 1 : $page;
-        if ($page == "1") {
-            $pagenum = 0;
-        } else {
-            $pagenum = ($page - 1) * $page_count;
+
+        $list = $category->getCategorywhere(null, null, 'id,project_id,name,icon,sort,type,delay', 'project_id,type,sort');
+        if ($list) {
+            $projects = (new ProjectModel())->getProjects(null);
+            $projects = array_column($projects, 'name', 'id');
+            $types = (new CategoryModel())->getCategoryType(null);
+            foreach ($list as $k => $v) {
+                $list[$k]['project_name'] = $projects[$v['project_id']];
+                $list[$k]['type'] = $types[$v['type']]['name'];
+            }
         }
-        $name = getgpc("name");
-        $where = " 1=1 and name like '%{$name}%'";
-        $categorylistsum = $category->getCategorywhere($where);
-        if ($categorylistsum) {
-            $totalcount = count($categorylistsum);
-        
-        } else {
-            $totalcount = 0;
-        }
-        $totalpage = ($totalcount % $page_count) > 0 ? (intval($totalcount / $page_count) + 1) : intval($totalcount / $page_count);
-        $pagestr = auto_page_arr($page, $totalpage);
-        $limit = " $pagenum,$page_count ";
-        $categorylist = $category->getCategorywhere($where, $limit);
         return array(
-                'categorylist' => $categorylist, 
-                "pagestr" => $pagestr, 
-                "totalcount" => $totalcount, 
-                "page_count" => $page_count, 
-                "name" => $name, 
-                'page' => $page, 
+                'categorylist' => $list,
                 'action' => $action
         );
     }
@@ -1129,7 +1136,7 @@ class Admin_Action extends ActionPDO {
         if ($action == "from" && $code) {
             $cityinfo = $city->getcityinfo("code=" . $code);
             return array(
-                    "cityinfo" => $cityinfo, 
+                    "cityinfo" => $cityinfo,
                     "action" => $action
             );
         }
@@ -1138,7 +1145,7 @@ class Admin_Action extends ActionPDO {
             $code = getgpc("code");
             $name = getgpc("name");
             $status = getgpc("status");
-            
+
             $sort = getgpc("sort");
             if ($sort == "") {
                 $sort = 0;
@@ -1147,20 +1154,20 @@ class Admin_Action extends ActionPDO {
             if ($id) {
                 // 更新城市信息
                 $cityarray = array(
-                        "code" => $code, 
-                        "name" => $name, 
-                        'sort' => $sort, 
-                        'phone' => $phone, 
+                        "code" => $code,
+                        "name" => $name,
+                        'sort' => $sort,
+                        'phone' => $phone,
                         'status' => $status
                 );
                 $city->updateCity($cityarray, $id);
             } else {
                 // 新增城市信息
                 $cityarray = array(
-                        "code" => $code, 
-                        "name" => $name, 
-                        'sort' => $sort, 
-                        'phone' => $phone, 
+                        "code" => $code,
+                        "name" => $name,
+                        'sort' => $sort,
+                        'phone' => $phone,
                         'status' => $status
                 );
                 $city->insertCity($cityarray);
@@ -1170,7 +1177,7 @@ class Admin_Action extends ActionPDO {
         } else if ($action == "delete") {
             $city->deletecity($code);
             $output = array(
-                    "success" => "1", 
+                    "success" => "1",
                     "msg" => "删除成功!"
             );
             echo json_encode($output);
@@ -1196,16 +1203,16 @@ class Admin_Action extends ActionPDO {
         $limit = " $pagenum,$page_count ";
         $citylist = $city->getcitylist($where, $limit);
         return array(
-                'citylist' => $citylist, 
-                "pagestr" => $pagestr, 
-                "totalcount" => $totalcount, 
-                "page_count" => $page_count, 
-                "name" => $name, 
-                'page' => $page, 
+                'citylist' => $citylist,
+                "pagestr" => $pagestr,
+                "totalcount" => $totalcount,
+                "page_count" => $page_count,
+                "name" => $name,
+                'page' => $page,
                 'action' => $action
         );
     }
-    
+
     // 用户信息
     function user ()
     {
@@ -1220,8 +1227,8 @@ class Admin_Action extends ActionPDO {
         if ($action == "from" && $id) {
             $userinfo = $user->getUser($id);
             return array(
-                    "userinfo" => $userinfo, 
-                    "action" => $action, 
+                    "userinfo" => $userinfo,
+                    "action" => $action,
                     'storelist' => $storelist
             );
         }
@@ -1233,8 +1240,8 @@ class Admin_Action extends ActionPDO {
                 $userinfo = null;
             }
             return array(
-                    "userinfo" => $userinfo, 
-                    "action" => $action, 
+                    "userinfo" => $userinfo,
+                    "action" => $action,
                     'storelist' => $storelist
             );
         }
@@ -1249,7 +1256,7 @@ class Admin_Action extends ActionPDO {
             header('Location:?c=admin&a=user');
             exit();
         }
-        
+
         if ($action == "editpass") {
             // 修改密码
             $telephone = getgpc("telephone");
@@ -1308,18 +1315,18 @@ class Admin_Action extends ActionPDO {
             $search_endtime = $search_endtime . " 23:59:00";
         }
         $result = array(
-                'userlist' => $userlist, 
-                'storelist' => $storelist, 
-                'storeid' => $storeid, 
-                "search_starttime" => $search_starttime, 
-                "search_endtime" => $search_endtime, 
-                "telephone" => $telephone, 
-                "pagestr" => $pagestr, 
-                "totalcount" => $totalcount, 
-                "page_count" => $page_count, 
-                "name" => $name, 
-                'totalpage' => $totalpage, 
-                'page' => $page, 
+                'userlist' => $userlist,
+                'storelist' => $storelist,
+                'storeid' => $storeid,
+                "search_starttime" => $search_starttime,
+                "search_endtime" => $search_endtime,
+                "telephone" => $telephone,
+                "pagestr" => $pagestr,
+                "totalcount" => $totalcount,
+                "page_count" => $page_count,
+                "name" => $name,
+                'totalpage' => $totalpage,
+                'page' => $page,
                 'action' => $action
         );
         $result = array_merge($result, $this->gettimearray());
@@ -1342,7 +1349,7 @@ class Admin_Action extends ActionPDO {
         curl_close($curl);
         return $return_str;
     }
-    
+
     // 将 xml数据转换为数组格式。
     public function xml_to_array ($xml)
     {
@@ -1368,7 +1375,7 @@ class Admin_Action extends ActionPDO {
     public function comment ()
     {
         if (empty($_GET['action'])) {
-            
+
             $where = [];
             if ($this->_G['user']['area'] > 0) {
                 $where[] = 'storeid = ' . $this->_G['user']['area'];
@@ -1394,22 +1401,22 @@ class Admin_Action extends ActionPDO {
             $storelist = $storeModel->getstorewhere($this->_G['user']['area'] > 0 ? 'id = ' . $this->_G['user']['area'] : '');
             $storelist = array_column($storelist, null, 'id');
             return array(
-                    'pagesize' => $pagesize, 
-                    'list' => $list, 
-                    'storelist' => $storelist, 
+                    'pagesize' => $pagesize,
+                    'list' => $list,
+                    'storelist' => $storelist,
                     'search_date' => $this->gettimearray()
             );
-        
+
         } elseif ($_GET['action'] == 'view') {
-            
+
             $orderModel = new OrderModel();
             $info = $orderModel->getCommentInfo(intval($_GET['id']));
             return [
                     'info' => $info
             ];
-        
+
         } elseif ($_GET['action'] == 'chart') {
-            
+
             $orderModel = new OrderModel();
             $score_list = $orderModel->commentScore($this->_G['user']['area'], $_GET['search_starttime'], $_GET['search_endtime']);
             header("Cache-control: public");
@@ -1418,9 +1425,9 @@ class Admin_Action extends ActionPDO {
             header("Content-Disposition: attachment;filename=" . date('YmdHis') . '.xls');
             include APPLICATION_PATH . '/application/views/default/admin/comment_xls.html';
             exit();
-        
+
         }
-    
+
     }
 
 }

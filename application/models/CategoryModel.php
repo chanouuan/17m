@@ -14,9 +14,9 @@ class CategoryModel {
     /**
      * 获取套餐分类
      */
-    public function getCategoryType ()
+    public function getCategoryType ($where = 'status = 1')
     {
-        $list = $this->db->table('pro_category_type')->field('id,name')->where('status = 1')->order('sort desc')->select();
+        $list = $this->db->table('pro_category_type')->field('id,name')->where($where)->order('sort desc')->select();
         return array_column($list, null, 'id');
     }
 
@@ -91,17 +91,11 @@ class CategoryModel {
         $rs =  $this->db->find($sql);
         return $rs;
     }
-    public function getCategorywhere($where ,$limit=""){
-        if($limit==""){
-            $rs= $this->db->table('~category~')->field('*')->where($where)->select();
-        }
-        else{
-            $rs = $this->db->table('~category~')->field('*')->where($where)->order(" sort asc")->limit($limit)->select();
-        }
-        return $rs;
+    public function getCategorywhere($where, $limit = '', $field = '*', $order = 'sort asc'){
+        return $this->db->table('~category~')->field($field)->where($where)->order($order)->limit($limit)->select();
     }
-    public function getCategorywhereinfo($where){
-        $rs= $this->db->table('~category~')->field('*')->where($where)->find();
+    public function getCategorywhereinfo($where, $field = '*'){
+        $rs= $this->db->table('~category~')->field($field)->where($where)->find();
         return $rs;
     }
     public function  insertCategory($cityarray){

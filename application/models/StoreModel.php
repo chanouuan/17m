@@ -26,14 +26,9 @@ class StoreModel {
         $rs = $this->db->select($sql);
         return $rs;
     }
-    public function getstorewhere($where ,$limit=""){
-        if($limit==""){
-            $rs= $this->db->table('~store~')->field('*')->where($where)->select();
-        }
-        else{
-            $rs = $this->db->table('~store~')->field('*')->where($where)->order(" sort asc")->limit($limit)->select();
-        }
-        return $rs;
+    public function getstorewhere($where ,$limit = null, $order = 'sort asc')
+    {
+        return $this->db->table('~store~')->field('*')->where($where)->order($order)->limit($limit)->select();
     }
     public function getstoreinfo($where){
         $rs= $this->db->table('~store~')->field('*')->where($where)->find();

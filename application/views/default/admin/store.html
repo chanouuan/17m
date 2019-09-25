@@ -15,7 +15,7 @@
                     <div class="am-form">
                         <fieldset>
                             <div class="am-form-group">
-                                <label for="doc-ipt-email-1">城市编码</label>
+                                <label >城市编码</label>
                                 <select name="citycode" id="citycode">
                                     <option value="0">请选择</option>
                                     <?foreach($citylist as $k=>$v){?>
@@ -24,37 +24,46 @@
                                 </select>
                             </div>
                             <div class="am-form-group">
-                                <label for="doc-ipt-email-1">店名</label>
+                                <label >所属项目</label>
+                                <select name="project_id" id="project_id" onchange="selectProject(this.value)">
+                                    <option value="">请选择</option>
+                                    <?foreach($projects as $k=>$v){?>
+                                    <option value="<?=$v['id']?>"  <?if($storeinfo['project_id']==$v['id']){?> selected <?}?>><?=$v['name']?></option>
+                                    <?}?>
+                                </select>
+                            </div>
+                            <div class="am-form-group">
+                                <label >店名</label>
                                 <input type="text" class="" id="name" name="name" value="<?=$storeinfo['name']?>">
                             </div>
                             <div class="am-form-group">
-                                <label for="doc-ipt-email-1">排序</label>
+                                <label >排序</label>
                                 <input type="number" class="" id="sort" name="sort" value="<?=$storeinfo['sort']?>">
                             </div>
                             <div class="am-form-group">
-                                <label for="doc-ipt-email-1">电话</label>
+                                <label >电话</label>
                                 <input type="text" class="" id="tel" name="tel" value="<?=$storeinfo['tel']?>">
                             </div>
                             <div class="am-form-group">
-                                <label for="doc-ipt-email-1">地址</label>
+                                <label >地址</label>
                                 <input type="text" class="" id="address" name="address" value="<?=$storeinfo['address']?>">
                             </div>
                             <div class="am-form-group">
-                                <label for="doc-ipt-email-1">邮箱</label>
+                                <label >邮箱</label>
                                 <input type="text" class="" id="email" name="email" value="<?=$storeinfo['email']?>">
                             </div>
                             <div class="am-form-group">
-                                <label for="doc-ipt-email-1">乘车路线</label>
+                                <label >乘车路线</label>
                                 <input type="text" class="" id="transit" name="transit" value="<?=$storeinfo['transit']?>">
                             </div>
                             <div class="am-form-group">
-                                <label for="doc-ipt-email-1">选择套餐</label>
-                                <div>
-                                    <?foreach($categorylist as $v){?>
-                                    <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;">
-                                        <input <?if(in_array($v['id'],$package)){?> checked="checked" <?}?>  type="checkbox" name="package[]" value="<?=$v['id']?>"> <?=$v['name']?>
+                                <label >选择套餐</label>
+                                <div style="overflow: hidden">
+                                    <?php foreach($categorylist as $v){ ?>
+                                    <label style="float:left;padding:0 10px 5px 0;margin:0;font-weight:normal;<?php if($storeinfo['project_id']!=$v['project_id']){ ?>display:none;<?php } ?>">
+                                        <input class="project project<?=$v['project_id']?>" <?php if(in_array($v['id'],$package)){ ?> checked="checked" <?php } ?>  type="checkbox" name="package[]" value="<?=$v['id']?>"> <?=$v['name']?>
                                     </label>
-                                    <?}?>
+                                    <?php } ?>
                                 </div>
                             </div>
                             <p><button type="submit" class="am-btn am-btn-success">提交</button></p>
@@ -70,7 +79,7 @@
         </div>
         <div class="am-g">
             <div class="am-g" style="margin:10px">
-                
+
                 <div class="am-form  am-scrollable-horizontal">
                     <table class="am-table am-table-bordered am-table-striped am-text-nowrap">
                         <thead>
@@ -108,7 +117,7 @@
         <div class="am-cf am-padding am-padding-bottom-0">
             <div class="am-fl am-cf"> 价格设置</div>
         </div>
- 
+
         <div class="am-g">
             <form method="post" action="?c=admin&a=store&action=savestory_category" enctype="multipart/form-data">
                 <div class="admin-content-body">
@@ -117,11 +126,11 @@
                     <div class="am-form">
                         <fieldset>
                             <div class="am-form-group">
-                                <label for="doc-ipt-email-1">套餐名</label>
+                                <label >套餐名</label>
                                 <input type="text" class="" id="name" name="name" value="<?=$categoryinfo['name']?>">
                             </div>
                             <div class="am-form-group">
-                                <label for="doc-ipt-email-1">价格</label>
+                                <label >价格</label>
                                 <input type="text" class="" id="price" name="price" value="<?=$categoryinfo['price']/100?>">
                             </div>
                             <p><button type="submit" class="am-btn am-btn-success">提交</button></p>
@@ -134,7 +143,7 @@
         <div class="am-cf am-padding am-padding-bottom-0">
             <div class="am-fl am-cf"> 门店管理</div>
         </div>
- 
+
         <div class="am-g">
             <div class="am-g" style="margin:10px">
                 <div class="am-btn-toolbar">
@@ -148,6 +157,7 @@
                             <tr>
                                 <th>所属城市</th>
                                 <th>城市编码</th>
+                                <th>所属项目</th>
                                 <th>店名</th>
                                 <th>电话</th>
                                 <th>地址</th>
@@ -161,6 +171,7 @@
                             <tr>
                                 <td><?=$v['cityname']?></td>
                                 <td><?=$v['citycode']?></td>
+                                <td><?=$v['project_name']?></td>
                                 <td><?=$v['name']?></td>
                                 <td><?=$v['tel']?></td>
                                 <td><?=$v['address']?></td>
@@ -204,8 +215,13 @@
     function onFormSubmit(from) {
           var citycode = $("#citycode").val();
           var name = $("#name").val();
+          var projectid = $("#project_id").val();
           if (citycode=="0") {
               layer.msg("请选择城市");
+              return false;
+          }
+          if (!projectid) {
+              layer.msg("请选择项目");
               return false;
           }
           if (!name) {
@@ -230,6 +246,17 @@
                   }
               });
           });
+      }
+      function selectProject (id){
+          $('.project').each(function(){
+              this.checked = false;
+              $(this).parent().hide();
+          });
+          if (id) {
+              $('.project'+id).each(function(){
+                  $(this).parent().show();
+              });
+          }
       }
 
 </script>

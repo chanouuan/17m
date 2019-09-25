@@ -12,9 +12,9 @@ class ProjectModel {
     /**
      * 获取项目
      */
-    public function getProjects ()
+    public function getProjects ($where = 'status = 1')
     {
-        $list = $this->db->table('~project~')->field('id,name,icon,url')->where('status = 1')->order('sort desc')->select();
+        $list = $this->db->table('~project~')->field('id,name,icon,url')->where($where)->order('sort desc')->select();
         foreach ($list as $k => $v) {
             $list[$k]['icon'] = httpurl($v['icon']);
         }
